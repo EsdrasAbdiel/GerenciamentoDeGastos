@@ -1,0 +1,152 @@
+  <!-- Toolbar com ícone que abre o drawer -->
+<mat-toolbar color="primary" class="toolbar-menu">
+      <app-icon-button [icone]="'menu_outlined'" (click)="drawer.toggle()"></app-icon-button>
+    <span>Gerenciamento de Despesas</span>
+    <span class="spacer"></span>
+</mat-toolbar>
+
+  <!-- Container do Drawer + Conteúdo -->
+  <mat-drawer-container class="example-container" hasBackdrop="true">
+
+    <!-- Drawer (menu lateral) -->
+    <mat-drawer #drawer mode="over" position="start" class="year-menu-container">
+      <mat-nav-list>
+        <mat-list-item>
+          <mat-icon matListItemIcon>calendar_today</mat-icon>
+          <span matListItemTitle>2024</span>
+        </mat-list-item>
+        <mat-list-item (click)="drawer.close()">
+          <mat-icon matListItemIcon>close</mat-icon>
+          <span matListItemTitle>Fechar menu</span>
+        </mat-list-item>
+      </mat-nav-list>
+    </mat-drawer>
+
+    <!-- Conteúdo principal -->
+    <mat-drawer-content>
+
+      <div class="titulo-container">Compras de 2024</div>
+
+      <div class="container-card">
+        <div class="container-cards" *ngIf="!detalhes">
+          <mat-card appearance="outlined" (click)="aoClicarNoCardDeveVerDetalhes()">
+            <mat-card-title>Janeiro</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 1059,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Fevereiro</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Março</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Abril</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card appearance="outlined">
+            <mat-card-title>Maio</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Junho</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Julho</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Agosto</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Setembro</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Outubro</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card appearance="outlined">
+            <mat-card-title>Novembro</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+          <mat-card appearance="outlined">
+            <mat-card-title>Dezembro</mat-card-title>
+            <mat-card-content>
+
+              <p class="valor-total">
+                <strong>Total: R$ 59,00</strong>
+              </p>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+
+      <div class="container-card-detalhes">
+        <div *ngIf="detalhes">
+          <app-detalhes></app-detalhes>
+        </div>
+      </div>
+
+    </mat-drawer-content>
+  </mat-drawer-container>
