@@ -1,0 +1,12 @@
+@use '@angular/material' as mat;
+
+// Customize the entire app. Change :root to your selector if you want to scope the styles.
+
+mat-icon.icone-acoes {
+  &.confirmar { color: #008000 }
+  &.cancelar { color: #ab1313 }
+  &.editar { color: #d9c210 }
+  &.deletar { color: #7b1717 }
+  &.adicionar { color: #3f51b5 }
+  &.desabilitado { color: #0000001a }
+}
