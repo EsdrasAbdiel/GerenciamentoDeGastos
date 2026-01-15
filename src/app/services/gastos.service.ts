@@ -1,5 +1,5 @@
 import { Ano } from './../models/ano.model';
-import { environment } from './../enviroment/enviroment';
+import { environment } from '../../enviroment/enviroment';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
