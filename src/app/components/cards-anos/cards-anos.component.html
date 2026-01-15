@@ -1,0 +1,20 @@
+<app-menu>
+  <ng-container *ngTemplateOutlet="card_anos"></ng-container>
+</app-menu>
+
+<ng-template #card_anos>
+  <div class="titulo-container" titulo>
+    <p>Selecione o ano:</p>
+  </div>
+
+  <div class="container-card" card-anos-consulta>
+    <div class="container-cards" *ngIf="!loading">
+      <mat-card appearance="outlined" *ngFor="let ano of anos" (click)="aoClicarNoCardAnoDeveIrParaMeses(ano)">
+        <mat-card-title> {{ ano.anoDescricao }} </mat-card-title>
+      </mat-card>
+    </div>
+    <div class="loading" *ngIf="loading">
+      <app-loading></app-loading>
+    </div>
+  </div>
+</ng-template>
