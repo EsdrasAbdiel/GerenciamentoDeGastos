@@ -1,12 +1,104 @@
 @use '@angular/material' as mat;
 
-// Customize the entire app. Change :root to your selector if you want to scope the styles.
+// ===================================
+// 1. Suas cores centralizadas (Sass)
+// ===================================
+$ph-primary-color: #3f51b5;
+$ph-primary-color-hover: #495dd1;
+$ph-success-color: #008000;
+$ph-error-color: #ab1313;
+$ph-error-color-hover: #d21a1a;
+$ph-warning-color: #d9c210;
+$ph-disabled-color: #0000001a;
+$ph-white-color: #f5f5f5;
+$ph-gray-color: #808080;
+$ph-gray-color-hover: #a3a3a3;
 
-mat-icon.icone-acoes {
-  &.confirmar { color: #008000 }
-  &.cancelar { color: #ab1313 }
-  &.editar { color: #d9c210 }
-  &.deletar { color: #7b1717 }
-  &.adicionar { color: #3f51b5 }
-  &.desabilitado { color: #0000001a }
+// ===================================
+// 2. Exporta como variáveis CSS no :root
+// ===================================
+:root {
+  --ph-primary: #{$ph-primary-color};
+  --ph-primary-hover: #{$ph-primary-color-hover};
+  --ph-success: #{$ph-success-color};
+  --ph-error: #{$ph-error-color};
+  --ph-error-hover: #{$ph-error-color-hover};
+  --ph-warning: #{$ph-warning-color};
+  --ph-disabled: #{$ph-disabled-color};
+  --ph-white: #{$ph-white-color};
+  --ph-gray: #{$ph-gray-color};
+  --ph-gray-hover: #{$ph-gray-color-hover};
+}
+
+// ===================================
+// 3. Aplica as cores nos ícones do Material
+//     (funciona com font e SVG!)
+// ===================================
+::ng-deep mat-icon.icone-acoes {
+  &.adicionar {
+    color: var(--ph-primary) !important;
+  }
+
+  &.menu {
+    color: var(--ph-white) !important;
+  }
+
+  &.confirmar {
+    color: var(--ph-success) !important;
+  }
+
+  &.cancelar {
+    color: var(--ph-error) !important;
+  }
+
+  &.editar {
+    color: var(--ph-warning) !important;
+  }
+
+  &.deletar {
+    color: var(--ph-error) !important;
+  }
+
+  &.desabilitado {
+    color: var(--ph-disabled) !important;
+  }
+
+  // Garante que ícones SVG (ex: delete, edit) herdem a cor
+  svg {
+    fill: currentColor !important;
+  }
+}
+
+::ng-deep button.botao-acoes {
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  height: 2rem;
+
+  &.salvar {
+    background-color: var(--ph-primary) !important;
+    color: var(--ph-white) !important
+  }
+
+  &.salvar:hover {
+    background-color: var(--ph-primary-hover) !important;
+  }
+
+  &.excluir {
+    background-color: var(--ph-error) !important;
+    color: var(--ph-white) !important;
+  }
+
+  &.excluir:hover {
+    background-color: var(--ph-error-hover) !important;
+  }
+
+  &.voltar {
+    background-color: var(--ph-gray) !important;
+    color: var(--ph-white) !important;
+  }
+
+  &.voltar:hover {
+    background-color: var(--ph-gray-hover) !important;
+  }
 }

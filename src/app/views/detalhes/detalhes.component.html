@@ -1,414 +1,249 @@
 <style>
-  * {
-    margin: 0;
-    font-size: 14px;
-  }
-
-  mat-card {
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s ease;
-    transform-style: preserve-3d;
-    border: none;
-    background-color: #f5f5f5;
-    width: 300px;
-    padding: 8px;
-  }
-
-  input {
-    width: 100%;
-    height: 1rem;
-    border: none;
-    border-bottom: 1px solid #333;
-    background-color: transparent;
-    outline: none;
-    font-size: 14px;
-    margin: 0 5px
-  }
-
-
-  mat-grid-tile {
-    width: 100%;
-    height: 0
-  }
-
-  mat-grid-list {
-    display: flex;
-    margin: 0px 5px;
-    height: calc(114px);
-    flex-direction: column-reverse;
-  }
-
-  mat-card-title {
-    display: flex;
-    justify-content: center;
-  }
-
-  mat-icon {
-    font-size: 1.5rem;
-    cursor: pointer;
-  }
-
-  .detalhes-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: center;
-    width: 100%;
-    gap: 1rem;
-  }
-
-  .adicionar-icon {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    margin-bottom: 12px;
-    margin-top: 12px;
-  }
-
-  .titulo-card-detalhe-container {
-    padding: 8px 0 important;
-
-    .titulo-card-detalhe {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 5px 0;
-
-      p {
-        font-size: 18px;
-        font-weight: 600;
-      }
-    }
-  }
-
-  .nenhum-registro-encontrado {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 1rem
-  }
-
-  .button-icon{
-    background: none;
-    border: 0;
-    padding: 0;
-    display: inline-flex;
-    padding: 2px;
-  }
-
-  .button-icon:hover{
-    background:#0000001a;
-    border-radius: 50%;
-  }
-
-  .button-icon:disabled{
-    background: none;
-    mat-icon{
-      color: #0000001a;
-    cursor: no-drop;
-
-    }
-  }
+.cards-container {
+  width: 100%;
+  height: 80%;
+}
 </style>
 
+<app-menu>
+  <app-loading *ngIf="loading"></app-loading>
+  <div *ngIf="!loading">
+    <ng-container *ngTemplateOutlet="despesas__detalhes"></ng-container>
+  </div>
+</app-menu>
 
-<div class="detalhes-container">
-  <mat-card>
-    <div class="titulo-card-detalhe-container">
-      <mat-card-title class="titulo-card-detalhe">
-        <p>Renda</p>
-      </mat-card-title>
-    </div>
-    <mat-grid-list cols="12" rowHeight="30px" gutterSize="12px" style="margin: 0 5px;">
-      <!-- Coluna Descrição → ocupa 5/12 do espaço -->
-      <form [formGroup]="form">
-        <div *ngIf="adicionar">
-          <mat-grid-tile [colspan]="5">
-            <input matInput type="text" placeholder="Descrição" class="full-width" formControlName="descricao">
-          </mat-grid-tile>
+<ng-template #despesas__detalhes>
+  <div class="detalhes-container">
+    <form [formGroup]="form">
 
-          <!-- Coluna Valor → ocupa 4/12 do espaço -->
-          <mat-grid-tile [colspan]="4">
-            <input matInput type="number" placeholder="Valor" class="full-width" formControlName="valor" required>
-          </mat-grid-tile>
-
-          <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="deveMostrarDadosAoConfirmar()">
-              <mat-icon class="icone-acoes confirmar" >done</mat-icon>
-            </button>
-
-            <button class="button-icon" mat-icon-button (click)="deveRenderizarLinhaSemDados()">
-              <mat-icon class="icone-acoes cancelar" >close</mat-icon>
-            </button>
-          </mat-grid-tile>
+      <div class="header-container">
+        <div class="valores-container">
+          <mat-card style="background-color: #5fbf62; width: auto;">
+            <mat-card-title>
+              <div>Valor Entrada {{ valoresEntradasSomados | currency: 'BRL'}} </div>
+            </mat-card-title>
+          </mat-card>
+          <mat-card
+            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(entradaValor - valoresSomados) }">
+            <mat-card-title>
+              <div>
+                Saldo Total {{ valoresEntradasSomados - valoresSomados | currency: 'BRL'}}
+              </div>
+            </mat-card-title>
+          </mat-card>
+          <mat-card style="background-color: #C62828;">
+            <mat-card-title>
+              <div>
+                Despesas Totais {{ valoresSomados | currency: 'BRL'}}
+              </div>
+            </mat-card-title>
+          </mat-card>
         </div>
+        <div class="botoes-acao">
+          <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
+            [disabled]="botaoDesabilitado()">
+            Salvar
+          </button>
+          <button class="botao-acoes excluir" mat-button (click)="excluir()">Excluir</button>
 
-
-        <div *ngIf="editar">
-          <mat-grid-tile [colspan]="5">
-            <input matInput type="text" placeholder="Descrição" class="full-width" formControlName="descricao">
-          </mat-grid-tile>
-
-          <!-- Coluna Valor → ocupa 4/12 do espaço -->
-          <mat-grid-tile [colspan]="4">
-            <input matInput type="number" placeholder="Valor" class="full-width" formControlName="valor" required>
-          </mat-grid-tile>
-
-          <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="deveEditarDadosAoConfirmar()">
-              <mat-icon class="icone-acoes confirmar">done</mat-icon>
-            </button>
-
-            <button class="button-icon" mat-icon-button (click)="deveCancelarEdicaoComDados()">
-              <mat-icon class="icone-acoes cancelar" >close</mat-icon>
-            </button>
-          </mat-grid-tile>
+          <button class="botao-acoes voltar" mat-button (click)="voltar()">Voltar</button>
         </div>
-
-        <div *ngIf="this.array.length > 0">
-          <div *ngFor="let item of array">
-            <mat-grid-tile [colspan]="5">
-              {{ item.descricao }}
-            </mat-grid-tile>
-
-            <!-- Coluna Valor → ocupa 4/12 do espaço -->
-            <mat-grid-tile [colspan]="4">
-              {{ item.valor | currency: 'BRL' }}
-            </mat-grid-tile>
-
-            <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="aoEditarDeveAlterarLinha(item)" [disabled]="deveDesabilitarComboEditarDeletar()">
-              <mat-icon class="icone-acoes editar" >edit</mat-icon>
-            </button>
-            <button class="button-icon" mat-icon-button (click)="aoDeletarDeveRemoverLinha(item)" [disabled]="deveDesabilitarComboEditarDeletar()">
-              <mat-icon class="icone-acoes deletar" >delete</mat-icon>
-            </button>
-            </mat-grid-tile>
-
-          </div>
-          <br>
-          <br>
-          <mat-grid-tile [colspan]="5">
-            <strong>Renda Total</strong>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="4">
-            <strong>{{ valoresSomados | currency: 'BRL'}}</strong>
-          </mat-grid-tile>
-        </div>
-      </form>
-      <!-- Coluna Ações → ocupa só 3/12 (fica pequena e perfeita pra ícones) -->
-
-      <div class="nenhum-registro-encontrado" *ngIf="this.array.length === 0 && !this.adicionar">
-        Nenhum registro encontrado
       </div>
+      <div class="cards-container">
+        <div class="card-entrada">
+          <mat-card>
+            <div class="titulo-card-detalhe-container">
+              <mat-card-title class="titulo-card-detalhe">
+                <p>Entradas</p>
+              </mat-card-title>
+            </div>
 
-    </mat-grid-list>
+            <mat-grid-list cols="8" rowHeight="50px" gutterSize="12px" style="margin: 0 5px;">
 
+              <!-- Linhas existentes (visualização ou edição) -->
+              <ng-container *ngFor="let item of dadosEntradasEmEdicao; let i = index; trackBy: trackByIndexEntrada">
 
-    <div class="adicionar-icon">
-      <button class="button-icon" mat-icon-button (click)="deveAdicionarMaisLinhas()" [disabled]="deveDesabilitarComboEditarDeletar()">
-        <mat-icon class="icone-acoes adicionar">add</mat-icon>
-      </button>
-    </div>
-  </mat-card>
+                <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
+                <div *ngIf="indiceEntradaEmEdicao === i">
+                  <mat-grid-tile [colspan]="3">
+                    <input matInput formControlName="descricaoEntrada" placeholder="Descrição" class="full-width">
+                  </mat-grid-tile>
 
-  <mat-card>
-    <div class="titulo-card-detalhe-container">
-      <mat-card-title class="titulo-card-detalhe">
-        <p>Despesas</p>
-      </mat-card-title>
-    </div>
-    <mat-grid-list cols="12" rowHeight="30px" gutterSize="12px" style="margin: 0 5px;">
-      <!-- Coluna Descrição → ocupa 5/12 do espaço -->
-      <form [formGroup]="form">
-        <div *ngIf="adicionar">
-          <mat-grid-tile [colspan]="5">
-            <input matInput type="text" placeholder="Descrição" class="full-width" formControlName="descricao">
-          </mat-grid-tile>
+                  <mat-grid-tile [colspan]="2">
+                    <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width">
+                  </mat-grid-tile>
 
-          <!-- Coluna Valor → ocupa 4/12 do espaço -->
-          <mat-grid-tile [colspan]="4">
-            <input matInput type="number" placeholder="Valor" class="full-width" formControlName="valor" required>
-          </mat-grid-tile>
+                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                    <button class="button-icon">
+                      <mat-icon class="icone-acoes confirmar" (click)="confirmarEntrada()">done</mat-icon>
+                    </button>
+                    <button class="button-icon">
+                      <mat-icon class="icone-acoes cancelar" (click)="cancelarEdicaoEntrada()">close</mat-icon>
+                    </button>
+                  </mat-grid-tile>
+                </div>
 
-          <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="deveMostrarDadosAoConfirmar()">
-              <mat-icon class="icone-acoes confirmar" >done</mat-icon>
-            </button>
+                <!-- Modo VISUALIZAÇÃO (padrão) -->
+                <div *ngIf="indiceEntradaEmEdicao !== i">
+                  <mat-grid-tile [colspan]="3">
+                    {{ item.entradaDescricao }}
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="2">
+                    {{ item.entradaValor | currency: 'BRL' }}
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                    <button mat-icon-button class="button-icon"
+                      [disabled]="indiceEntradaEmEdicao !== -1" matTooltip="Editar" (click)="iniciarEdicaoEntrada(i)">
+                      <mat-icon class="icone-acoes editar">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" class="button-icon" (click)="removerLinhaEntrada(i)"
+                      [disabled]="indiceEntradaEmEdicao !== -1" matTooltip="Remover">
+                      <mat-icon class="icone-acoes deletar">delete</mat-icon>
+                    </button>
+                  </mat-grid-tile>
+                </div>
 
-            <button class="button-icon" mat-icon-button (click)="deveRenderizarLinhaSemDados()">
-              <mat-icon class="icone-acoes cancelar" >close</mat-icon>
-            </button>
-          </mat-grid-tile>
+              </ng-container>
+
+              <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
+              <div *ngIf="indiceEntradaEmEdicao === dadosEntradasEmEdicao.length">
+                <mat-grid-tile [colspan]="3">
+                  <input matInput formControlName="descricaoEntrada" placeholder="Descrição" class="full-width">
+                </mat-grid-tile>
+
+                <mat-grid-tile [colspan]="2">
+                  <input matInput formControlName="entradaValor" placeholder="Descrição" class="full-width">
+                </mat-grid-tile>
+
+                <mat-grid-tile [colspan]="3" class="acoes-center">
+                  <button mat-icon-button class="button-icon" color="primary" (click)="confirmarEntrada()">
+                    <mat-icon class="icone-acoes confirmar">done</mat-icon>
+                  </button>
+                  <button mat-icon-button class="button-icon" color="warn" (click)="cancelarEdicaoEntrada()">
+                    <mat-icon class="icone-acoes cancelar">close</mat-icon>
+                  </button>
+                </mat-grid-tile>
+              </div>
+
+              <!-- Nenhum registro -->
+              <div *ngIf="dadosEntradasEmEdicao.length === 0 && indiceEntradaEmEdicao === -1">
+                <mat-grid-tile [colspan]="8" class="nenhum-registro-encontrado">
+                  Nenhum registro encontrado
+                </mat-grid-tile>
+              </div>
+
+            </mat-grid-list>
+
+            <!-- Botão adicionar nova linha -->
+            <div class="adicionar-icon">
+              <button mat-icon-button class="button-icon" (click)="adicionarNovaLinhaEntrada()"
+                [disabled]="botaoDesabilitadoEntrada()">
+                <mat-icon class="icone-acoes adicionar">add</mat-icon>
+              </button>
+            </div>
+          </mat-card>
         </div>
+        <div class="card-despesa">
+          <mat-card>
+            <div class="titulo-card-detalhe-container">
+              <mat-card-title class="titulo-card-detalhe">
+                <p>Despesas</p>
+              </mat-card-title>
+            </div>
 
+            <mat-grid-list cols="16" rowHeight="50px" gutterSize="12px" style="margin: 0 5px;">
 
-        <div *ngIf="editar">
-          <mat-grid-tile [colspan]="5">
-            <input matInput type="text" placeholder="Descrição" class="full-width" formControlName="descricao">
-          </mat-grid-tile>
+              <!-- Linhas existentes (visualização ou edição) -->
+              <ng-container *ngFor="let item of dadosDespesasEmEdicao; let i = index; trackBy: trackByIndex">
 
-          <!-- Coluna Valor → ocupa 4/12 do espaço -->
-          <mat-grid-tile [colspan]="4">
-            <input matInput type="number" placeholder="Valor" class="full-width" formControlName="valor" required>
-          </mat-grid-tile>
+                <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
+                <div *ngIf="indiceDespesaEmEdicao === i">
+                  <mat-grid-tile [colspan]="5">
+                    <input matInput formControlName="descricao" placeholder="Descrição" class="full-width">
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="4">
+                    <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="4">
+                    <mat-checkbox color="primary">Pago</mat-checkbox>
+                  </mat-grid-tile>
 
-          <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="deveEditarDadosAoConfirmar()">
-              <mat-icon class="icone-acoes confirmar">done</mat-icon>
-            </button>
+                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                    <button class="button-icon" (click)="confirmar()">
+                      <mat-icon class="icone-acoes confirmar">done</mat-icon>
+                    </button>
+                    <button class="button-icon" (click)="cancelarEdicao()">
+                      <mat-icon class="icone-acoes cancelar">close</mat-icon>
+                    </button>
+                  </mat-grid-tile>
+                </div>
 
-            <button class="button-icon" mat-icon-button (click)="deveCancelarEdicaoComDados()">
-              <mat-icon class="icone-acoes cancelar" >close</mat-icon>
-            </button>
-          </mat-grid-tile>
+                <!-- Modo VISUALIZAÇÃO (padrão) -->
+                <div *ngIf="indiceDespesaEmEdicao !== i">
+                  <mat-grid-tile [colspan]="5">
+                    {{ item.descricao || '—' }}
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="4">
+                    {{ item.valor | currency:'BRL' }}
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="4">
+                    <mat-checkbox color="primary" [disabled]="true">Pago</mat-checkbox>
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                    <button mat-icon-button (click)="iniciarEdicao(i)" class="button-icon"
+                      [disabled]="indiceDespesaEmEdicao !== -1" matTooltip="Editar">
+                      <mat-icon class="icone-acoes editar">edit</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" (click)="removerLinha(i)" class="button-icon"
+                      [disabled]="indiceDespesaEmEdicao !== -1" matTooltip="Remover">
+                      <mat-icon class="icone-acoes deletar">delete</mat-icon>
+                    </button>
+                  </mat-grid-tile>
+                </div>
+
+              </ng-container>
+
+              <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
+              <div *ngIf="indiceDespesaEmEdicao === dadosDespesasEmEdicao.length">
+                <mat-grid-tile [colspan]="5">
+                  <input matInput formControlName="descricao" placeholder="Descrição" class="full-width">
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="4">
+                  <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
+                </mat-grid-tile>
+                <mat-grid-tile [colspan]="4">
+                  <mat-checkbox color="primary">Pago</mat-checkbox>
+                </mat-grid-tile>
+
+                <mat-grid-tile [colspan]="3" class="acoes-center">
+                  <button mat-icon-button class="button-icon" color="primary" (click)="confirmar()">
+                    <mat-icon class="icone-acoes confirmar">done</mat-icon>
+                  </button>
+                  <button mat-icon-button class="button-icon" color="warn" (click)="cancelarEdicao()">
+                    <mat-icon class="icone-acoes cancelar">close</mat-icon>
+                  </button>
+                </mat-grid-tile>
+              </div>
+
+              <!-- Nenhum registro -->
+              <div *ngIf="dadosDespesasEmEdicao.length === 0 && indiceDespesaEmEdicao === -1">
+                <mat-grid-tile [colspan]="16" class="nenhum-registro-encontrado">
+                  Nenhum registro encontrado
+                </mat-grid-tile>
+              </div>
+
+            </mat-grid-list>
+
+            <!-- Botão adicionar nova linha -->
+            <div class="adicionar-icon">
+              <button mat-icon-button class="button-icon" (click)="adicionarNovaLinha()"
+                [disabled]="botaoDesabilitado()">
+                <mat-icon class="icone-acoes adicionar">add</mat-icon>
+              </button>
+            </div>
+          </mat-card>
         </div>
-
-        <div *ngIf="this.array.length > 0">
-          <div *ngFor="let item of array">
-            <mat-grid-tile [colspan]="5">
-              {{ item.descricao }}
-            </mat-grid-tile>
-
-            <!-- Coluna Valor → ocupa 4/12 do espaço -->
-            <mat-grid-tile [colspan]="4">
-              {{ item.valor | currency: 'BRL' }}
-            </mat-grid-tile>
-
-            <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="aoEditarDeveAlterarLinha(item)" [disabled]="deveDesabilitarComboEditarDeletar()">
-              <mat-icon class="icone-acoes editar" >edit</mat-icon>
-            </button>
-            <button class="button-icon" mat-icon-button (click)="aoDeletarDeveRemoverLinha(item)" [disabled]="deveDesabilitarComboEditarDeletar()">
-              <mat-icon class="icone-acoes deletar" >delete</mat-icon>
-            </button>
-            </mat-grid-tile>
-
-          </div>
-          <br>
-          <br>
-          <mat-grid-tile [colspan]="5">
-            <strong>Despesas Totais</strong>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="4">
-            <strong>{{ valoresSomados | currency: 'BRL'}}</strong>
-          </mat-grid-tile>
-        </div>
-      </form>
-      <!-- Coluna Ações → ocupa só 3/12 (fica pequena e perfeita pra ícones) -->
-
-      <div class="nenhum-registro-encontrado" *ngIf="this.array.length === 0 && !this.adicionar">
-        Nenhum registro encontrado
       </div>
-
-    </mat-grid-list>
-
-
-    <div class="adicionar-icon">
-      <button class="button-icon" mat-icon-button (click)="deveAdicionarMaisLinhas()" [disabled]="deveDesabilitarComboEditarDeletar()">
-        <mat-icon class="icone-acoes adicionar">add</mat-icon>
-      </button>
-    </div>
-  </mat-card>
-
-  <mat-card>
-    <div class="titulo-card-detalhe-container">
-      <mat-card-title class="titulo-card-detalhe">
-        <p>Investimentos</p>
-      </mat-card-title>
-    </div>
-    <mat-grid-list cols="12" rowHeight="30px" gutterSize="12px" style="margin: 0 5px;">
-      <!-- Coluna Descrição → ocupa 5/12 do espaço -->
-      <form [formGroup]="form">
-        <div *ngIf="adicionar">
-          <mat-grid-tile [colspan]="5">
-            <input matInput type="text" placeholder="Descrição" class="full-width" formControlName="descricao">
-          </mat-grid-tile>
-
-          <!-- Coluna Valor → ocupa 4/12 do espaço -->
-          <mat-grid-tile [colspan]="4">
-            <input matInput type="number" placeholder="Valor" class="full-width" formControlName="valor" required>
-          </mat-grid-tile>
-
-          <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="deveMostrarDadosAoConfirmar()">
-              <mat-icon class="icone-acoes confirmar" >done</mat-icon>
-            </button>
-
-            <button class="button-icon" mat-icon-button (click)="deveRenderizarLinhaSemDados()">
-              <mat-icon class="icone-acoes cancelar" >close</mat-icon>
-            </button>
-          </mat-grid-tile>
-        </div>
-
-
-        <div *ngIf="editar">
-          <mat-grid-tile [colspan]="5">
-            <input matInput type="text" placeholder="Descrição" class="full-width" formControlName="descricao">
-          </mat-grid-tile>
-
-          <!-- Coluna Valor → ocupa 4/12 do espaço -->
-          <mat-grid-tile [colspan]="4">
-            <input matInput type="number" placeholder="Valor" class="full-width" formControlName="valor" required>
-          </mat-grid-tile>
-
-          <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="deveEditarDadosAoConfirmar()">
-              <mat-icon class="icone-acoes confirmar">done</mat-icon>
-            </button>
-
-            <button class="button-icon" mat-icon-button (click)="deveCancelarEdicaoComDados()">
-              <mat-icon class="icone-acoes cancelar" >close</mat-icon>
-            </button>
-          </mat-grid-tile>
-        </div>
-
-        <div *ngIf="this.array.length > 0">
-          <div *ngFor="let item of array">
-            <mat-grid-tile [colspan]="5">
-              {{ item.descricao }}
-            </mat-grid-tile>
-
-            <!-- Coluna Valor → ocupa 4/12 do espaço -->
-            <mat-grid-tile [colspan]="4">
-              {{ item.valor | currency: 'BRL' }}
-            </mat-grid-tile>
-
-            <mat-grid-tile [colspan]="3" class="acoes-center">
-            <button class="button-icon" mat-icon-button (click)="aoEditarDeveAlterarLinha(item)" [disabled]="deveDesabilitarComboEditarDeletar()">
-              <mat-icon class="icone-acoes editar" >edit</mat-icon>
-            </button>
-            <button class="button-icon" mat-icon-button (click)="aoDeletarDeveRemoverLinha(item)" [disabled]="deveDesabilitarComboEditarDeletar()">
-              <mat-icon class="icone-acoes deletar" >delete</mat-icon>
-            </button>
-            </mat-grid-tile>
-
-          </div>
-          <br>
-          <br>
-          <mat-grid-tile [colspan]="5">
-            <strong>Invest. Totais</strong>
-          </mat-grid-tile>
-          <mat-grid-tile [colspan]="4">
-            <strong>{{ valoresSomados | currency: 'BRL'}}</strong>
-          </mat-grid-tile>
-        </div>
-      </form>
-      <!-- Coluna Ações → ocupa só 3/12 (fica pequena e perfeita pra ícones) -->
-
-      <div class="nenhum-registro-encontrado" *ngIf="this.array.length === 0 && !this.adicionar">
-        Nenhum registro encontrado
-      </div>
-
-    </mat-grid-list>
-
-
-    <div class="adicionar-icon">
-      <button class="button-icon" mat-icon-button (click)="deveAdicionarMaisLinhas()" [disabled]="deveDesabilitarComboEditarDeletar()">
-        <mat-icon class="icone-acoes adicionar">add</mat-icon>
-      </button>
-    </div>
-  </mat-card>
-</div>
+    </form>
+  </div>
+</ng-template>
