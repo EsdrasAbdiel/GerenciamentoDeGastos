@@ -6,7 +6,10 @@
 </style>
 
 <app-menu>
-  <ng-container *ngTemplateOutlet="despesas__detalhes"></ng-container>
+  <app-loading *ngIf="loading"></app-loading>
+  <div *ngIf="!loading">
+    <ng-container *ngTemplateOutlet="despesas__detalhes"></ng-container>
+  </div>
 </app-menu>
 
 <ng-template #despesas__detalhes>
@@ -15,16 +18,16 @@
 
       <div class="header-container">
         <div class="valores-container">
-          <mat-card style="background-color: #5fbf62;">
+          <mat-card style="background-color: #5fbf62; width: auto;">
             <mat-card-title>
-              <div>Valor Entrada {{ valorEntrada | currency: 'BRL'}} </div>
+              <div>Valor Entrada {{ valoresEntradasSomados | currency: 'BRL'}} </div>
             </mat-card-title>
           </mat-card>
           <mat-card
-            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(valorEntrada - valoresSomados) }">
+            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(entradaValor - valoresSomados) }">
             <mat-card-title>
               <div>
-                Saldo Total {{ valorEntrada - valoresSomados | currency: 'BRL'}}
+                Saldo Total {{ valoresEntradasSomados - valoresSomados | currency: 'BRL'}}
               </div>
             </mat-card-title>
           </mat-card>
@@ -41,7 +44,7 @@
             [disabled]="botaoDesabilitado()">
             Salvar
           </button>
-          <button class="botao-acoes excluir" mat-button (click)="voltar()">Excluir</button>
+          <button class="botao-acoes excluir" mat-button (click)="excluir()">Excluir</button>
 
           <button class="botao-acoes voltar" mat-button (click)="voltar()">Voltar</button>
         </div>
@@ -67,7 +70,7 @@
                   </mat-grid-tile>
 
                   <mat-grid-tile [colspan]="2">
-                    <input matInput formControlName="valorEntrada" placeholder="Valor" class="full-width">
+                    <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width">
                   </mat-grid-tile>
 
                   <mat-grid-tile [colspan]="3" class="acoes-center">
@@ -86,7 +89,7 @@
                     {{ item.entradaDescricao }}
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="2">
-                    {{ item.valorEntrada }}
+                    {{ item.entradaValor | currency: 'BRL' }}
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="3" class="acoes-center">
                     <button mat-icon-button class="button-icon"
@@ -109,7 +112,7 @@
                 </mat-grid-tile>
 
                 <mat-grid-tile [colspan]="2">
-                  <input matInput formControlName="valorEntrada" placeholder="Descrição" class="full-width">
+                  <input matInput formControlName="entradaValor" placeholder="Descrição" class="full-width">
                 </mat-grid-tile>
 
                 <mat-grid-tile [colspan]="3" class="acoes-center">
@@ -244,5 +247,3 @@
     </form>
   </div>
 </ng-template>
-
-<ng-template #despesas__entradas></ng-template>

@@ -12,9 +12,11 @@ import { MenuComponent } from '../../components/menu/menu.component';
 import { GastosService } from '../../services/gastos.service';
 import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTooltipModule } from '@angular/material/tooltip'
+import { finalize } from 'rxjs';
+import { LoadingComponent } from '../../components/loading/loading.component';
 
 export interface Despesa {
-  indice?: number;
+  f?: number;
   id?: number;
   descricao: string;
   valor: number;
@@ -24,7 +26,7 @@ export interface Entrada {
   indice?: number;
   id?: number;
   entradaDescricao: string;
-  valorEntrada: number;
+  entradaValor: number;
 }
 
 @Component({
@@ -41,20 +43,22 @@ export interface Entrada {
     MenuComponent,
     MatCheckboxModule,
     NgStyle,
-    MatTooltipModule
+    MatTooltipModule,
+    LoadingComponent
   ],
   templateUrl: './detalhes.component.html',
   styleUrls: ['./detalhes.component.scss', '../../../assets/colors.scss']
 })
 export class DetalhesComponent implements OnInit {
   paramsRoute: any;
-  form: FormGroup;
+  form!: FormGroup;
   dadosDespesasEmEdicao: Despesa[] = [];
   dadosEntradasEmEdicao: Entrada[] = [];
   valoresSomados = 0;
+  valoresEntradasSomados = 0;
   adicionarValorEntrada: boolean = false;
-  valorEntrada: number = 3250;
-
+  entradaValor: number = 3250;
+  loading = false;
   // Índice da linha sendo editada (-1 = nenhuma, ou length = nova linha no final)
   indiceDespesaEmEdicao: number = -1;
   indiceEntradaEmEdicao: number = -1;
@@ -65,22 +69,20 @@ export class DetalhesComponent implements OnInit {
     private gastosService: GastosService,
     private activatedRoute: ActivatedRoute
   ) {
+    this.paramsRoute = this.activatedRoute.snapshot.params;
     this.form = this.fb.group({
       valorSaida: [null],
-      valorEntrada: [null],
+      entradaValor: [null],
       descricaoEntrada: [null],
       descricao: [''],
       valor: [null]
     });
-    this.paramsRoute = this.activatedRoute.snapshot.params;
   }
 
   ngOnInit(): void {
-    if (this.paramsRoute.id) {
+    if (this.paramsRoute.id)
       this.carregarDespesasExistentes();
-    }
   }
-
   verificacaoValorPositivoOuNegativo(valor: number) {
     if (valor > 0) {
       return '#28A745';
@@ -94,20 +96,28 @@ export class DetalhesComponent implements OnInit {
   deveSalvarValorDeEntrada() {
     this.adicionarValorEntrada = false;
 
-    const { valorEntrada, descricaoEntrada } = this.form.value;
+    const { entradaValor, descricaoEntrada } = this.form.value;
 
-    console.log(valorEntrada, descricaoEntrada);
+    console.log(entradaValor, descricaoEntrada);
 
   }
 
   carregarDespesasExistentes() {
-    this.gastosService.getDespesaPeloId(this.paramsRoute.id).subscribe(retorno => {
-      this.dadosDespesasEmEdicao = retorno.itensDespesa.map((item: any, index: number) => ({
-        ...item,
+    this.loading = true;
+    this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
+      this.dadosDespesasEmEdicao = retorno.itensDespesa.map((itensDespesa: any, index: number) => ({
+        ...itensDespesa,
         indice: index
       }));
+
+      this.dadosEntradasEmEdicao = retorno.itensEntrada.map((itensEntrada: any, index: number) => ({
+        ...itensEntrada,
+        indice: index
+      }))
       this.somarValores();
+      this.somarValoresEntrada();
     });
+
   }
 
   // Inicia edição de uma linha existente
@@ -124,7 +134,7 @@ export class DetalhesComponent implements OnInit {
     this.indiceEntradaEmEdicao = index;
     const item = this.dadosEntradasEmEdicao[index];
     this.form.patchValue({
-      valorEntrada: item.valorEntrada,
+      entradaValor: item.entradaValor,
       descricaoEntrada: item.entradaDescricao
     })
   }
@@ -140,6 +150,14 @@ export class DetalhesComponent implements OnInit {
     this.form.reset();
   }
 
+  gerarIdPorItemEntrada() {
+    return this.dadosEntradasEmEdicao.length + 1;
+  }
+
+  gerarIdPorItemDespesa() {
+    return this.dadosDespesasEmEdicao.length + 1;
+  }
+
   // Confirma (edição ou adição)
   confirmar() {
     if (this.form.invalid) {
@@ -152,6 +170,7 @@ export class DetalhesComponent implements OnInit {
     if (this.indiceDespesaEmEdicao === this.dadosDespesasEmEdicao.length) {
       // É uma NOVA linha
       this.dadosDespesasEmEdicao.push({
+        //id: this.gerarIdPorItemDespesa(),
         descricao: valor.descricao,
         valor: Number(valor.valor)
       });
@@ -179,20 +198,21 @@ export class DetalhesComponent implements OnInit {
     if (this.indiceEntradaEmEdicao === this.dadosEntradasEmEdicao.length) {
       // É uma NOVA linha
       this.dadosEntradasEmEdicao.push({
+        //id: this.gerarIdPorItemEntrada(),
         entradaDescricao: valor.descricaoEntrada,
-        valorEntrada: Number(valor.valorEntrada)
+        entradaValor: Number(valor.entradaValor)
       });
     } else {
       // É edição de linha existente
       this.dadosEntradasEmEdicao[this.indiceEntradaEmEdicao] = {
         ...this.dadosEntradasEmEdicao[this.indiceEntradaEmEdicao],
         entradaDescricao: valor.descricaoEntrada,
-        valorEntrada: Number(valor.valorEntrada)
+        entradaValor: Number(valor.entradaValor)
       };
     }
 
     this.cancelarEdicaoEntrada();
-    //this.somarValores();
+    this.somarValoresEntrada();
   }
 
   // Cancela edição/adição
@@ -241,6 +261,10 @@ export class DetalhesComponent implements OnInit {
     this.valoresSomados = this.dadosDespesasEmEdicao.reduce((acc, item) => acc + item.valor, 0);
   }
 
+  somarValoresEntrada() {
+    this.valoresEntradasSomados = this.dadosEntradasEmEdicao.reduce((acc, item) => acc + item.entradaValor, 0);
+  }
+
   // TrackBy para performance
   trackByIndex(index: number): number {
     return index;
@@ -259,7 +283,8 @@ export class DetalhesComponent implements OnInit {
       const paramsCadastro = {
         despesas: this.dadosDespesasEmEdicao,
         entradas: this.dadosEntradasEmEdicao,
-        valorTotal: this.valoresSomados,
+        valorDespesaTotal: this.valoresSomados,
+        valorEntradaTotal: this.valoresEntradasSomados,
         dataInclusao: new Date(),
         mes: Number(this.paramsRoute.mes),
         ano: Number(this.paramsRoute.ano)
@@ -273,7 +298,8 @@ export class DetalhesComponent implements OnInit {
         id: this.paramsRoute.id,
         despesas: this.dadosDespesasEmEdicao,
         entradas: this.dadosEntradasEmEdicao,
-        valorTotal: this.valoresSomados,
+        valorDespesaTotal: this.valoresSomados,
+        valorEntradaTotal: this.valoresEntradasSomados,
         dataInclusao: new Date(),
         mes: Number(this.paramsRoute.mes),
         ano: Number(this.paramsRoute.ano)
@@ -283,6 +309,12 @@ export class DetalhesComponent implements OnInit {
         alert(retorno.sucesso ? retorno.mensagem : retorno.mensagem)
       })
     }
+  }
+
+  excluir() {
+    this.gastosService.deleteDespesa(this.paramsRoute.id).subscribe(retorno => {
+      alert(retorno.message);
+    })
   }
 
   voltar() {

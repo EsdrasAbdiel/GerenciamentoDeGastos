@@ -5,6 +5,7 @@ export interface Despesa {
   dataInclusao: Date;
   id: string;
   itensDespesa: DespesaItem[];
+  itensEntrada: any;
   mes: number;
   valorTotal: number;
 }
