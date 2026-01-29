@@ -9,30 +9,19 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent {
-  form!: FormGroup;
 
-  constructor(
-    private fb: FormBuilder,
-    private router: Router
-  ) {
-    this.form = this.fb.group({
-      login: [null],
-      senha: [null]
-    })
+  constructor(private Router: Router) {
+
+  }
+  email: string = ''
+  password: string = ''
+
+  onSubmit() {
+    console.log('Login tentado:', this.email, this.password);
+    // Aqui vai sua lógica de autenticação (AuthService, etc.)
   }
 
-  login = 'admin';
-  senha = 123;
-
-  conferirLogin() {
-    console.log(this.form.value);
-
-    const { login, senha } = this.form.value;
-
-    if (login === this.login && senha === this.senha) {
-      this.router.navigate(['home'])
-    } else {
-      alert('Erro ao fazer login')
-    }
+  redirecionar() {
+    this.Router.navigate(['/card-anos'])
   }
 }

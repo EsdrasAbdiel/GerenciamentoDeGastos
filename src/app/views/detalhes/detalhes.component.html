@@ -24,7 +24,7 @@
             </mat-card-title>
           </mat-card>
           <mat-card
-            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(entradaValor - valoresSomados) }">
+            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(valoresEntradasSomados - valoresSomados) }">
             <mat-card-title>
               <div>
                 Saldo Total {{ valoresEntradasSomados - valoresSomados | currency: 'BRL'}}
@@ -112,7 +112,7 @@
                 </mat-grid-tile>
 
                 <mat-grid-tile [colspan]="2">
-                  <input matInput formControlName="entradaValor" placeholder="Descrição" class="full-width">
+                  <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width">
                 </mat-grid-tile>
 
                 <mat-grid-tile [colspan]="3" class="acoes-center">
@@ -165,7 +165,7 @@
                     <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="4">
-                    <mat-checkbox color="primary">Pago</mat-checkbox>
+                    <mat-checkbox formControlName="pagamentoEfetuado">Pago</mat-checkbox>
                   </mat-grid-tile>
 
                   <mat-grid-tile [colspan]="3" class="acoes-center">
