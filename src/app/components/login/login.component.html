@@ -1,0 +1,32 @@
+<div class="card-formulario">
+  <mat-card>
+    <div class="titulo-section-card">
+      <span>Login</span>
+    </div>
+    <form class="formulario-container" [formGroup]="form">
+      <div class="input-container">
+        <label for="">E-mail</label>
+        <input type="email" formControlName="email">
+        <div class="input-error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+          <span>Email incorreto.</span>
+        </div>
+      </div>
+      <div class="input-container">
+        <label for="">Senha</label>
+        <input type="password" formControlName="senha">
+        <div class="input-error" *ngIf="form.get('senha')?.invalid && form.get('senha')?.touched">
+          <span>Senha incorreta.</span>
+        </div>
+        <div style="font-size: 12px; color: #b2b2c9;">
+          <ins (click)="deveRedefinirSenha()">Esqueci a senha.</ins>
+        </div>
+      </div>
+      <div class="button-width-100">
+        <button (click)="redirecionar()" mat-raised-button>Login</button>
+      </div>
+      <div class="registro-card-login">
+        <span>Não tem cadastro? <ins (click)="deveMudarCardParaRegistroOuLogin()">Cadastre-se</ins></span>
+      </div>
+    </form>
+  </mat-card>
+</div>

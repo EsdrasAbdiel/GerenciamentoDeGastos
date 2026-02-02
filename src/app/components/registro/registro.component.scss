@@ -1,0 +1,51 @@
+.registro {
+  gap: 1rem;
+  font-size: 12px;
+  font-weight: 300;
+  width: 300px;
+  justify-content: center;
+}
+
+
+
+.campos-form-registro-container {
+  flex-direction: row;
+  display: flex;
+  gap: 18px;
+}
+
+mat-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+  transform-style: preserve-3d;
+  border: none;
+  background: #262626;
+  border: 1px solid #707070;
+  color: #E5E5E5;
+  padding: 1rem;
+
+  .titulo-card-login {
+    font-size: 24px;
+    font-weight: 500;
+    color: #f5f5f5;
+    margin-bottom: 8px;
+  }
+}
+
+.login-card-registro {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 12px;
+  font-weight: 300;
+  justify-content: center;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.textarea-container {
+  flex-direction: column;
+  display: flex;
+  margin-bottom: 1rem;
+}

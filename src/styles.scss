@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
-@import url(../src/assets/colors.scss);
-
+@use 'assets/forms';
+@use 'assets/buttons';
+@use 'assets/titles';
+@use 'assets/inputs';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -16,3 +18,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .mdc-checkbox--disabled .mdc-checkbox__background {
   border-color: #44474e !important;
 }
+
+ins { color: #b2b2c9; cursor: pointer; }
+
+button { cursor: pointer; }
+
+h2 { margin: 0; }
