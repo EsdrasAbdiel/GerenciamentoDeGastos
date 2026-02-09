@@ -3,8 +3,9 @@
 </app-menu>
 
 <ng-template #card_meses>
-  <div class="titulo-container" titulo>
+  <div class="titulo-container">
     <p>Selecione o mês:</p>
+    <button (click)="deveVoltarParaMenuAnos()">voltar</button>
   </div>
 
   <div class="container-card" card-anos-consulta>

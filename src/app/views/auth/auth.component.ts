@@ -7,7 +7,7 @@ import { RouterOutlet } from '@angular/router';
 @Component({
   selector: 'app-auth',
   standalone: true,
-  imports: [MoneyBackgroundComponent, LoginComponent, RegistroComponent, RouterOutlet],
+  imports: [MoneyBackgroundComponent, RouterOutlet],
   templateUrl: './auth.component.html',
   styleUrl: './auth.component.scss'
 })
