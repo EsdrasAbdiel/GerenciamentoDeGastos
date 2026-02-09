@@ -74,10 +74,13 @@ export class CardsMesesComponent implements OnInit {
       return;
     }
 
-
     const id = card.despesas[0].id
 
     this.router.navigate([`${this.paramsRoute.ano}/${card.id}/${id}`])
+  }
+
+  deveVoltarParaMenuAnos() {
+    this.router.navigate(['/card-anos'])
   }
 
 }
