@@ -1,0 +1,16 @@
+import { Component } from '@angular/core';
+import { MoneyBackgroundComponent } from '../../../assets/money-background/money-background.component';
+import { LoginComponent } from '../../components/login/login.component';
+import { RegistroComponent } from '../../components/registro/registro.component';
+import { RouterOutlet } from '@angular/router';
+
+@Component({
+  selector: 'app-auth',
+  standalone: true,
+  imports: [MoneyBackgroundComponent, LoginComponent, RegistroComponent, RouterOutlet],
+  templateUrl: './auth.component.html',
+  styleUrl: './auth.component.scss'
+})
+export class AuthComponent {
+
+}

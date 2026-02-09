@@ -1,0 +1,43 @@
+<div class="card-formulario">
+  <mat-card class="card-container">
+    <div class="titulo-section-card">
+      <span>Registro</span>
+    </div>
+    <form class="formulario-container">
+      <div class="campos-form-container">
+        <div class="input-container">
+          <label for="">Nome</label>
+          <input type="text">
+        </div>
+        <div class="input-container">
+          <label for="">Email</label>
+          <input type="text">
+        </div>
+      </div>
+      <div class="campos-form-container">
+        <div class="input-container">
+          <label for="">Data de Nascimento</label>
+          <input type="date">
+        </div>
+        <div class="input-container">
+          <label for="">Sexo</label>
+          <select name="" id="">
+            <option value="null"></option>
+            <option value="0">Masculino</option>
+            <option value="1">Feminino</option>
+          </select>
+        </div>
+      </div>
+      <div class="textarea-container">
+        <span>Qual objetivo você tem em mente ao utilizar esse sistema?</span>
+        <textarea name="" id=""></textarea>
+      </div>
+      <div class="button-width-100">
+        <button mat-raised-button>Cadastrar</button>
+      </div>
+      <div class="login-card-registro">
+        <span>Já possui cadastro? <ins (click)="deveMudarCardParaRegistroOuLogin()">Fazer login</ins></span>
+      </div>
+    </form>
+  </mat-card>
+</div>

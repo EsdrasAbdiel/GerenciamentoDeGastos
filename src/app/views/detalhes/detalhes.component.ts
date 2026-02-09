@@ -57,7 +57,6 @@ export class DetalhesComponent implements OnInit {
   valoresSomados = 0;
   valoresEntradasSomados = 0;
   adicionarValorEntrada: boolean = false;
-  entradaValor: number = 3250;
   loading = false;
   // Índice da linha sendo editada (-1 = nenhuma, ou length = nova linha no final)
   indiceDespesaEmEdicao: number = -1;
@@ -75,7 +74,8 @@ export class DetalhesComponent implements OnInit {
       entradaValor: [null],
       descricaoEntrada: [null],
       descricao: [''],
-      valor: [null]
+      valor: [null],
+      pagamentoEfetuado: [null]
     });
   }
 
@@ -89,7 +89,7 @@ export class DetalhesComponent implements OnInit {
     } else if (valor < 0) {
       return '#DC3545'
     } else {
-      return 'none'
+      return 'gray'
     }
   }
 
@@ -312,9 +312,12 @@ export class DetalhesComponent implements OnInit {
   }
 
   excluir() {
-    this.gastosService.deleteDespesa(this.paramsRoute.id).subscribe(retorno => {
-      alert(retorno.message);
-    })
+    var confirmar = confirm('Deseja excluir toda a despesa??');
+
+    if (confirmar)
+      this.gastosService.deleteDespesa(this.paramsRoute.id).subscribe(retorno => {
+        alert(retorno.message);
+      })
   }
 
   voltar() {
