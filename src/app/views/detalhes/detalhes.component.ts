@@ -20,6 +20,7 @@ export interface Despesa {
   id?: number;
   descricao: string;
   valor: number;
+  pago: boolean
 }
 
 export interface Entrada {
@@ -47,7 +48,7 @@ export interface Entrada {
     LoadingComponent
   ],
   templateUrl: './detalhes.component.html',
-  styleUrls: ['./detalhes.component.scss', '../../../assets/colors.scss']
+  styleUrl: './detalhes.component.scss'
 })
 export class DetalhesComponent implements OnInit {
   paramsRoute: any;
@@ -71,11 +72,11 @@ export class DetalhesComponent implements OnInit {
     this.paramsRoute = this.activatedRoute.snapshot.params;
     this.form = this.fb.group({
       valorSaida: [null],
-      entradaValor: [null],
-      descricaoEntrada: [null],
-      descricao: [''],
-      valor: [null],
-      pagamentoEfetuado: [null]
+      entradaValor: [null, Validators.required],
+      descricaoEntrada: [null, [Validators.required]],
+      descricao: [null, [Validators.required]],
+      valor: [null, [Validators.required]],
+      pago: [false]
     });
   }
 
@@ -92,16 +93,7 @@ export class DetalhesComponent implements OnInit {
       return 'gray'
     }
   }
-
-  deveSalvarValorDeEntrada() {
-    this.adicionarValorEntrada = false;
-
-    const { entradaValor, descricaoEntrada } = this.form.value;
-
-    console.log(entradaValor, descricaoEntrada);
-
-  }
-
+  
   carregarDespesasExistentes() {
     this.loading = true;
     this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
@@ -126,7 +118,8 @@ export class DetalhesComponent implements OnInit {
     const item = this.dadosDespesasEmEdicao[index];
     this.form.patchValue({
       descricao: item.descricao,
-      valor: item.valor
+      valor: item.valor,
+      pago: item.pago
     });
   }
 
@@ -160,10 +153,6 @@ export class DetalhesComponent implements OnInit {
 
   // Confirma (edição ou adição)
   confirmar() {
-    if (this.form.invalid) {
-      alert('Preencha descrição e valor corretamente.');
-      return;
-    }
 
     const valor = this.form.value;
 
@@ -172,14 +161,16 @@ export class DetalhesComponent implements OnInit {
       this.dadosDespesasEmEdicao.push({
         //id: this.gerarIdPorItemDespesa(),
         descricao: valor.descricao,
-        valor: Number(valor.valor)
+        valor: Number(valor.valor),
+        pago: valor.pago
       });
     } else {
       // É edição de linha existente
       this.dadosDespesasEmEdicao[this.indiceDespesaEmEdicao] = {
         ...this.dadosDespesasEmEdicao[this.indiceDespesaEmEdicao],
         descricao: valor.descricao,
-        valor: Number(valor.valor)
+        valor: Number(valor.valor),
+        pago: valor.pago
       };
     }
 
@@ -188,10 +179,7 @@ export class DetalhesComponent implements OnInit {
   }
 
   confirmarEntrada() {
-    if (this.form.invalid) {
-      alert('Preencha descrição e valor corretamente.');
-      return;
-    }
+
 
     const valor = this.form.value;
 
@@ -275,8 +263,15 @@ export class DetalhesComponent implements OnInit {
   }
 
   salvarNoBackend() {
-    console.log(this.dadosEntradasEmEdicao);
-    console.log(this.dadosDespesasEmEdicao);
+    if (this.dadosDespesasEmEdicao.length === 0) {
+      alert('Para salvar o registro de gastos, deve adicionar uma despesa');
+      return;
+    }
+
+    if (this.dadosEntradasEmEdicao.length === 0) {
+      alert('Para salvar o registro de gastos, deve adicionar uma entrada');
+      return;
+    }
 
 
     if (!this.paramsRoute.id) {
@@ -291,7 +286,11 @@ export class DetalhesComponent implements OnInit {
       };
 
       this.gastosService.postCadastroDespesas(paramsCadastro).subscribe(retorno => {
-        alert(retorno.sucesso ? retorno.mensagem : retorno.mensagem);
+       if (retorno.sucesso) {
+        alert(retorno.message)
+       } else {
+        console.error(retorno.erro)
+       }
       });
     } else {
       const paramsAlteracao = {
@@ -322,5 +321,9 @@ export class DetalhesComponent implements OnInit {
 
   voltar() {
     this.router.navigate([`/${this.paramsRoute.ano}/card-meses`]);
+  }
+
+  get formulario() {
+    return this.form.controls;
   }
 }
