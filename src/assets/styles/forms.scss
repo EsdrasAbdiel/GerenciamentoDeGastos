@@ -16,3 +16,10 @@
   display: flex;
   flex-direction: column;
 }
+
+.campos-form-container {
+  flex-direction: row;
+  display: flex;
+  gap: 1rem;
+}
+
