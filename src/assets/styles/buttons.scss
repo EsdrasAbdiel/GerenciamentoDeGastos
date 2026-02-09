@@ -1,0 +1,15 @@
+.button-width-100 {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+}
+
+.buttons-container-space-around {
+  display: flex;
+  width: 100%;
+  flex-direction: row;
+  justify-content: space-around;
+  gap: 1rem;
+}
+
+button { cursor: pointer; }

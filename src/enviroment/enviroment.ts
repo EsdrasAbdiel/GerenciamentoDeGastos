@@ -2,12 +2,12 @@ export const environment = {
   production: false,
   name: 'dev',
   BASE_URL: {
-    listarGastos: 'https://localhost:8080/api/gastos/listar',
-    listarAnos: 'https://localhost:8080/api/data/listar/anos',
-    listarMeses: 'https://localhost:8080/api/data/listar/meses',
-    cadastro: 'https://localhost:8080/api/gastos/cadastro',
-    buscarDespesa: 'https://localhost:8080/api/gastos/buscarDespesa',
-    atualizarDespesa: 'https://localhost:8080/api/gastos/atualizarDespesa',
-    deletarDespesa: 'https://localhost:8080/api/gastos/deletarDespesa'
+    listarGastos: 'http://localhost:8080/api/gastos/listar',
+    listarAnos: 'http://localhost:8080/api/data/listar/anos',
+    listarMeses: 'http://localhost:8080/api/data/listar/meses',
+    cadastro: 'http://localhost:8080/api/gastos/cadastro',
+    buscarDespesa: 'http://localhost:8080/api/gastos/buscarDespesa',
+    atualizarDespesa: 'http://localhost:8080/api/gastos/atualizarDespesa',
+    deletarDespesa: 'http://localhost:8080/api/gastos/deletarDespesa'
   }
 }
