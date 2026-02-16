@@ -1,0 +1,48 @@
+
+
+.login-card-registro {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  font-size: 12px;
+  font-weight: 300;
+  justify-content: center;
+  margin-top: 1rem;
+  align-items: center;
+}
+
+.textarea-container {
+  flex-direction: column;
+  display: flex;
+  margin-bottom: 1rem;
+}
+
+.password-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.eye-btn {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-70%);
+  background: none;
+  border: none;
+  padding: 0 0.5rem;
+  cursor: pointer;
+  color: #cbcbcb;           // combina com sua borda
+  font-size: 1.1rem;        // tamanho confortável
+  line-height: 1;
+  opacity: 0.7;
+
+  &:hover,
+  &:focus {
+    opacity: 1;
+    color: #f5f5f5;         // mais visível no hover
+  }
+
+  &:active {
+    transform: translateY(-65%) scale(0.95);
+  }
+}
