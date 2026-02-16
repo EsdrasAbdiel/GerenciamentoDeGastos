@@ -4,22 +4,12 @@
       <span>Login</span>
     </div>
     <form class="formulario-container" [formGroup]="form">
-      <div class="input-container">
-        <label for="">E-mail</label>
-        <input type="email" formControlName="email">
-        <div class="input-error" *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-          <span>Email incorreto.</span>
-        </div>
-      </div>
-      <div class="input-container">
-        <label for="">Senha</label>
-        <input type="password" formControlName="senha">
-        <div class="input-error" *ngIf="form.get('senha')?.invalid && form.get('senha')?.touched">
-          <span>Senha incorreta.</span>
-        </div>
-      </div>
+      <app-input [label]="'Email'" formControlName="email" [error]="erroEmail" />
+      <app-password-input>
+        <app-input [label]="'Senha'" formControlName="senha" [error]="erroSenha" [mask]="'000000'" />
+      </app-password-input>
       <div class="button-width-100">
-        <button (click)="redirecionar()" mat-raised-button>Login</button>
+        <button (click)="deveBuscarUsuario()" mat-raised-button>Login</button>
       </div>
               <div style="font-size: 12px; color: #b2b2c9;">
           <ins (click)="deveRedefinirSenha()">Esqueci a senha.</ins>
@@ -30,3 +20,21 @@
     </form>
   </mat-card>
 </div>
+
+<ng-template #erroSenha>
+  <ng-container *ngIf="!form.get('senha')?.value && form.get('senha')?.touched">
+    *Campo Obrigatorio
+  </ng-container>
+  <ng-container *ngIf="form.get('senha')?.invalid && form.get('senha')?.value">
+    *Digite 6 digitos numericos
+  </ng-container>
+</ng-template>
+
+<ng-template #erroEmail>
+  <ng-container *ngIf="!form.get('email')?.value && form.get('email')?.touched">
+    *Campo Obrigatorio
+  </ng-container>
+    <ng-container *ngIf="form.get('email')?.hasError('gmail')">
+    *Deve conter dominio valido.
+  </ng-container>
+</ng-template>
