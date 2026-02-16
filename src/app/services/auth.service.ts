@@ -13,6 +13,11 @@ type RegistroRequest = {
   confirmarSenha: number;
 }
 
+type LoginRequest = {
+  email: string;
+  senha: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,5 +27,9 @@ export class AuthService {
 
   postRegistrarUsuario(registro: RegistroRequest): Observable<RetornoApi<Registro>> {
     return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro)
+  }
+
+  postUsuario(login: LoginRequest): Observable<RetornoApi<any>> {
+    return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.buscarUsuario}`, login)
   }
 }

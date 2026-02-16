@@ -67,9 +67,10 @@ export class RegistroComponent {
             alert(retorno.mensagem)
             this.registroService.setInformacoesCadastroUsuario(retorno.resultado)
             this.router.navigate(['/auth/login'])
-          } else {
-            alert(retorno.mensagem)
           }
+        },
+        error => {
+          alert(error?.error.mensagem)
         }
       )
     }
