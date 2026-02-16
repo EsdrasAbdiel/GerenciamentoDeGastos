@@ -7,10 +7,14 @@ import { MoneyBackgroundComponent } from '../../../../../assets/money-background
 import { MatCardModule } from '@angular/material/card';
 import { RegistroService } from '../../../../services/registro.service';
 import { Registro } from '../../../../models/registro.model';
+import { AuthService } from '../../../../services/auth.service';
+import { PasswordInputComponent } from '../../../../components/password-input/password-input.component';
+import { InputComponent } from '../../../../components/input/input.component';
+import { emailValidator } from '../../../../utils/email-validator.util';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -22,9 +26,10 @@ export class LoginComponent implements OnInit {
   constructor(
     private router: Router,
     private fb: FormBuilder,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private authService: AuthService
   ) {
-      this.inicializarFormGroup();
+    this.inicializarFormGroup();
   }
 
   ngOnInit(): void {
@@ -33,7 +38,7 @@ export class LoginComponent implements OnInit {
 
   private inicializarFormGroup() {
     this.form = this.fb.group({
-      email: [null, [Validators.required, Validators.email]],
+      email: [null, [Validators.required, emailValidator()]],
       senha: [null, [Validators.required, Validators.minLength(6)]]
     })
   }
@@ -56,6 +61,30 @@ export class LoginComponent implements OnInit {
       alert('erro ao tentar efetuar o login.')
     } else {
       this.router.navigate(['/card-anos'])
+    }
+  }
+
+  deveBuscarUsuario() {
+    const { email, senha } = this.form.value;
+
+    const params = {
+      email: String(email),
+      senha: Number(senha)
+    }
+
+    if (this.form.invalid) {
+      this.form.markAllAsTouched()
+    } else {
+      this.authService.postUsuario(params).pipe().subscribe(
+        retorno => {
+          if (retorno.sucesso)
+            alert(retorno.mensagem);
+          this.router.navigate(['/card-anos'])
+        },
+        error => {
+          alert(error?.error.mensagem)
+        }
+      )
     }
   }
 
