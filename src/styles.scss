@@ -5,6 +5,7 @@
 @use 'assets/styles/inputs';
 @use 'assets/styles/colors';
 @use 'assets/styles/cards';
+@use 'assets/styles/snackbar';
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

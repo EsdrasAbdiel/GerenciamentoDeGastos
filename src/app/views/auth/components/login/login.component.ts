@@ -3,14 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { MoneyBackgroundComponent } from '../../../../../assets/money-background/money-background.component';
 import { MatCardModule } from '@angular/material/card';
 import { RegistroService } from '../../../../services/registro.service';
-import { Registro } from '../../../../models/registro.model';
 import { AuthService } from '../../../../services/auth.service';
 import { PasswordInputComponent } from '../../../../components/password-input/password-input.component';
 import { InputComponent } from '../../../../components/input/input.component';
 import { emailValidator } from '../../../../utils/email-validator.util';
+import { SnackbarService } from '../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -27,7 +26,8 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private fb: FormBuilder,
     private registroService: RegistroService,
-    private authService: AuthService
+    private authService: AuthService,
+    private snackbarService: SnackbarService
   ) {
     this.inicializarFormGroup();
   }
@@ -55,15 +55,6 @@ export class LoginComponent implements OnInit {
     )
   }
 
-  redirecionar() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      alert('erro ao tentar efetuar o login.')
-    } else {
-      this.router.navigate(['/card-anos'])
-    }
-  }
-
   deveBuscarUsuario() {
     const { email, senha } = this.form.value;
 
@@ -78,11 +69,10 @@ export class LoginComponent implements OnInit {
       this.authService.postUsuario(params).pipe().subscribe(
         retorno => {
           if (retorno.sucesso)
-            alert(retorno.mensagem);
           this.router.navigate(['/card-anos'])
         },
         error => {
-          alert(error?.error.mensagem)
+          this.snackbarService.error(error?.error.mensagem)
         }
       )
     }
