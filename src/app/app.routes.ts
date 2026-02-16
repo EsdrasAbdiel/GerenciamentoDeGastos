@@ -1,13 +1,13 @@
 import { Routes } from '@angular/router';
 import { ConsultaComponent } from './views/consulta/consulta.component';
 import { DetalhesComponent } from './views/detalhes/detalhes.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './views/auth/components/login/login.component';
 import { HomeComponent } from './views/home/home.component';
 import { CardsAnosComponent } from './components/cards-anos/cards-anos.component';
 import { CardsMesesComponent } from './components/cards-meses/cards-meses.component';
 import { AuthComponent } from './views/auth/auth.component';
-import { RegistroComponent } from './components/registro/registro.component';
-import { EsqueciSenhaComponent } from './components/esqueci-senha/esqueci-senha.component';
+import { RegistroComponent } from './views/auth/components/registro/registro.component';
+import { EsqueciSenhaComponent } from './views/auth/components/esqueci-senha/esqueci-senha.component';
 
 export const routes: Routes = [
   {

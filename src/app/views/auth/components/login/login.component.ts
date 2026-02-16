@@ -3,8 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { MoneyBackgroundComponent } from '../../../assets/money-background/money-background.component';
+import { MoneyBackgroundComponent } from '../../../../../assets/money-background/money-background.component';
 import { MatCardModule } from '@angular/material/card';
+import { RegistroService } from '../../../../services/registro.service';
+import { Registro } from '../../../../models/registro.model';
 
 @Component({
   selector: 'app-login',
@@ -19,11 +21,14 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private fb: FormBuilder
-  ) { }
+    private fb: FormBuilder,
+    private registroService: RegistroService
+  ) {
+      this.inicializarFormGroup();
+  }
 
   ngOnInit(): void {
-    this.inicializarFormGroup();
+    this.carregarInformacoesDaTelaDeRegistro();
   }
 
   private inicializarFormGroup() {
@@ -31,6 +36,18 @@ export class LoginComponent implements OnInit {
       email: [null, [Validators.required, Validators.email]],
       senha: [null, [Validators.required, Validators.minLength(6)]]
     })
+  }
+
+  carregarInformacoesDaTelaDeRegistro() {
+    this.registroService.getInformacoesCadastroUsuario().subscribe(
+      (informacoesRegistro) => {
+        if (informacoesRegistro) {
+          this.form.patchValue({
+            email: informacoesRegistro.email
+          })
+        }
+      }
+    )
   }
 
   redirecionar() {
@@ -42,7 +59,7 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  deveMudarCardParaRegistroOuLogin() {
+  deveFazerRegistro() {
     this.router.navigate(['/auth/registro'])
   }
 
