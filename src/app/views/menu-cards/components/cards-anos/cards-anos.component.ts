@@ -1,16 +1,17 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MenuComponent } from '../menu/menu.component';
+import { MenuComponent } from '../../../../components/menu/menu.component';
 import { ActivatedRoute, Router } from "@angular/router";
-import { GastosService } from '../../services/gastos.service';
-import { Ano } from '../../models/ano.model';
-import { LoadingComponent } from '../loading/loading.component';
+import { GastosService } from '../../../../services/gastos.service';
+import { Ano } from '../../../../models/ano.model';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 import { finalize, takeUntil } from 'rxjs';
+import { MenuCardsComponent } from '../../menu-cards.component';
 
 @Component({
   selector: 'app-cards-anos',
-  imports: [MatCardModule, CommonModule, MenuComponent, LoadingComponent],
+  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet],
   templateUrl: './cards-anos.component.html',
   styleUrl: './cards-anos.component.scss'
 })
@@ -27,12 +28,12 @@ export class CardsAnosComponent implements OnInit {
   ) {
   }
 
-
   ngOnInit(): void {
     this.listarAnos();
   }
 
   aoClicarNoCardAnoDeveIrParaMeses(ano: Ano) {
+    console.log(ano);
     this.router.navigate([`/${ano.id}/card-meses`])
   }
 
