@@ -1,0 +1,56 @@
+<!-- <select
+  [(ngModel)]="value"
+  (ngModelChange)="onSelectChange($event)"
+  [disabled]="disabled"
+  [multiple]="multiselect"
+  >
+
+  <option value="" disabled selected>
+    {{ placeholder }}
+  </option>
+
+  <option
+    *ngFor="let opcao of opcoes"
+    [ngValue]="opcao">
+    <input type="checkbox" *ngIf="multiselect">{{ opcao.nome }}
+  </option>
+
+  <option value="adicionar">
+    ➕ Adicionar Categoria
+  </option>
+
+</select> -->
+
+<style>
+  .select-container {
+    width: 200px;
+    background-color: azure;
+  }
+
+  .placeholder-select-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .opcao-container {
+    display: flex;
+    align-items: center;
+  }
+
+  .checkbox {
+    width: auto !important;
+  }
+</style>
+
+<div class="select-container">
+  <div class="placeholder-select-container" (click)="abrirModalComOpcoes = !abrirModalComOpcoes">
+    {{ opcaoSelecionada }} <mat-icon>arrow_drop_down</mat-icon>
+  </div>
+  <div class="modal-opcoes-container" *ngIf="abrirModalComOpcoes">
+    <div class="opcao-container" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder('opcao 01')"> <input
+        type="checkbox" class="checkbox" *ngIf="true">opcao 1</div>
+    <div class="opcao-container" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder('opcao 02')">opcao 02</div>
+    <div class="opcao-container" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder('opcao 03')">opcao 03</div>
+  </div>
+</div>
