@@ -14,6 +14,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../components/loading/loading.component';
+import { SelectComponent, SelectModel } from '../../components/select/select.component';
 
 export interface Despesa {
   f?: number;
@@ -45,7 +46,8 @@ export interface Entrada {
     MatCheckboxModule,
     NgStyle,
     MatTooltipModule,
-    LoadingComponent
+    LoadingComponent,
+    SelectComponent
   ],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
@@ -62,6 +64,13 @@ export class DetalhesComponent implements OnInit {
   // Índice da linha sendo editada (-1 = nenhuma, ou length = nova linha no final)
   indiceDespesaEmEdicao: number = -1;
   indiceEntradaEmEdicao: number = -1;
+
+  opcoes: SelectModel[] = [
+    { id: 1, nome: 'Opção 1' },
+    { id: 2, nome: 'Opção 2' },
+    { id: 3, nome: 'Opção 3' },
+    { id: 4, nome: 'Opção 4' }
+  ]
 
   constructor(
     private router: Router,
@@ -93,7 +102,7 @@ export class DetalhesComponent implements OnInit {
       return 'gray'
     }
   }
-  
+
   carregarDespesasExistentes() {
     this.loading = true;
     this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
@@ -209,11 +218,11 @@ export class DetalhesComponent implements OnInit {
     this.form.reset();
   }
 
-    // Cancela edição/adição
-    cancelarEdicaoEntrada() {
-      this.indiceEntradaEmEdicao = -1;
-      this.form.reset();
-    }
+  // Cancela edição/adição
+  cancelarEdicaoEntrada() {
+    this.indiceEntradaEmEdicao = -1;
+    this.form.reset();
+  }
 
   // Remove linha
   removerLinha(index: number) {
@@ -286,11 +295,11 @@ export class DetalhesComponent implements OnInit {
       };
 
       this.gastosService.postCadastroDespesas(paramsCadastro).subscribe(retorno => {
-       if (retorno.sucesso) {
-        alert(retorno.message)
-       } else {
-        console.error(retorno.erro)
-       }
+        if (retorno.sucesso) {
+          alert(retorno.message)
+        } else {
+          console.error(retorno.erro)
+        }
       });
     } else {
       const paramsAlteracao = {
@@ -325,5 +334,9 @@ export class DetalhesComponent implements OnInit {
 
   get formulario() {
     return this.form.controls;
+  }
+
+  abrirModal() {
+    confirm('Teste modal')
   }
 }

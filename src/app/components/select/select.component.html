@@ -24,13 +24,21 @@
 <style>
   .select-container {
     width: 200px;
-    background-color: azure;
+    color: gray;
   }
 
   .placeholder-select-container {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    border-bottom: 1px solid gray;
+  }
+
+  .modal-opcoes-container {
+    display: flex;
+    flex-direction: column;
+
+    background-color: rgb(255, 255, 255);
   }
 
   .opcao-container {
@@ -41,16 +49,38 @@
   .checkbox {
     width: auto !important;
   }
+
+  .input-checkbox {
+    width: 10%;
+  }
 </style>
 
 <div class="select-container">
   <div class="placeholder-select-container" (click)="abrirModalComOpcoes = !abrirModalComOpcoes">
-    {{ opcaoSelecionada }} <mat-icon>arrow_drop_down</mat-icon>
+    {{ opcaoSelecionada || placeholder }} <mat-icon>arrow_drop_down</mat-icon>
   </div>
-  <div class="modal-opcoes-container" *ngIf="abrirModalComOpcoes">
-    <div class="opcao-container" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder('opcao 01')"> <input
-        type="checkbox" class="checkbox" *ngIf="true">opcao 1</div>
-    <div class="opcao-container" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder('opcao 02')">opcao 02</div>
-    <div class="opcao-container" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder('opcao 03')">opcao 03</div>
-  </div>
+  <ng-container *ngTemplateOutlet="multiselect ? multiselectContainer : selectContainer"></ng-container>
+
 </div>
+
+<ng-template #multiselectContainer>
+  <div class="modal-opcoes-container" *ngIf="abrirModalComOpcoes">
+    <div *ngFor="let opcao of opcoes" class="opcao-container"> <input type="checkbox" class="input-checkbox"
+        [checked]="estaSelecionado(opcao)" (change)="acaoAoClicar($event, opcao)"> {{ opcao.nome }}
+    </div>
+    <ng-container *ngIf="aparecerAdicionarOpcao">
+          <ng-container *ngTemplateOutlet="nova"></ng-container>
+
+    </ng-container>
+  </div>
+</ng-template>
+<ng-template #selectContainer>
+  <div class="modal-opcoes-container" *ngIf="abrirModalComOpcoes">
+    <div *ngFor="let opcao of opcoes" (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao)">{{ opcao.nome }}
+    </div>
+  </div>
+</ng-template>
+<ng-template #nova>
+    <div class="opcao-container" (click)="onSelectChange('adicionar')"><mat-icon class="mat-18">add</mat-icon> <span>Adiconar Nova
+        Opção</span></div>
+</ng-template>

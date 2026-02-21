@@ -142,6 +142,7 @@
               </button>
             </div>
           </mat-card>
+          <app-select [placeholder]="'Selecione uma opção'" [opcoes]="opcoes" [multiselect]="true" [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="abrirModal()"></app-select>
         </div>
         <div class="card-despesa">
           <mat-card>
@@ -168,7 +169,7 @@
                     <mat-checkbox formControlName="pago">Pago</mat-checkbox>
                   </mat-grid-tile>
 
-                  <mat-grid-tile [colspan]="3" class="acoes-center"> 
+                  <mat-grid-tile [colspan]="3" class="acoes-center">
                     <button class="button-icon" (click)="confirmar()" matTooltip="Confirmar">
                       <mat-icon class="icone-acoes confirmar">done</mat-icon>
                     </button>
@@ -182,7 +183,7 @@
                 <div *ngIf="indiceDespesaEmEdicao !== i">
                   <mat-grid-tile [colspan]="5" *ngIf="!item.pago">
                     {{ item.descricao }}
-                  </mat-grid-tile>                  
+                  </mat-grid-tile>
                   <mat-grid-tile [colspan]="5" *ngIf="item.pago">
                     <del>{{ item.descricao }}</del>
                   </mat-grid-tile>

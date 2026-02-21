@@ -1,4 +1,4 @@
-import { NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, NgModel, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
@@ -11,7 +11,7 @@ export interface SelectModel {
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [NgFor, NgIf,ReactiveFormsModule, FormsModule, MatIconModule],
+  imports: [NgFor, NgIf, ReactiveFormsModule, FormsModule, MatIconModule, NgTemplateOutlet, CommonModule],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
   providers: [
@@ -24,10 +24,12 @@ export interface SelectModel {
 })
 export class SelectComponent implements ControlValueAccessor {
   opcaoSelecionada!: string;
+  opcaoSelecionadaMultiselect: any[] = []
   abrirModalComOpcoes = false;
   @Input() placeholder!: string;
   @Input() opcoes: SelectModel[] = [];
   @Input() multiselect: boolean = false
+  @Input() aparecerAdicionarOpcao: boolean = false;
   @Output() adicionarNovaOpcao = new EventEmitter<void>();
 
   value: any;
@@ -67,8 +69,28 @@ export class SelectComponent implements ControlValueAccessor {
     this.onTouchedFn();
   }
 
-  aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao: string) {
-    this.opcaoSelecionada = opcao;
+  aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao: SelectModel) {
+    this.opcaoSelecionada = opcao.nome;
     this.abrirModalComOpcoes = !this.abrirModalComOpcoes
   }
+
+  aoSelecionarOpcaoDevePermanecerAbertoModal(opcao: SelectModel) {
+    this.opcaoSelecionadaMultiselect.push(opcao)
+  }
+
+  acaoAoClicar(event: any, opcao: SelectModel) {
+    const checked = event.target.checked;
+
+    if (checked) {
+      this.opcaoSelecionadaMultiselect.push({...opcao, marcado: checked})
+    } else {
+      this.opcaoSelecionadaMultiselect = this.opcaoSelecionadaMultiselect.filter(o => o.id != opcao.id )
+    }
+    console.log(this.opcaoSelecionadaMultiselect);
+
+  }
+
+estaSelecionado(opcao: any): boolean {
+  return this.opcaoSelecionadaMultiselect.some(o => o.id === opcao.id);
+}
 }
