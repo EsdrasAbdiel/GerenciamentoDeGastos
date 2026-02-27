@@ -12,5 +12,4 @@ export class IconButtonComponent {
   @Input() icone = '';
   @Input() desabilitado = '';
   @Input() cor = '';
-
 }

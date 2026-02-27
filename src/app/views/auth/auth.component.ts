@@ -1,7 +1,5 @@
 import { Component } from '@angular/core';
 import { MoneyBackgroundComponent } from '../../../assets/money-background/money-background.component';
-import { LoginComponent } from '../../components/login/login.component';
-import { RegistroComponent } from '../../components/registro/registro.component';
 import { RouterOutlet } from '@angular/router';
 
 @Component({

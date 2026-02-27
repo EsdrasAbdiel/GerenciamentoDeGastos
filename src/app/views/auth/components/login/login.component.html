@@ -1,0 +1,42 @@
+<div class="card-formulario">
+  <mat-card class="card-container login">
+    <div class="titulo-section-card">
+      <span>Login</span>
+    </div>
+    <form class="formulario-container" [formGroup]="form">
+      <div class="inputs-form">
+        <app-input [label]="'Email'" formControlName="email" [error]="erroEmail" class="input-form" />
+      <app-password-input>
+        <app-input [label]="'Senha'" formControlName="senha" [error]="erroSenha" [mask]="'000000'" />
+      </app-password-input>
+      </div>
+      <div class="button-width-100">
+        <button (click)="deveBuscarUsuario()" mat-raised-button>Login</button>
+      </div>
+              <div style="font-size: 12px; color: #b2b2c9;">
+          <ins (click)="deveRedefinirSenha()">Esqueci a senha.</ins>
+        </div>
+      <div class="registro-card-login">
+        <span>Não tem cadastro? <ins (click)="deveFazerRegistro()">Cadastre-se</ins></span>
+      </div>
+    </form>
+  </mat-card>
+</div>
+
+<ng-template #erroSenha>
+  <ng-container *ngIf="!form.get('senha')?.value && form.get('senha')?.touched">
+    *Campo Obrigatorio
+  </ng-container>
+  <ng-container *ngIf="form.get('senha')?.invalid && form.get('senha')?.value">
+    *Digite 6 digitos numericos
+  </ng-container>
+</ng-template>
+
+<ng-template #erroEmail>
+  <ng-container *ngIf="!form.get('email')?.value && form.get('email')?.touched">
+    *Campo Obrigatorio
+  </ng-container>
+    <ng-container *ngIf="form.get('email')?.hasError('gmail')">
+    *Deve conter dominio valido.
+  </ng-container>
+</ng-template>

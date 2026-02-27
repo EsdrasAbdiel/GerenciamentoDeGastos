@@ -8,6 +8,8 @@ export const environment = {
     cadastro: 'http://localhost:8080/api/gastos/cadastro',
     buscarDespesa: 'http://localhost:8080/api/gastos/buscarDespesa',
     atualizarDespesa: 'http://localhost:8080/api/gastos/atualizarDespesa',
-    deletarDespesa: 'http://localhost:8080/api/gastos/deletarDespesa'
+    deletarDespesa: 'http://localhost:8080/api/gastos/deletarDespesa',
+    registarUsuario: 'http://localhost:8080/api/auth/registro',
+    buscarUsuario: 'http://localhost:8080/api/auth/buscarUsuario/'
   }
 }

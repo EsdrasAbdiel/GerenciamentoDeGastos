@@ -1,0 +1,7 @@
+<div class="container-card">
+    <div class="container-cards">
+        <mat-card appearance="outlined" *ngFor="let item of items" (click)="selecionar(item)">
+            <mat-card-title> {{ getLabel(item) }} </mat-card-title>
+        </mat-card>
+    </div>
+</div>
