@@ -13,6 +13,7 @@ input {
 }
 
 .input-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   color: white;
@@ -23,6 +24,7 @@ input {
 
 
   .input-error {
+    position: absolute;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
@@ -30,6 +32,7 @@ input {
     align-items: center;
     font-weight: 400;
     font-size: 12px;
+    bottom: 0;
   }
 }
 
