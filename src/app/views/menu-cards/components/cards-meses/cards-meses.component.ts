@@ -1,12 +1,13 @@
-import { GastosService } from './../../services/gastos.service';
-import { CommonModule } from '@angular/common';
+import { GastosService } from '../../../../services/gastos.service';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { MenuComponent } from '../menu/menu.component';
-import { Mes } from '../../models/mes.model';
+import { MenuComponent } from '../../../../components/menu/menu.component';
+import { Mes } from '../../../../models/mes.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize, forkJoin, map, switchMap } from 'rxjs';
-import { LoadingComponent } from '../loading/loading.component';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { MenuCardsComponent } from '../../menu-cards.component';
 
 export interface CardsMeses {
   mes: number;
@@ -16,7 +17,7 @@ export interface CardsMeses {
 @Component({
   selector: 'app-cards-meses',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MenuComponent, LoadingComponent],
+  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet],
   templateUrl: './cards-meses.component.html',
   styleUrl: './cards-meses.component.scss'
 })
