@@ -8,6 +8,7 @@ import { AuthService } from '../../../../services/auth.service';
 import { RegistroService } from '../../../../services/registro.service';
 import { InputComponent } from '../../../../components/input/input.component';
 import { PasswordInputComponent } from '../../../../components/password-input/password-input.component';
+import { SnackbarService } from '../../../../services/snackbar.service';
 
 @Component({
   selector: 'app-registro',
@@ -26,7 +27,8 @@ export class RegistroComponent {
     private router: Router,
     private fb: FormBuilder,
     private authService: AuthService,
-    private registroService: RegistroService
+    private registroService: RegistroService,
+    private snackbarService: SnackbarService
   ) {
 
     this.form = this.fb.group({
@@ -35,7 +37,6 @@ export class RegistroComponent {
       dataNascimento: [null, [Validators.required]],
       senha: [null, [Validators.required, Validators.maxLength(6), Validators.minLength(6)]],
       confirmarSenha: [null, [Validators.required, Validators.maxLength(6)]],
-      teste1: ['']
     })
   }
 
@@ -64,13 +65,13 @@ export class RegistroComponent {
       this.authService.postRegistrarUsuario(params).pipe().subscribe(
         retorno => {
           if (retorno.sucesso) {
-            alert(retorno.mensagem)
-            this.registroService.setInformacoesCadastroUsuario(retorno.resultado)
-            this.router.navigate(['/auth/login'])
+            this.snackbarService.success(retorno.mensagem);
+            this.registroService.setInformacoesCadastroUsuario(retorno.resultado);
+            this.router.navigate(['/auth/login']);
           }
         },
         error => {
-          alert(error?.error.mensagem)
+          this.snackbarService.error(error ? error?.error.mensagem : 'Erro ao efetuar registro' )
         }
       )
     }
