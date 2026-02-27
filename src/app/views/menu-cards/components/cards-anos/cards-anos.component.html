@@ -1,0 +1,13 @@
+<app-menu>
+  <ng-container *ngTemplateOutlet="menu__cards"></ng-container>
+</app-menu>
+
+<ng-template #menu__cards>
+  <div class="titulo-container" titulo>
+    <p>Selecione o ano:</p>
+  </div>
+
+  <app-menu-cards [items]="anos" [labelKey]="'anoDescricao'"
+    (selecionado)="aoClicarNoCardAnoDeveIrParaMeses($event)"></app-menu-cards>
+
+</ng-template>
