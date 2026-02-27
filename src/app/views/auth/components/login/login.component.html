@@ -4,10 +4,12 @@
       <span>Login</span>
     </div>
     <form class="formulario-container" [formGroup]="form">
-      <app-input [label]="'Email'" formControlName="email" [error]="erroEmail" />
+      <div class="inputs-form">
+        <app-input [label]="'Email'" formControlName="email" [error]="erroEmail" class="input-form" />
       <app-password-input>
         <app-input [label]="'Senha'" formControlName="senha" [error]="erroSenha" [mask]="'000000'" />
       </app-password-input>
+      </div>
       <div class="button-width-100">
         <button (click)="deveBuscarUsuario()" mat-raised-button>Login</button>
       </div>

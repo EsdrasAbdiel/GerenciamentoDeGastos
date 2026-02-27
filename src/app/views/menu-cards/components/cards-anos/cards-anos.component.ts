@@ -33,7 +33,6 @@ export class CardsAnosComponent implements OnInit {
   }
 
   aoClicarNoCardAnoDeveIrParaMeses(ano: Ano) {
-    console.log(ano);
     this.router.navigate([`/${ano.id}/card-meses`])
   }
 

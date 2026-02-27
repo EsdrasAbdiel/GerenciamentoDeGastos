@@ -21,7 +21,6 @@ input {
   font-weight: 200;
   flex: 1 1 0;
 
-
   .input-error {
     position: absolute;
     display: flex;
@@ -31,9 +30,10 @@ input {
     align-items: center;
     font-weight: 400;
     font-size: 12px;
-    bottom: 0;
+    bottom: -15px;
   }
 }
+
 
 .input-container label {
   white-space: nowrap;
