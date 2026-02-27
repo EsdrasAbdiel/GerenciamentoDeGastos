@@ -1,8 +1,57 @@
-.add-option {
-  color: white !important;
-}
+:host {
+  .select-container {
+    width: 100%;
+    color: gray;
+    position: relative;
 
-select {
-  height: auto !important;
-  font-size: 18px;
+    .placeholder-select-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #f5f5f5;
+      border-bottom: 1px solid #808080;
+      width: 100%;
+      flex-wrap: nowrap;
+      height: 1rem;
+    }
+  }
+
+  .modal-opcoes-container {
+    transition: transform 0.3s ease;
+
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    z-index: 9999;
+    width: 100%;
+    top: 100%;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+    background-color: rgb(255, 255, 255);
+
+    .opcao-container {
+      display: flex;
+      align-items: center;
+      padding: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    .opcao-container:hover {
+      background-color: rgba(92, 92, 92, 0.121);
+      cursor: pointer;
+    }
+  }
+
+  .adicionar {
+    cursor: pointer
+  }
+
+  .checkbox {
+    width: auto !important;
+  }
+
+  .input-checkbox {
+    width: 10%;
+    cursor: pointer;
+  }
 }

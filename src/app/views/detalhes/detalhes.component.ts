@@ -48,7 +48,7 @@ export interface Entrada {
     MatTooltipModule,
     LoadingComponent,
     SelectComponent
-  ],
+],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
 })
@@ -66,10 +66,10 @@ export class DetalhesComponent implements OnInit {
   indiceEntradaEmEdicao: number = -1;
 
   opcoes: SelectModel[] = [
-    { id: 1, nome: 'Opção 1' },
-    { id: 2, nome: 'Opção 2' },
-    { id: 3, nome: 'Opção 3' },
-    { id: 4, nome: 'Opção 4' }
+    { id: 1, nome: 'Faculdade' },
+    { id: 2, nome: 'Aluguel' },
+    { id: 3, nome: 'Combustivel' },
+    { id: 4, nome: 'Outros' }
   ]
 
   constructor(
@@ -99,7 +99,7 @@ export class DetalhesComponent implements OnInit {
     } else if (valor < 0) {
       return '#DC3545'
     } else {
-      return 'gray'
+      return '#808080'
     }
   }
 
@@ -125,8 +125,9 @@ export class DetalhesComponent implements OnInit {
   iniciarEdicao(index: number) {
     this.indiceDespesaEmEdicao = index;
     const item = this.dadosDespesasEmEdicao[index];
+    
     this.form.patchValue({
-      descricao: item.descricao,
+      descricao: { nome: item.descricao, id: 0 },
       valor: item.valor,
       pago: item.pago
     });
@@ -162,24 +163,25 @@ export class DetalhesComponent implements OnInit {
 
   // Confirma (edição ou adição)
   confirmar() {
+    const {descricao, valor, pago} = this.form.value;
 
-    const valor = this.form.value;
 
     if (this.indiceDespesaEmEdicao === this.dadosDespesasEmEdicao.length) {
       // É uma NOVA linha
       this.dadosDespesasEmEdicao.push({
         //id: this.gerarIdPorItemDespesa(),
-        descricao: valor.descricao,
-        valor: Number(valor.valor),
-        pago: valor.pago
+        descricao: descricao.nome,
+        valor: Number(valor),
+        pago: pago ?? false
       });
     } else {
       // É edição de linha existente
+
       this.dadosDespesasEmEdicao[this.indiceDespesaEmEdicao] = {
         ...this.dadosDespesasEmEdicao[this.indiceDespesaEmEdicao],
-        descricao: valor.descricao,
-        valor: Number(valor.valor),
-        pago: valor.pago
+        descricao: descricao.nome,
+        valor: Number(valor),
+        pago: pago ?? false
       };
     }
 
@@ -334,9 +336,5 @@ export class DetalhesComponent implements OnInit {
 
   get formulario() {
     return this.form.controls;
-  }
-
-  abrirModal() {
-    confirm('Teste modal')
   }
 }

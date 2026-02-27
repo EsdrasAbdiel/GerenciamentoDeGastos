@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 export interface SelectModel {
   id: number;
   nome: string;
+  marcado?: boolean
 }
 
 @Component({
@@ -23,23 +24,26 @@ export interface SelectModel {
   ]
 })
 export class SelectComponent implements ControlValueAccessor {
-  opcaoSelecionada!: string;
-  opcaoSelecionadaMultiselect: any[] = []
-  abrirModalComOpcoes = false;
   @Input() placeholder!: string;
   @Input() opcoes: SelectModel[] = [];
   @Input() multiselect: boolean = false
   @Input() aparecerAdicionarOpcao: boolean = false;
   @Output() adicionarNovaOpcao = new EventEmitter<void>();
 
+  opcaoSelecionada!: string | any[];
+  opcaoSelecionadaMultiselect: SelectModel[] = []
+  array: string[] = []
+  abrirModalComOpcoes = false;
   value: any;
   disabled = false;
 
-  onChangeFn = (_: any) => {};
-  onTouchedFn = () => {};
+  onChangeFn = (_: any) => { };
+  onTouchedFn = () => { };
 
-  writeValue(value: any): void {
-    this.value = value;
+  writeValue(value: SelectModel): void {
+    if (!value) return;
+
+    this.opcaoSelecionada = value.nome
   }
 
   registerOnChange(fn: any): void {
@@ -71,26 +75,30 @@ export class SelectComponent implements ControlValueAccessor {
 
   aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao: SelectModel) {
     this.opcaoSelecionada = opcao.nome;
-    this.abrirModalComOpcoes = !this.abrirModalComOpcoes
-  }
+    this.abrirModalComOpcoes = !this.abrirModalComOpcoes;
+    this.abrirModalComOpcoes = false;
 
-  aoSelecionarOpcaoDevePermanecerAbertoModal(opcao: SelectModel) {
-    this.opcaoSelecionadaMultiselect.push(opcao)
+    this.onChangeFn(opcao);
+    this.onTouchedFn();
+
+    return this.opcaoSelecionada;
   }
 
   acaoAoClicar(event: any, opcao: SelectModel) {
     const checked = event.target.checked;
 
     if (checked) {
-      this.opcaoSelecionadaMultiselect.push({...opcao, marcado: checked})
+      this.opcaoSelecionadaMultiselect.push({ ...opcao, marcado: checked })
+      this.array.push(' ' + opcao.nome)
     } else {
-      this.opcaoSelecionadaMultiselect = this.opcaoSelecionadaMultiselect.filter(o => o.id != opcao.id )
+      this.opcaoSelecionadaMultiselect = this.opcaoSelecionadaMultiselect.filter(o => o.id != opcao.id);
+      this.array = this.opcaoSelecionadaMultiselect.map(opcao => {
+        return opcao.nome
+      });
     }
-    console.log(this.opcaoSelecionadaMultiselect);
 
+    this.opcaoSelecionada = String(this.array)
+
+    this.onChangeFn(this.opcaoSelecionadaMultiselect)
   }
-
-estaSelecionado(opcao: any): boolean {
-  return this.opcaoSelecionadaMultiselect.some(o => o.id === opcao.id);
-}
 }
