@@ -15,6 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip'
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { SelectComponent, SelectModel } from '../../components/select/select.component';
+import { CardValoresComponent } from '../../components/card-valores/card-valores.component';
 
 export interface Despesa {
   f?: number;
@@ -47,7 +48,8 @@ export interface Entrada {
     NgStyle,
     MatTooltipModule,
     LoadingComponent,
-    SelectComponent
+    SelectComponent,
+    CardValoresComponent
 ],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
