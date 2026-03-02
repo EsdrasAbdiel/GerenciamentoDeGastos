@@ -32,4 +32,8 @@ export class AuthService {
   postUsuario(login: LoginRequest): Observable<RetornoApi<any>> {
     return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.buscarUsuario}`, login)
   }
+
+  logout() {
+    return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.logout}`, {})
+  }
 }

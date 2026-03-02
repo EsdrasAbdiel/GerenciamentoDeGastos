@@ -1,4 +1,4 @@
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { CommonModule, NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MenuComponent } from '../../../../components/menu/menu.component';
@@ -11,13 +11,12 @@ import { MenuCardsComponent } from '../../menu-cards.component';
 
 @Component({
   selector: 'app-cards-anos',
-  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet],
+  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet, NgIf, LoadingComponent],
   templateUrl: './cards-anos.component.html',
   styleUrl: './cards-anos.component.scss'
 })
 
 export class CardsAnosComponent implements OnInit {
-
   anos: Ano[] = []
   paramsRoute: any;
   loading!: boolean;
