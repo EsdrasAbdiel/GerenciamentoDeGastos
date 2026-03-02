@@ -11,6 +11,7 @@ export const environment = {
     deletarDespesa: 'http://localhost:8080/api/gastos/deletarDespesa',
     registarUsuario: 'http://localhost:8080/api/auth/registro',
     buscarUsuario: 'http://localhost:8080/api/auth/buscarUsuario/',
-    logout: 'http://localhost:8080/api/auth/logout/'
+    logout: 'http://localhost:8080/api/auth/logout/',
+    me: 'http://localhost:8080/api/auth/me'
   }
 }
