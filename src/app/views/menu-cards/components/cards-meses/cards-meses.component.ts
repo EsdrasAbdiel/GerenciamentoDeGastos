@@ -1,5 +1,5 @@
 import { GastosService } from '../../../../services/gastos.service';
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
+import { CommonModule, NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MenuComponent } from '../../../../components/menu/menu.component';
@@ -17,7 +17,7 @@ export interface CardsMeses {
 @Component({
   selector: 'app-cards-meses',
   standalone: true,
-  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet],
+  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet, LoadingComponent, NgIf],
   templateUrl: './cards-meses.component.html',
   styleUrl: './cards-meses.component.scss'
 })
