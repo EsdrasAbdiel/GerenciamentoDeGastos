@@ -68,4 +68,8 @@ export class AuthService {
   isAuthenticated(): boolean | null {
     return this.authenticated$.value;
   }
+
+  logout() {
+    return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.logout}`, {})
+  }
 }

@@ -10,17 +10,20 @@ import { PasswordInputComponent } from '../../../../components/password-input/pa
 import { InputComponent } from '../../../../components/input/input.component';
 import { emailValidator } from '../../../../utils/email-validator.util';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { finalize } from 'rxjs';
+import { LoadingComponent } from '../../../../components/loading/loading.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent],
+  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent, LoadingComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
 
-  form!: FormGroup
+  form!: FormGroup;
   registrarUsuario: boolean = false;
+  loading!: boolean;
 
   constructor(
     private router: Router,
@@ -56,6 +59,7 @@ export class LoginComponent implements OnInit {
   }
 
   deveBuscarUsuario() {
+    this.loading = true;
     const { email, senha } = this.form.value;
 
     const params = {
@@ -66,7 +70,7 @@ export class LoginComponent implements OnInit {
     if (this.form.invalid) {
       this.form.markAllAsTouched()
     } else {
-      this.authService.postUsuario(params).pipe().subscribe(
+      this.authService.postUsuario(params).pipe((finalize(() => this.loading = false))).subscribe(
         retorno => {
           if (retorno)
           this.router.navigate(['/card-anos'])
