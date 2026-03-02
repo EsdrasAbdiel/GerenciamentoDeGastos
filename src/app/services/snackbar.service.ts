@@ -17,7 +17,7 @@ export class SnackbarService {
             },
             verticalPosition: 'top',
             horizontalPosition: 'right',
-            duration: duration ? duration : 3000000,
+            duration: duration ? duration : 3000,
             panelClass: ['success']
         })
     }
@@ -30,7 +30,7 @@ export class SnackbarService {
             },
             verticalPosition: 'top',
             horizontalPosition: 'right',
-            duration: duration ? duration : 3000000,
+            duration: duration ? duration : 3000,
             panelClass: ['error']
         })
     }
