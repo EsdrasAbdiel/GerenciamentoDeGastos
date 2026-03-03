@@ -76,7 +76,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/card-anos'])
         },
         error => {
-          this.snackbarService.error(error?.error.mensagem)
+          error?.error.mensagem ? this.snackbarService.error(error?.error.mensagem) : this.snackbarService.error('Error ao efetuar login')
         }
       )
     }
