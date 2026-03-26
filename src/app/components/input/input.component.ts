@@ -1,19 +1,17 @@
 import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, forwardRef, Input, TemplateRef } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
-import { NgxMaskDirective, provideNgxMask } from 'ngx-mask'
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [NgIf, NgTemplateOutlet, ReactiveFormsModule, NgxMaskDirective],
+  imports: [NgIf, NgTemplateOutlet, ReactiveFormsModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => InputComponent),
       multi: true
     },
-    provideNgxMask()
   ],
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss'

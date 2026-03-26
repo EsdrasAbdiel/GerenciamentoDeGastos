@@ -149,8 +149,6 @@
               </button>
             </div>
           </mat-card>
-                          <app-select [opcoes]="opcoesDespesas" [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"></app-select>
-
         </div>
         <div class="card-despesa">
           <mat-card>
@@ -168,8 +166,8 @@
                 <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
                 <div *ngIf="indiceDespesaEmEdicao === i">
                   <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
-                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao"
-                      class="full-width"></app-select> 
+                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao" [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
+                      class="full-width"></app-select>
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="4">
                     <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
@@ -219,8 +217,8 @@
               <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
               <div *ngIf="indiceDespesaEmEdicao === dadosDespesasEmEdicao.length">
                 <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
-                  <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao"
-                    class="full-width"></app-select>
+                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao" [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
+                      class="full-width"></app-select>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="4">
                   <input matInput formControlName="valor" placeholder="Valor" [type]="'number'" class="full-width">
