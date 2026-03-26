@@ -14,6 +14,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox'
 import { MatTooltipModule } from '@angular/material/tooltip'
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../components/loading/loading.component';
+import { SelectComponent, SelectModel } from '../../components/select/select.component';
+import { CardValoresComponent } from '../../components/card-valores/card-valores.component';
 
 export interface Despesa {
   f?: number;
@@ -45,8 +47,10 @@ export interface Entrada {
     MatCheckboxModule,
     NgStyle,
     MatTooltipModule,
-    LoadingComponent
-  ],
+    LoadingComponent,
+    SelectComponent,
+    CardValoresComponent
+],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
 })
@@ -62,6 +66,13 @@ export class DetalhesComponent implements OnInit {
   // Índice da linha sendo editada (-1 = nenhuma, ou length = nova linha no final)
   indiceDespesaEmEdicao: number = -1;
   indiceEntradaEmEdicao: number = -1;
+
+  opcoes: SelectModel[] = [
+    { id: 1, nome: 'Faculdade' },
+    { id: 2, nome: 'Aluguel' },
+    { id: 3, nome: 'Combustivel' },
+    { id: 4, nome: 'Outros' }
+  ]
 
   constructor(
     private router: Router,
@@ -90,10 +101,10 @@ export class DetalhesComponent implements OnInit {
     } else if (valor < 0) {
       return '#DC3545'
     } else {
-      return 'gray'
+      return '#808080'
     }
   }
-  
+
   carregarDespesasExistentes() {
     this.loading = true;
     this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
@@ -116,8 +127,9 @@ export class DetalhesComponent implements OnInit {
   iniciarEdicao(index: number) {
     this.indiceDespesaEmEdicao = index;
     const item = this.dadosDespesasEmEdicao[index];
+    
     this.form.patchValue({
-      descricao: item.descricao,
+      descricao: { nome: item.descricao, id: 0 },
       valor: item.valor,
       pago: item.pago
     });
@@ -153,24 +165,25 @@ export class DetalhesComponent implements OnInit {
 
   // Confirma (edição ou adição)
   confirmar() {
+    const {descricao, valor, pago} = this.form.value;
 
-    const valor = this.form.value;
 
     if (this.indiceDespesaEmEdicao === this.dadosDespesasEmEdicao.length) {
       // É uma NOVA linha
       this.dadosDespesasEmEdicao.push({
         //id: this.gerarIdPorItemDespesa(),
-        descricao: valor.descricao,
-        valor: Number(valor.valor),
-        pago: valor.pago
+        descricao: descricao.nome,
+        valor: Number(valor),
+        pago: pago ?? false
       });
     } else {
       // É edição de linha existente
+
       this.dadosDespesasEmEdicao[this.indiceDespesaEmEdicao] = {
         ...this.dadosDespesasEmEdicao[this.indiceDespesaEmEdicao],
-        descricao: valor.descricao,
-        valor: Number(valor.valor),
-        pago: valor.pago
+        descricao: descricao.nome,
+        valor: Number(valor),
+        pago: pago ?? false
       };
     }
 
@@ -209,11 +222,11 @@ export class DetalhesComponent implements OnInit {
     this.form.reset();
   }
 
-    // Cancela edição/adição
-    cancelarEdicaoEntrada() {
-      this.indiceEntradaEmEdicao = -1;
-      this.form.reset();
-    }
+  // Cancela edição/adição
+  cancelarEdicaoEntrada() {
+    this.indiceEntradaEmEdicao = -1;
+    this.form.reset();
+  }
 
   // Remove linha
   removerLinha(index: number) {
@@ -286,11 +299,11 @@ export class DetalhesComponent implements OnInit {
       };
 
       this.gastosService.postCadastroDespesas(paramsCadastro).subscribe(retorno => {
-       if (retorno.sucesso) {
-        alert(retorno.message)
-       } else {
-        console.error(retorno.erro)
-       }
+        if (retorno.sucesso) {
+          alert(retorno.message)
+        } else {
+          console.error(retorno.erro)
+        }
       });
     } else {
       const paramsAlteracao = {

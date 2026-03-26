@@ -3,6 +3,11 @@
     width: 100%;
     height: 80%;
   }
+
+  .full-width {
+    width: 100%;
+    display: flex;
+  }
 </style>
 
 <app-menu>
@@ -17,37 +22,16 @@
     <form [formGroup]="form">
 
       <div class="header-container">
-        <div class="valores-container">
-          <mat-card style="background-color: #5fbf62; width: auto;">
-            <mat-card-title>
-              <div>Valor Entrada {{ valoresEntradasSomados | currency: 'BRL'}} </div>
-            </mat-card-title>
-          </mat-card>
-          <mat-card
-            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(valoresEntradasSomados - valoresSomados) }">
-            <mat-card-title>
-              <div>
-                Saldo Total {{ valoresEntradasSomados - valoresSomados | currency: 'BRL'}}
-              </div>
-            </mat-card-title>
-          </mat-card>
-          <mat-card style="background-color: #C62828;">
-            <mat-card-title>
-              <div>
-                Despesas Totais {{ valoresSomados | currency: 'BRL'}}
-              </div>
-            </mat-card-title>
-          </mat-card>
-        </div>
-        <div class="botoes-acao">
-          <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
+          <app-card-valores [valorDespesaTotal]="valoresSomados" [valorEntradaTotal]="valoresEntradasSomados"></app-card-valores>
+          <div style="display: flex; flex-direction: row; gap: 1rem; padding: 1rem 0;">
+            <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
             [disabled]="botaoDesabilitado()">
             Salvar
           </button>
           <button class="botao-acoes excluir" mat-button (click)="excluir()">Excluir</button>
 
           <button class="botao-acoes voltar" mat-button (click)="voltar()">Voltar</button>
-        </div>
+          </div>
       </div>
       <div class="cards-container">
         <div class="card-entrada">
@@ -69,11 +53,11 @@
                     <input matInput formControlName="descricaoEntrada" placeholder="Descrição" class="full-width">
                   </mat-grid-tile>
 
-                  <mat-grid-tile [colspan]="2">
+                  <mat-grid-tile [colspan]="3">
                     <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width" type="number">
                   </mat-grid-tile>
 
-                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                  <mat-grid-tile [colspan]="2" class="acoes-center">
                     <button class="button-icon" matTooltip="Confirmar">
                       <mat-icon class="icone-acoes confirmar" (click)="confirmarEntrada()">done</mat-icon>
                     </button>
@@ -88,10 +72,10 @@
                   <mat-grid-tile [colspan]="3">
                     {{ item.entradaDescricao }}
                   </mat-grid-tile>
-                  <mat-grid-tile [colspan]="2">
+                  <mat-grid-tile [colspan]="3">
                     {{ item.entradaValor | currency: 'BRL' }}
                   </mat-grid-tile>
-                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                  <mat-grid-tile [colspan]="2" class="acoes-center">
                     <button mat-icon-button class="button-icon" [disabled]="indiceEntradaEmEdicao !== -1"
                       matTooltip="Editar" (click)="iniciarEdicaoEntrada(i)">
                       <mat-icon class="icone-acoes editar">edit</mat-icon>
@@ -111,15 +95,17 @@
                   <input matInput formControlName="descricaoEntrada" placeholder="Descrição" class="full-width">
                 </mat-grid-tile>
 
-                <mat-grid-tile [colspan]="2">
+                <mat-grid-tile [colspan]="3">
                   <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width" type="number">
                 </mat-grid-tile>
 
-                <mat-grid-tile [colspan]="3" class="acoes-center">
-                  <button mat-icon-button class="button-icon" color="primary" (click)="confirmarEntrada()" matTooltip="Confirmar">
+                <mat-grid-tile [colspan]="2" class="acoes-center">
+                  <button mat-icon-button class="button-icon" color="primary" (click)="confirmarEntrada()"
+                    matTooltip="Confirmar">
                     <mat-icon class="icone-acoes confirmar">done</mat-icon>
                   </button>
-                  <button mat-icon-button class="button-icon" color="warn" (click)="cancelarEdicaoEntrada()" matTooltip="Cancelar">
+                  <button mat-icon-button class="button-icon" color="warn" (click)="cancelarEdicaoEntrada()"
+                    matTooltip="Cancelar">
                     <mat-icon class="icone-acoes cancelar">close</mat-icon>
                   </button>
                 </mat-grid-tile>
@@ -151,24 +137,25 @@
               </mat-card-title>
             </div>
 
-            <mat-grid-list cols="16" rowHeight="50px" gutterSize="12px" style="margin: 0 5px;">
+            <mat-grid-list cols="13" rowHeight="50px" gutterSize="12px" style="margin: 0 5px;">
 
               <!-- Linhas existentes (visualização ou edição) -->
               <ng-container *ngFor="let item of dadosDespesasEmEdicao; let i = index; trackBy: trackByIndex">
 
                 <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
                 <div *ngIf="indiceDespesaEmEdicao === i">
-                  <mat-grid-tile [colspan]="5">
-                    <input matInput formControlName="descricao" placeholder="Descrição" class="full-width">
+                  <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
+                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoes" formControlName="descricao"
+                      class="full-width"></app-select> 
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="4">
                     <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
                   </mat-grid-tile>
-                  <mat-grid-tile [colspan]="4">
+                  <mat-grid-tile [colspan]="3">
                     <mat-checkbox formControlName="pago">Pago</mat-checkbox>
                   </mat-grid-tile>
 
-                  <mat-grid-tile [colspan]="3" class="acoes-center"> 
+                  <mat-grid-tile [colspan]="2" class="acoes-center">
                     <button class="button-icon" (click)="confirmar()" matTooltip="Confirmar">
                       <mat-icon class="icone-acoes confirmar">done</mat-icon>
                     </button>
@@ -180,19 +167,19 @@
 
                 <!-- Modo VISUALIZAÇÃO (padrão) -->
                 <div *ngIf="indiceDespesaEmEdicao !== i">
-                  <mat-grid-tile [colspan]="5" *ngIf="!item.pago">
+                  <mat-grid-tile [colspan]="4" *ngIf="!item.pago">
                     {{ item.descricao }}
-                  </mat-grid-tile>                  
-                  <mat-grid-tile [colspan]="5" *ngIf="item.pago">
+                  </mat-grid-tile>
+                  <mat-grid-tile [colspan]="4" *ngIf="item.pago">
                     <del>{{ item.descricao }}</del>
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="4">
                     {{ item.valor | currency:'BRL' }}
                   </mat-grid-tile>
-                  <mat-grid-tile [colspan]="4">
+                  <mat-grid-tile [colspan]="3">
                     <mat-checkbox type="checkbox" [checked]="item.pago" disabled="true">Pago</mat-checkbox>
                   </mat-grid-tile>
-                  <mat-grid-tile [colspan]="3" class="acoes-center">
+                  <mat-grid-tile [colspan]="2" class="acoes-center">
                     <button mat-icon-button (click)="iniciarEdicao(i)" class="button-icon"
                       [disabled]="indiceDespesaEmEdicao !== -1" matTooltip="Editar">
                       <mat-icon class="icone-acoes editar">edit</mat-icon>
@@ -208,17 +195,18 @@
 
               <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
               <div *ngIf="indiceDespesaEmEdicao === dadosDespesasEmEdicao.length">
-                <mat-grid-tile [colspan]="5">
-                  <input matInput formControlName="descricao" placeholder="Descrição" class="full-width">
+                <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
+                  <app-select [placeholder]="'Selecione'" [opcoes]="opcoes" formControlName="descricao"
+                    class="full-width"></app-select>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="4">
-                  <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
+                  <input matInput formControlName="valor" placeholder="Valor" [type]="'number'" class="full-width">
                 </mat-grid-tile>
-                <mat-grid-tile [colspan]="4">
+                <mat-grid-tile [colspan]="3">
                   <mat-checkbox formControlName="pago">Pago</mat-checkbox>
                 </mat-grid-tile>
 
-                <mat-grid-tile [colspan]="3" class="acoes-center">
+                <mat-grid-tile [colspan]="2" class="acoes-center">
                   <button mat-icon-button class="button-icon" color="primary" (click)="confirmar()">
                     <mat-icon class="icone-acoes confirmar">done</mat-icon>
                   </button>
@@ -230,7 +218,7 @@
 
               <!-- Nenhum registro -->
               <div *ngIf="dadosDespesasEmEdicao.length === 0 && indiceDespesaEmEdicao === -1">
-                <mat-grid-tile [colspan]="16" class="nenhum-registro-encontrado">
+                <mat-grid-tile [colspan]="13" class="nenhum-registro-encontrado">
                   Nenhum registro encontrado
                 </mat-grid-tile>
               </div>

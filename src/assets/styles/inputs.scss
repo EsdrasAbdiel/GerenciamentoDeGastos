@@ -20,8 +20,6 @@ input {
   font-size: 12px;
   font-weight: 200;
   flex: 1 1 0;
-  padding-bottom: 1rem;
-
 
   .input-error {
     position: absolute;
@@ -32,9 +30,10 @@ input {
     align-items: center;
     font-weight: 400;
     font-size: 12px;
-    bottom: 0;
+    bottom: -15px;
   }
 }
+
 
 .input-container label {
   white-space: nowrap;
@@ -43,23 +42,3 @@ input {
   max-width: 100%;
 }
 /*Input --fim--*/
-
-/*Select --inicio--*/
-select {
-  width: 100%;
-  height: 1rem;
-  border: none;
-  border-bottom: 1px solid #cbcbcb;
-  background-color: transparent;
-  outline: none;
-  font-size: 14px;
-  margin: 0;
-  color: #f5f5f5;
-  margin-top: 1px;
-
-  option {
-    background-color: black;
-    color: #f5f5f5;
-  }
-}
-/*Select --Fim--*/
