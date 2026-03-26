@@ -19,6 +19,7 @@ import { DespesasService } from '../../services/despesas.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ResumoFinanceiroMensalService } from '../../services/resumo-financeiro-mensal.service';
+import { CardValoresComponent } from '../../components/card-valores/card-valores.component';
 
 export interface Despesa {
   f?: number;
@@ -156,7 +157,7 @@ export class DetalhesComponent implements OnInit {
   iniciarEdicao(index: number) {
     this.indiceDespesaEmEdicao = index;
     const item = this.dadosDespesasEmEdicao[index];
-    
+
     this.form.patchValue({
       descricao: { nome: item.descricao, id: 0 },
       valor: item.valor,

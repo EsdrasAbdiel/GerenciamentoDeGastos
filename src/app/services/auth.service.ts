@@ -22,8 +22,6 @@ type LoginRequest = {
   providedIn: 'root'
 })
 export class AuthService {
-  private authenticated$ = new BehaviorSubject<boolean | null>(null);
-
   constructor(private http: HttpClient) { }
   private authenticated$ = new BehaviorSubject<boolean | null>(null);
 
