@@ -25,6 +25,8 @@ export class AuthService {
   private authenticated$ = new BehaviorSubject<boolean | null>(null);
 
   constructor(private http: HttpClient) { }
+  private authenticated$ = new BehaviorSubject<boolean | null>(null);
+
 
   postRegistrarUsuario(registro: RegistroRequest): Observable<RetornoApi<Registro>> {
     return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro)

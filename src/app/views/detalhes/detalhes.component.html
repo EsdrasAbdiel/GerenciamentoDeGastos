@@ -22,37 +22,16 @@
     <form [formGroup]="form">
 
       <div class="header-container">
-        <div class="valores-container">
-          <mat-card style="background-color: #5fbf62; width: auto;">
-            <mat-card-title>
-              <div>Valor Entrada {{ valoresEntradasSomados | currency: 'BRL'}} </div>
-            </mat-card-title>
-          </mat-card>
-          <mat-card
-            [ngStyle]="{'background-color': verificacaoValorPositivoOuNegativo(valoresEntradasSomados - valoresSomados) }">
-            <mat-card-title>
-              <div>
-                Saldo Total {{ valoresEntradasSomados - valoresSomados | currency: 'BRL'}}
-              </div>
-            </mat-card-title>
-          </mat-card>
-          <mat-card style="background-color: #C62828;">
-            <mat-card-title>
-              <div>
-                Despesas Totais {{ valoresSomados | currency: 'BRL'}}
-              </div>
-            </mat-card-title>
-          </mat-card>
-        </div>
-        <div class="botoes-acao">
-          <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
+          <app-card-valores [valorDespesaTotal]="valoresSomados" [valorEntradaTotal]="valoresEntradasSomados"></app-card-valores>
+          <div style="display: flex; flex-direction: row; gap: 1rem; padding: 1rem 0;">
+            <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
             [disabled]="botaoDesabilitado()">
             Salvar
           </button>
           <button class="botao-acoes excluir" mat-button (click)="excluir()">Excluir</button>
 
           <button class="botao-acoes voltar" mat-button (click)="voltar()">Voltar</button>
-        </div>
+          </div>
       </div>
       <div class="cards-container">
         <div class="card-entrada">

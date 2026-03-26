@@ -51,7 +51,8 @@ export interface Entrada {
     NgStyle,
     MatTooltipModule,
     LoadingComponent,
-    SelectComponent
+    SelectComponent,
+    CardValoresComponent
 ],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
