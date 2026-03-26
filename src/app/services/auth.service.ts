@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
-import { environment } from '../../enviroment/enviroment';
+import { environment } from '../../environment/enviroment';
 import { Registro } from '../models/registro.model';
 import { Injectable } from '@angular/core';
 import { RetornoApi } from '../models/retorno-api.model';
@@ -22,6 +22,7 @@ type LoginRequest = {
   providedIn: 'root'
 })
 export class AuthService {
+  private authenticated$ = new BehaviorSubject<boolean | null>(null);
 
   constructor(private http: HttpClient) { }
   private authenticated$ = new BehaviorSubject<boolean | null>(null);
@@ -31,8 +32,8 @@ export class AuthService {
     return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro)
   }
 
-  postUsuario(login: LoginRequest): Observable<Boolean> {
-    return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.buscarUsuario}`, login).pipe(
+  postUsuario(login: LoginRequest): Observable<boolean> {
+    return this.http.post<boolean>(`${environment.BASE_URL.buscarUsuario}`, login).pipe(
       tap(() => {
         this.authenticated$.next(true);
       }),
@@ -67,9 +68,5 @@ export class AuthService {
 
   isAuthenticated(): boolean | null {
     return this.authenticated$.value;
-  }
-
-  logout() {
-    return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.logout}`, {})
   }
 }
