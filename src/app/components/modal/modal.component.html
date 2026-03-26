@@ -1,0 +1,10 @@
+<div style="padding: 1rem">
+    <form action="" [formGroup]="form" style="gap: 1rem; display: flex; flex-direction: column;">
+        <app-input [label]="'Nome da Despesa'" formControlName="descricao"></app-input>
+        <app-select [placeholder]="'Categoria da Despesa'" formControlName="categoria" [opcoes]="opcoesCategorias()"></app-select>
+    </form>
+    <div style="margin-top: 1rem; display: flex; justify-content: space-between;">
+        <button (click)="close()">Cancelar</button>
+        <button (click)="cadastrarDespesa()">Salvar</button>
+    </div>
+</div>

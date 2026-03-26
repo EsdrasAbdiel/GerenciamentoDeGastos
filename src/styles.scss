@@ -18,3 +18,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 ins { color: #b2b2c9; cursor: pointer; }
 
 h2 { margin: 0; }
+
+mat-dialog-container .mat-mdc-dialog-surface {
+  background-color: black !important;
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+}

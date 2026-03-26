@@ -1,50 +1,36 @@
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { MenuComponent } from '../../../../components/menu/menu.component';
-import { ActivatedRoute, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { GastosService } from '../../../../services/gastos.service';
 import { Ano } from '../../../../models/ano.model';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
-import { finalize, takeUntil } from 'rxjs';
 import { MenuCardsComponent } from '../../menu-cards.component';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { SnackbarService } from '../../../../services/snackbar.service';
+
 
 @Component({
   selector: 'app-cards-anos',
-  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet],
+  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet, LoadingComponent, NgIf],
   templateUrl: './cards-anos.component.html',
   styleUrl: './cards-anos.component.scss'
 })
 
 export class CardsAnosComponent implements OnInit {
+  private router = inject(Router);
+  private gastosService = inject(GastosService);
+  private snackbar = inject(SnackbarService);
 
-  anos: Ano[] = []
-  paramsRoute: any;
-  loading!: boolean;
-
-  constructor(
-    private router: Router,
-    private gastosService: GastosService,
-  ) {
-  }
+  anos = toSignal(this.gastosService.getAnos(), { initialValue: [] });
+  loading = computed(() => this.anos().length === 0);
 
   ngOnInit(): void {
-    this.listarAnos();
+    if (!this.loading())
+      return this.snackbar.error('erro ao carregar dados');
   }
 
   aoClicarNoCardAnoDeveIrParaMeses(ano: Ano) {
-    this.router.navigate([`/${ano.id}/card-meses`])
-  }
-
-  listarAnos() {
-    this.loading = true;
-    this.gastosService.getAnos().pipe(finalize(() => (this.loading = false))).subscribe(
-      (retorno) => {
-        this.anos = retorno;
-      },
-      (error) => {
-        console.error('Erro ao carregar dados.', error.message)
-      }
-    )
+    this.router.navigate([`/${ano.id}/card-meses`]);
   }
 }

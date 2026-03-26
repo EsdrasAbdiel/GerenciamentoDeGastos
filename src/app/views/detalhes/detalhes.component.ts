@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit, resource } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,10 @@ import { MatTooltipModule } from '@angular/material/tooltip'
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { SelectComponent, SelectModel } from '../../components/select/select.component';
+import { DespesasService } from '../../services/despesas.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent } from '../../components/modal/modal.component';
+import { ResumoFinanceiroMensalService } from '../../services/resumo-financeiro-mensal.service';
 
 export interface Despesa {
   f?: number;
@@ -64,19 +68,17 @@ export class DetalhesComponent implements OnInit {
   // Índice da linha sendo editada (-1 = nenhuma, ou length = nova linha no final)
   indiceDespesaEmEdicao: number = -1;
   indiceEntradaEmEdicao: number = -1;
+  private resumoFinanceiroMensalService = inject(ResumoFinanceiroMensalService)
+  private despesasService = inject(DespesasService);
+  private dialog = inject(MatDialog)
 
-  opcoes: SelectModel[] = [
-    { id: 1, nome: 'Faculdade' },
-    { id: 2, nome: 'Aluguel' },
-    { id: 3, nome: 'Combustivel' },
-    { id: 4, nome: 'Outros' }
-  ]
+  opcoesDespesas: SelectModel[] = [];
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private gastosService: GastosService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
   ) {
     this.paramsRoute = this.activatedRoute.snapshot.params;
     this.form = this.fb.group({
@@ -90,9 +92,21 @@ export class DetalhesComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.paramsRoute.id)
+    this.carregarDespesas();
+    this.atualizarDespesasOpcoes();
+        if (this.paramsRoute.id)
       this.carregarDespesasExistentes();
   }
+
+  atualizarDespesasOpcoes() {
+    this.resumoFinanceiroMensalService.getAtualizarOpcoesDespesas().subscribe(
+      retorno => {
+        if (retorno)
+          this.carregarDespesas();
+      }
+    )
+  }
+
   verificacaoValorPositivoOuNegativo(valor: number) {
     if (valor > 0) {
       return '#28A745';
@@ -101,6 +115,22 @@ export class DetalhesComponent implements OnInit {
     } else {
       return '#808080'
     }
+  }
+
+  carregarDespesas() {
+    this.despesasService.buscarDespesas().subscribe(retorno => {
+      this.opcoesDespesas = retorno.map(d => ({
+        id: d.id,
+        nome: d.descricao
+      }));
+    })
+  }
+
+  deveCadastrarNovaDespesa() {
+    this.dialog.open(ModalComponent, {
+      width: '100%',
+      maxWidth: '50px'
+    })
   }
 
   carregarDespesasExistentes() {

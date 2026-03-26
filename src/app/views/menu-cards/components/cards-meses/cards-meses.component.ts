@@ -1,13 +1,12 @@
 import { GastosService } from '../../../../services/gastos.service';
-import { CommonModule, NgTemplateOutlet } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
+import { NgIf, NgTemplateOutlet } from '@angular/common';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { MenuComponent } from '../../../../components/menu/menu.component';
 import { Mes } from '../../../../models/mes.model';
 import { ActivatedRoute, Router } from '@angular/router';
-import { finalize, forkJoin, map, switchMap } from 'rxjs';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
 import { MenuCardsComponent } from '../../menu-cards.component';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 export interface CardsMeses {
   mes: number;
@@ -17,71 +16,31 @@ export interface CardsMeses {
 @Component({
   selector: 'app-cards-meses',
   standalone: true,
-  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet],
+  imports: [MenuCardsComponent, MenuComponent, NgTemplateOutlet, LoadingComponent, NgIf],
   templateUrl: './cards-meses.component.html',
   styleUrl: './cards-meses.component.scss'
 })
-export class CardsMesesComponent implements OnInit {
-  paramsRoute: any;
+export class CardsMesesComponent {
+  private gastosService = inject(GastosService)
+  private router = inject(Router);
+  private activatedRoute = inject(ActivatedRoute);
 
-  constructor(
-    private gastosService: GastosService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute
-  ) {
-    this.paramsRoute = this.activatedRoute.snapshot.params;
-    console.log(this.paramsRoute);
+  paramsRoute = this.activatedRoute.snapshot.params;
 
-  }
+  meses = toSignal(this.gastosService.getMeses(this.paramsRoute['ano']), { initialValue: [] })
+  loading = computed(() => this.meses().length === 0);
 
-  meses: Mes[] = [];
-  dadosCard: any[] = [];
-  cards: any[] = [];
-  loading = false;
-
-  ngOnInit() {
-    this.carregarDados();
-  }
-
-
-  carregarDados() {
-    this.loading = true;
-    forkJoin([
-      this.gastosService.getGastos(this.paramsRoute.ano),
-      this.gastosService.getMeses()
-    ]).pipe(finalize(() => (this.loading = false))).subscribe(([despesas, meses]) => {
-
-        console.log('Despesas:', despesas);
-        console.log('Meses:', meses);
-
-        this.meses = meses;
-
-        this.dadosCard = meses.map(m => {
-          return {
-            ...m,
-            despesas: despesas.filter((d: any) => d.mes === m.id)
-          }
-        })
-
-        console.log(this.dadosCard);
-
-    });
-  }
-
-
-  aoClicarNoCardMesDeveIrParaDetalhes(card: any) {
-    if (card.despesas.length === 0){
-      this.router.navigate([`${this.paramsRoute.ano}/${card.id}/detalhes`])
+  aoClicarNoCardMesDeveIrParaDetalhes(card: Mes) {
+    console.log(card)
+    if (!card.despesaId) {
+      this.router.navigate([`${this.paramsRoute['ano']}/${card.id}/detalhes`])
       return;
     }
 
-    const id = card.despesas[0].id
-
-    this.router.navigate([`${this.paramsRoute.ano}/${card.id}/${id}`])
+    this.router.navigate([`${this.paramsRoute['ano']}/${card.id}/${card.despesaId}`])
   }
 
   deveVoltarParaMenuAnos() {
     this.router.navigate(['/card-anos'])
   }
-
 }

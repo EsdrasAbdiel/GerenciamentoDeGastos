@@ -68,7 +68,7 @@ export class LoginComponent implements OnInit {
     } else {
       this.authService.postUsuario(params).pipe().subscribe(
         retorno => {
-          if (retorno.sucesso)
+          if (retorno)
           this.router.navigate(['/card-anos'])
         },
         error => {
