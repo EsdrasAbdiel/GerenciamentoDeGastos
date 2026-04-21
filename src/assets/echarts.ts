@@ -1,10 +1,25 @@
 import * as echarts from 'echarts/core';
 
-import { BarChart, LineChart, PieChart, GraphChart, TreeChart, FunnelChart, ScatterChart, SankeyChart, HeatmapChart, RadarChart, GaugeChart } from 'echarts/charts';
+import {
+  BarChart,
+  LineChart,
+  PieChart,
+  GraphChart,
+  TreeChart,
+  FunnelChart,
+  ScatterChart,
+  SankeyChart,
+  HeatmapChart,
+  RadarChart,
+  GaugeChart
+} from 'echarts/charts';
+
 import {
   GridComponent,
   TooltipComponent,
-  LegendComponent
+  LegendComponent,
+  TitleComponent,
+  GraphicComponent
 } from 'echarts/components';
 
 import { CanvasRenderer } from 'echarts/renderers';
@@ -16,16 +31,17 @@ echarts.use([
   TreeChart,
   SankeyChart,
   ScatterChart,
-    FunnelChart,
-    TreeChart,
-    GraphChart,
+  FunnelChart,
+  GraphChart,
   BarChart,
   LineChart,
   PieChart,
   GridComponent,
   TooltipComponent,
   LegendComponent,
-  CanvasRenderer
+  TitleComponent,
+  CanvasRenderer,
+  GraphicComponent
 ]);
 
-export default echarts;
+export { echarts };

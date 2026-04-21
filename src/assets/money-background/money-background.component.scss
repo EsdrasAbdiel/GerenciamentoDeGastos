@@ -3,7 +3,7 @@
   position: fixed;           /* ← importante */
   inset: 0;                  /* top:0 right:0 bottom:0 left:0 */
   z-index: -2;               /* valor negativo ou muito baixo */
-  pointer-events: none;      /* cliques passam através dele */
+  //pointer-events: none;      /* cliques passam através dele */
   overflow: hidden;
   background: #0a1f44;
 }
@@ -11,7 +11,7 @@
 .money-background {
   position: fixed;
   inset: 0;
-  pointer-events: none;
+  //pointer-events: none;
   z-index: 1;
   overflow: hidden;
 }

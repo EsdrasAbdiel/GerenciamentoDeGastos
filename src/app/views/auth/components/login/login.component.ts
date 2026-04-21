@@ -12,10 +12,11 @@ import { emailValidator } from '../../../../utils/email-validator.util';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { finalize } from 'rxjs';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
+import { ButtonComponent } from '../../../../components/button/button.component';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent, LoadingComponent],
+  imports: [ ButtonComponent, ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent, LoadingComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
@@ -72,8 +73,10 @@ export class LoginComponent implements OnInit {
     } else {
       this.authService.postUsuario(params).pipe((finalize(() => this.loading = false))).subscribe(
         retorno => {
-          if (retorno)
-          this.router.navigate(['/card-anos'])
+          if (retorno.sucesso)
+            this.authService.authenticated$.next(retorno.sucesso)
+            localStorage.setItem('usuario_id', String(retorno.resultado))
+            this.router.navigate(['/home'])
         },
         error => {
           error?.error.mensagem ? this.snackbarService.error(error?.error.mensagem) : this.snackbarService.error('Error ao efetuar login')

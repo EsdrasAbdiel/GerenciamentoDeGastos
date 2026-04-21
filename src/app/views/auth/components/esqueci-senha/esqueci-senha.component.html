@@ -1,22 +1,20 @@
 <div class="card-formulario">
-    <mat-card class="card-container esqueci-senha">
-        <div class="titulo-section-card">Recuperação de Senha</div>
-        <div style="display: flex; flex-direction: column; margin-bottom: 1rem;">
-            Para a mudança de senha, vai ser enviado um código para o seu email cadastrado.
-        </div>
-        <form class="formulario-container">
-            <div class="input-container">
-                <label>Código</label>
-                <input type="number">
-            </div>
-            <div class="input-container">
-                <label>Senha Nova</label>
-                <input type="password">
-            </div>
-            <div class="buttons-container-space-around">
-                <button (click)="deveRedirecionarParaTelaLogin()">Voltar</button>
-                <button>Cadastrar Nova Senha</button>
-            </div>
-        </form>
-    </mat-card>
+  <mat-card class="card-container esqueci-senha">
+    <div class="titulo-section-card">Recuperação de Senha</div>
+    <div style="display: flex; flex-direction: column; margin-bottom: 1rem;">
+      Para a mudança de senha, vai ser enviado um código para o seu email cadastrado.
+    </div>
+    <form class="formulario-container">
+      <div class="inputs-form">
+        <app-input [label]="'Código'" [type]="'number'"></app-input>
+        <app-password-input>
+          <app-input [label]="'Nova Senha'" [mask]="'000000'" />
+        </app-password-input>
+      </div>
+      <div style="display: flex; flex-direction: row; justify-content: space-between;">
+        <app-button [label]="'Voltar'" [classeBotao]="'voltar'" (aoClicar)="deveRedirecionarParaTelaLogin()"></app-button>
+        <app-button [label]="'Cadastrar'" [classeBotao]="'btn-primary'"></app-button>
+      </div>
+    </form>
+  </mat-card>
 </div>

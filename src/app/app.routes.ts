@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { ConsultaComponent } from './views/consulta/consulta.component';
 import { DetalhesComponent } from './views/detalhes/detalhes.component';
 import { LoginComponent } from './views/auth/components/login/login.component';
-import { HomeComponent } from './views/home/home.component';
+import { HomeComponent } from './views/dashboard/dashboard.component';
 import { CardsAnosComponent } from './views/menu-cards/components/cards-anos/cards-anos.component';
 import { CardsMesesComponent } from './views/menu-cards/components/cards-meses/cards-meses.component';
 import { AuthComponent } from './views/auth/auth.component';
@@ -40,6 +40,6 @@ export const routes: Routes = [
   },
 
   {
-    path: '**', redirectTo: 'auth/login'
+    path: '**', redirectTo: '/auth/login'
   }
 ];

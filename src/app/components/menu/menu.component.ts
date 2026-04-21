@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Output } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { MatDrawerContainer, MatSidenavModule } from "@angular/material/sidenav";
@@ -16,6 +16,7 @@ import { SnackbarService } from '../../services/snackbar.service';
   styleUrl: './menu.component.scss'
 })
 export class MenuComponent {
+  @Input() tituloSnackbar: string = 'Gerenciamento de Gastos'
   private router = inject(Router);
   private authService = inject(AuthService);
   private snackbarService = inject(SnackbarService);

@@ -1,0 +1,59 @@
+<app-menu [tituloSnackbar]="'Dashboard'">
+  <div class="container-dashboard">
+    <div class="container-cards">
+      <mat-card class="card-container">
+        <div class="titulo-container"><mat-icon
+            class="material-symbols-outlined icone-entrada">trending_up</mat-icon><span>Entradas</span></div>
+        <app-loading-skeleton [loading]="loading">
+          <span>{{ valorEntrada | currency:"BRL" }}</span>
+        </app-loading-skeleton>
+      </mat-card>
+      <mat-card class="card-container">
+        <div class="titulo-container"><mat-icon
+            class="material-symbols-outlined icone-saida">trending_down</mat-icon><span>Despesas</span></div>
+        <app-loading-skeleton [loading]="loading">
+          <span>{{ valorSaida | currency:"BRL" }}</span>
+        </app-loading-skeleton>
+      </mat-card>
+      <mat-card class="card-container">
+        <div class="titulo-container"><mat-icon class="material-symbols-outlined icone-saldo">paid
+          </mat-icon><span>Saldo</span></div>
+        <app-loading-skeleton [loading]="loading">
+          <span>{{ valorSaldo | currency:"BRL" }}</span>
+        </app-loading-skeleton>
+      </mat-card>
+      <mat-card class="card-container">
+        <div class="titulo-container"><mat-icon
+            class="material-symbols-outlined">list_alt</mat-icon><span>Registros</span></div>
+        <app-loading-skeleton [loading]="loading">
+          <span>{{ quantidadeRegistros }}</span>
+        </app-loading-skeleton>
+      </mat-card>
+    </div>
+    <mat-card class="card-container dashboard">
+      <div class="botoes-dashboard" *ngIf="!loading">
+        Filtrar dados por:
+        <app-date-picker [label]="'Mês'" [items]="meses()" [labelKey]="'nomeAbreviado'"
+          (selecionado)="this.dadosMes($event)" [isOpen]="pickerAberto === 'mes'"
+          (abrirFechar)="togglePicker('mes')"></app-date-picker>
+        <app-date-picker [label]="'Ano'" [items]="anos()" [labelKey]="'id'" (selecionado)="this.dadosAnos($event)"
+          [isOpen]="pickerAberto === 'ano'" (abrirFechar)="togglePicker('ano')"></app-date-picker>
+      </div>
+      <div class="dashboard">
+        <app-loading-skeleton-dashboard *ngIf="loading; else graficoComparativo" class="grafico-comparativo-container"></app-loading-skeleton-dashboard>
+              <app-loading-skeleton-dashboard *ngIf="loading; else graficoPizza" class="grafico-pizza-container"></app-loading-skeleton-dashboard>
+
+      </div>
+    </mat-card>
+  </div>
+
+</app-menu>
+
+<ng-template #graficoComparativo>
+  <div echarts [options]="chartOptionComparativo" (chartInit)="onChartInit($event)" class="grafico-comparativo-container"></div>
+</ng-template>
+
+<ng-template #graficoPizza>
+          <div echarts [options]="barOption" class="grafico-pizza-container"></div>
+
+</ng-template>
