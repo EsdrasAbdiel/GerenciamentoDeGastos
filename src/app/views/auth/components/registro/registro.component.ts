@@ -9,11 +9,12 @@ import { RegistroService } from '../../../../services/registro.service';
 import { InputComponent } from '../../../../components/input/input.component';
 import { PasswordInputComponent } from '../../../../components/password-input/password-input.component';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { ButtonComponent } from '../../../../components/button/button.component';
 
 @Component({
   selector: 'app-registro',
   standalone: true,
-  imports: [MatCardModule, NgIf, ReactiveFormsModule, MatIconModule, InputComponent, PasswordInputComponent],
+  imports: [MatCardModule, NgIf, ReactiveFormsModule, MatIconModule, InputComponent, PasswordInputComponent, ButtonComponent],
   templateUrl: './registro.component.html',
   styleUrl: './registro.component.scss'
 })
@@ -34,7 +35,7 @@ export class RegistroComponent {
     this.form = this.fb.group({
       nome: [null, [Validators.required]],
       email: [null, [Validators.email, Validators.required]],
-      dataNascimento: [null, [Validators.required]],
+      dataNascimento: ["29/05/2004", [Validators.required]],
       senha: [null, [Validators.required, Validators.maxLength(6), Validators.minLength(6)]],
       confirmarSenha: [null, [Validators.required, Validators.maxLength(6)]],
     })

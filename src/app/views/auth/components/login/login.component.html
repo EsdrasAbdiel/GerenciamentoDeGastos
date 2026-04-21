@@ -11,9 +11,9 @@
         </app-password-input>
       </div>
       <div class="button-width-100">
-        <button (click)="deveBuscarUsuario()" mat-raised-button>Login</button>
+        <app-button [label]="'Login'" (aoClicar)="deveBuscarUsuario()" [classeBotao]="'btn-primary'"></app-button>
       </div>
-      <div style="font-size: 12px; color: #b2b2c9;">
+      <div style="font-size: 16px; color: #b2b2c9;">
         <ins (click)="deveRedefinirSenha()">Esqueci a senha.</ins>
       </div>
       <div class="registro-card-login">

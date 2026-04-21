@@ -1,5 +1,5 @@
 <div class="card-formulario">
-  <mat-card class="card-container">
+  <mat-card class="card-container registro">
     <div class="titulo-section-card">
       <span>Registro</span>
     </div>
@@ -21,7 +21,7 @@
         </app-password-input>
       </div>
       <div class="button-width-100">
-        <button mat-raised-button (click)="deveCadastrarUsuario()">Cadastrar</button>
+        <app-button [label]="'Cadastrar'" [classeBotao]="'btn-primary'" (aoClicar)="deveCadastrarUsuario()"></app-button>
       </div>
       <div class="login-card-registro">
         <span>Já possui cadastro? <ins (click)="deveFazerLogin()">Fazer login</ins></span>

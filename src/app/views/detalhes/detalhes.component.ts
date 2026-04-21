@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, resource } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -6,7 +6,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
-import { CommonModule, NgStyle } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MenuComponent } from '../../components/menu/menu.component';
 import { GastosService } from '../../services/gastos.service';
@@ -20,6 +20,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalComponent } from '../../components/modal/modal.component';
 import { ResumoFinanceiroMensalService } from '../../services/resumo-financeiro-mensal.service';
 import { CardValoresComponent } from '../../components/card-valores/card-valores.component';
+import { AuthService } from '../../services/auth.service';
 
 export interface Despesa {
   f?: number;
@@ -49,11 +50,10 @@ export interface Entrada {
     MatIconModule,
     MenuComponent,
     MatCheckboxModule,
-    NgStyle,
     MatTooltipModule,
     LoadingComponent,
     SelectComponent,
-    CardValoresComponent
+    CardValoresComponent,
 ],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
@@ -67,14 +67,15 @@ export class DetalhesComponent implements OnInit {
   valoresEntradasSomados = 0;
   adicionarValorEntrada: boolean = false;
   loading = false;
-  // Índice da linha sendo editada (-1 = nenhuma, ou length = nova linha no final)
   indiceDespesaEmEdicao: number = -1;
   indiceEntradaEmEdicao: number = -1;
   private resumoFinanceiroMensalService = inject(ResumoFinanceiroMensalService)
   private despesasService = inject(DespesasService);
-  private dialog = inject(MatDialog)
+  private dialog = inject(MatDialog);
+  private authService = inject(AuthService);
 
   opcoesDespesas: SelectModel[] = [];
+  tituloSnackbar = '';
 
   constructor(
     private router: Router,
@@ -96,8 +97,13 @@ export class DetalhesComponent implements OnInit {
   ngOnInit(): void {
     this.carregarDespesas();
     this.atualizarDespesasOpcoes();
-        if (this.paramsRoute.id)
+    if (this.paramsRoute.id) {
       this.carregarDespesasExistentes();
+      this.tituloSnackbar = 'Editar Despesa'
+      return;
+    }
+
+    this.tituloSnackbar = 'Cadastrar Despesa'
   }
 
   atualizarDespesasOpcoes() {
@@ -325,12 +331,13 @@ export class DetalhesComponent implements OnInit {
         valorEntradaTotal: this.valoresEntradasSomados,
         dataInclusao: new Date(),
         mes: Number(this.paramsRoute.mes),
-        ano: Number(this.paramsRoute.ano)
+        ano: Number(this.paramsRoute.ano),
+        usuarioId: this.authService.buscarUsuarioId()
       };
 
       this.gastosService.postCadastroDespesas(paramsCadastro).subscribe(retorno => {
         if (retorno.sucesso) {
-          alert(retorno.message)
+          alert(retorno.mensagem)
         } else {
           console.error(retorno.erro)
         }
@@ -344,7 +351,8 @@ export class DetalhesComponent implements OnInit {
         valorEntradaTotal: this.valoresEntradasSomados,
         dataInclusao: new Date(),
         mes: Number(this.paramsRoute.mes),
-        ano: Number(this.paramsRoute.ano)
+        ano: Number(this.paramsRoute.ano),
+        usuarioId: this.authService.buscarUsuarioId()
       };
 
       this.gastosService.putDespesaPeloId(this.paramsRoute.id, paramsAlteracao).subscribe(retorno => {

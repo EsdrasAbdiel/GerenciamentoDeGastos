@@ -10,7 +10,7 @@
   }
 </style>
 
-<app-menu>
+<app-menu [tituloSnackbar]="tituloSnackbar">
   <app-loading *ngIf="loading"></app-loading>
   <div *ngIf="!loading">
     <ng-container *ngTemplateOutlet="despesas__detalhes"></ng-container>
@@ -22,16 +22,21 @@
     <form [formGroup]="form">
 
       <div class="header-container">
-          <app-card-valores [valorDespesaTotal]="valoresSomados" [valorEntradaTotal]="valoresEntradasSomados"></app-card-valores>
-          <div style="display: flex; flex-direction: row; gap: 1rem; padding: 1rem 0;">
-            <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
+        <app-card-valores [valorDespesaTotal]="valoresSomados" [valorEntradaTotal]="valoresEntradasSomados"
+          valorSa></app-card-valores>
+        <div style="    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem 0;
+    align-items: baseline;">
+          <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
             [disabled]="botaoDesabilitado()">
             Salvar
           </button>
           <button class="botao-acoes excluir" mat-button (click)="excluir()">Excluir</button>
 
           <button class="botao-acoes voltar" mat-button (click)="voltar()">Voltar</button>
-          </div>
+        </div>
       </div>
       <div class="cards-container">
         <div class="card-entrada">
@@ -145,7 +150,8 @@
                 <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
                 <div *ngIf="indiceDespesaEmEdicao === i">
                   <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
-                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao" [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
+                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao"
+                      [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
                       class="full-width"></app-select>
                   </mat-grid-tile>
                   <mat-grid-tile [colspan]="4">
@@ -196,8 +202,9 @@
               <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
               <div *ngIf="indiceDespesaEmEdicao === dadosDespesasEmEdicao.length">
                 <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
-                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao" [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
-                      class="full-width"></app-select>
+                  <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao"
+                    [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
+                    class="full-width"></app-select>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="4">
                   <input matInput formControlName="valor" placeholder="Valor" [type]="'number'" class="full-width">

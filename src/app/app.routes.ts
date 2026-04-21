@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { ConsultaComponent } from './views/consulta/consulta.component';
 import { DetalhesComponent } from './views/detalhes/detalhes.component';
 import { LoginComponent } from './views/auth/components/login/login.component';
-import { HomeComponent } from './views/home/home.component';
+import { HomeComponent } from './views/dashboard/dashboard.component';
 import { CardsAnosComponent } from './views/menu-cards/components/cards-anos/cards-anos.component';
 import { CardsMesesComponent } from './views/menu-cards/components/cards-meses/cards-meses.component';
 import { AuthComponent } from './views/auth/auth.component';
@@ -20,26 +20,26 @@ export const routes: Routes = [
     ]
   },
   {
-    path: ':ano/card-meses', canActivate: [authGuard], component: CardsMesesComponent
+    path: ':ano/card-meses', component: CardsMesesComponent
   },
   {
-    path: 'consulta', canActivate: [authGuard], component: ConsultaComponent
+    path: 'consulta', component: ConsultaComponent
   },
   {
-    path: 'card-anos', canActivate: [authGuard], component: CardsAnosComponent
+    path: 'card-anos', component: CardsAnosComponent
   },
   {
-    path: ':ano/:mes/detalhes', canActivate: [authGuard], component: DetalhesComponent
+    path: ':ano/:mes/detalhes', component: DetalhesComponent
   },
   {
-    path: ':ano/:mes/:id', canActivate: [authGuard], component: DetalhesComponent
-  },
-
-  {
-    path: 'home', canActivate: [authGuard], component: HomeComponent
+    path: ':ano/:mes/:id', component: DetalhesComponent
   },
 
   {
-    path: '**', redirectTo: 'auth/login'
+    path: 'home', component: HomeComponent
+  },
+
+  {
+    path: '**', redirectTo: '/auth/login'
   }
 ];

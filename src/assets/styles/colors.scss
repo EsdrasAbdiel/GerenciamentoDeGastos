@@ -62,43 +62,45 @@ $ph-gray-color-hover: #a3a3a3;
   &.desabilitado {
     color: var(--ph-disabled) !important;
   }
-
   // Garante que ícones SVG (ex: delete, edit) herdem a cor
   svg {
     fill: currentColor !important;
   }
 }
 
-::ng-deep button.botao-acoes {
-  cursor: pointer;
-  border: none;
-  border-radius: 5px;
-  height: 2rem;
+  .visualizar-senha {
+    color: var(--ph-white) !important;
+  }
 
-  &.salvar {
+  .salvar, .selecionar, .btn-primary {
     background-color: var(--ph-primary) !important;
     color: var(--ph-white) !important
   }
 
-  &.salvar:hover {
+  .salvar, .selecionar, .btn-primary {
+    &:hover {
+      background-color: var(--ph-primary-hover) !important;
+    }
+  }
+
+  .selecionar:hover {
     background-color: var(--ph-primary-hover) !important;
   }
 
-  &.excluir {
+  .excluir {
     background-color: var(--ph-error) !important;
     color: var(--ph-white) !important;
   }
 
-  &.excluir:hover {
+  .excluir:hover {
     background-color: var(--ph-error-hover) !important;
   }
 
-  &.voltar {
+  .voltar {
     background-color: var(--ph-gray) !important;
     color: var(--ph-white) !important;
   }
 
-  &.voltar:hover {
+  .voltar:hover {
     background-color: var(--ph-gray-hover) !important;
   }
-}

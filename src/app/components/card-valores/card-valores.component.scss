@@ -19,11 +19,15 @@
             flex-wrap: wrap;
 
             &.entrada {
-                background-color: #5fbf62
+              background-color: #5fbf62
             }
 
             &.despesa {
-                background-color: #C62828
+              background-color: #C62828
+            }
+
+            &.saldo {
+              background-color: #da7707d5;
             }
         }
     }

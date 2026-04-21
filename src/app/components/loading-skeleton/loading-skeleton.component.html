@@ -1,0 +1,7 @@
+<div *ngIf="loading; else conteudo" class="skeleton-container">
+  <div class="skeleton-value"></div>
+</div>
+
+<ng-template #conteudo>
+  <ng-content></ng-content>
+</ng-template>

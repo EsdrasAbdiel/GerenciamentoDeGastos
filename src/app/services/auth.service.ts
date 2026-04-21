@@ -23,24 +23,15 @@ type LoginRequest = {
 })
 export class AuthService {
   constructor(private http: HttpClient) { }
-  private authenticated$ = new BehaviorSubject<boolean | null>(null);
+  public authenticated$ = new BehaviorSubject<boolean | null>(null);
 
 
   postRegistrarUsuario(registro: RegistroRequest): Observable<RetornoApi<Registro>> {
     return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro)
   }
 
-  postUsuario(login: LoginRequest): Observable<boolean> {
-    return this.http.post<boolean>(`${environment.BASE_URL.buscarUsuario}`, login).pipe(
-      tap(() => {
-        this.authenticated$.next(true);
-      }),
-      map(() => true),
-      catchError(() => {
-        this.authenticated$.next(false);
-        return of(false)
-      })
-    );
+  postUsuario(login: LoginRequest): Observable<any> {
+    return this.http.post<any>(`${environment.BASE_URL.buscarUsuario}`, login)
   }
 
   logout() {
@@ -66,5 +57,16 @@ export class AuthService {
 
   isAuthenticated(): boolean | null {
     return this.authenticated$.value;
+  }
+
+  buscarUsuarioId(): string {
+    const usuarioId = localStorage.getItem('usuario_id')
+
+    if (!usuarioId) {
+      this.authenticated$.next(false);
+      return 'null';
+    }
+
+    return usuarioId;
   }
 }

@@ -1,0 +1,35 @@
+.picker-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.date-picker-container {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  z-index: 1000;
+}
+
+.modal-container {
+  background: white;
+  color: black;
+  border-radius: 6px;
+  padding: 10px;
+  min-width: 180px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.item {
+  cursor: pointer;
+  text-align: center;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.item:hover {
+  background: #f0f0f0;
+}
