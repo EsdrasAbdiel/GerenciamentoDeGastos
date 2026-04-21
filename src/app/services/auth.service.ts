@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
-import { environment } from '../../environment/enviroment';
+import { environment } from '../../environment/environment';
 import { Registro } from '../models/registro.model';
 import { Injectable } from '@angular/core';
 import { RetornoApi } from '../models/retorno-api.model';

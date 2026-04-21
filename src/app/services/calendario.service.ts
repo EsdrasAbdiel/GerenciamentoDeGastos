@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Ano } from '../models/ano.model';
 import { Mes } from '../models/mes.model';
-import { environment } from '../../environment/enviroment';
+import { environment } from '../../environment/environment';
 import { HttpClient } from '@angular/common/http';
 import { MesDashboard } from '../models/mes-dashboard.model';
 
