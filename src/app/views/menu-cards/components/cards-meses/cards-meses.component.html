@@ -1,12 +1,12 @@
-<app-menu>
+<app-menu [tituloSnackbar]="'Despesas'">
   <ng-container *ngTemplateOutlet="menu__cards"></ng-container>
 </app-menu>
 
 <ng-template #menu__cards>
       <app-loading *ngIf="loading()"></app-loading>
   <div class="titulo-container" *ngIf="!loading()">
-    <p>Selecione o mês:</p>
-    <button (click)="deveVoltarParaMenuAnos()">voltar</button>
+    <app-button [label]="'Voltar'" classeBotao="'voltar'" (aoClicar)="deveVoltarParaMenuAnos()"></app-button>
+    <span>Selecione o mês:</span>
   </div>
   <app-menu-cards [items]="meses()" [labelKey]="'nomeAbreviado'"
     (selecionado)="aoClicarNoCardMesDeveIrParaDetalhes($event)"></app-menu-cards>

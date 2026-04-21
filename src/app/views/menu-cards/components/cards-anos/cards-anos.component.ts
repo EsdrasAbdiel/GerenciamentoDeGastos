@@ -8,6 +8,7 @@ import { LoadingComponent } from '../../../../components/loading/loading.compone
 import { MenuCardsComponent } from '../../menu-cards.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SnackbarService } from '../../../../services/snackbar.service';
+import { CalendarioService } from '../../../../services/calendario.service';
 
 
 @Component({
@@ -19,10 +20,10 @@ import { SnackbarService } from '../../../../services/snackbar.service';
 
 export class CardsAnosComponent implements OnInit {
   private router = inject(Router);
-  private gastosService = inject(GastosService);
+  private calendarioService = inject(CalendarioService);
   private snackbar = inject(SnackbarService);
 
-  anos = toSignal(this.gastosService.getAnos(), { initialValue: [] });
+  anos = toSignal(this.calendarioService.getAnos(), { initialValue: [] });
   loading = computed(() => this.anos().length === 0);
 
   ngOnInit(): void {

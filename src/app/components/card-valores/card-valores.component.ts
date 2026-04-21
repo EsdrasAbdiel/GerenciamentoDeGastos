@@ -4,24 +4,16 @@ import { Component, Input } from '@angular/core';
 @Component({
   selector: 'app-card-valores',
   standalone: true,
-  imports: [CurrencyPipe, NgClass, NgStyle],
+  imports: [CurrencyPipe],
   templateUrl: './card-valores.component.html',
   styleUrl: './card-valores.component.scss'
 })
 export class CardValoresComponent {
   @Input() valorDespesaTotal!: number;
   @Input() valorEntradaTotal!: number;
-  valorSaldoTotal!: number;
+  valorSaldoTotal: number = 0;
 
-  deveRetornarCorValorTotal(valorEntrada: number, valorDespesa: number): string {
-    const valor = this.deveSubtrairValores(valorEntrada, valorDespesa)
-
-    if (valor === 0) return 'gray'
-
-    return valor > 0 ? '#5fbf62' : '#C62828'
-  }
-
-  deveSubtrairValores(valorEntrada: number, valorDespesa: number) {
+  deveSubtrairValores(valorEntrada: number, valorDespesa: number): number {
     return this.valorSaldoTotal = valorEntrada - valorDespesa
   }
 }

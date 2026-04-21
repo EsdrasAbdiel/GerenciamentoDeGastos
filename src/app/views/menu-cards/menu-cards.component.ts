@@ -1,7 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { MenuComponent } from '../../components/menu/menu.component';
 import { MatCardModule } from '@angular/material/card';
-import { LoadingComponent } from '../../components/loading/loading.component';
 import { NgFor, NgIf } from '@angular/common';
 
 @Component({

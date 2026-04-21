@@ -1,11 +1,10 @@
 <div class="input-container">
     <label>{{ label }}</label>
-    <input 
-        [type]="type" 
-        [placeholder]="placeholder" 
-        [disabled]="disabled" 
-        (input)="onInput($event)"
-        [mask]="mask">
+    <input
+        [type]="type"
+        [placeholder]="placeholder"
+        [disabled]="disabled"
+        (input)="onInput($event)">
     <ng-container *ngIf="error">
         <div class="input-error">
             <ng-container *ngTemplateOutlet="error"></ng-container>

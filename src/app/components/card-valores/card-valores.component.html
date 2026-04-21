@@ -1,7 +1,6 @@
 <div class="cards-valores-container">
-    <div class="card-valor entrada">Valor Entrada Total {{ valorEntradaTotal | currency: 'BRL'}}</div>
-    <div class="card-valor"
-        [ngStyle]="{'background-color': deveRetornarCorValorTotal(valorEntradaTotal, valorDespesaTotal)}">Valor
-        Saldo Total {{ valorSaldoTotal | currency: 'BRL' }}</div>
-    <div class="card-valor despesa">Valor Despesa Total {{ valorDespesaTotal | currency: 'BRL' }}</div>
+  <div class="card-valor entrada">Valor Entrada Total {{ valorEntradaTotal | currency: 'BRL'}}</div>
+  <div class="card-valor saldo">Valor
+    Saldo Total {{ deveSubtrairValores(valorEntradaTotal, valorDespesaTotal) | currency: 'BRL' }}</div>
+  <div class="card-valor despesa">Valor Despesa Total {{ valorDespesaTotal | currency: 'BRL' }}</div>
 </div>

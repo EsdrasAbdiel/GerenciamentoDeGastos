@@ -14,6 +14,8 @@ export const environment = {
     logout: 'http://localhost:8080/api/auth/logout/',
     me: 'http://localhost:8080/api/auth/me',
     despesas: 'http://localhost:8080/api/despesa/',
-    categorias: 'http://localhost:8080/api/categoria/'
+    categorias: 'http://localhost:8080/api/categoria/',
+    dashboard: 'http://localhost:8080/api/dashboard/',
+    mesesDashboard: 'http://localhost:8080/api/calendario/dashboard/meses'
   }
 }

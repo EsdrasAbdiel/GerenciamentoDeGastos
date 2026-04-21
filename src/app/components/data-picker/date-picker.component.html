@@ -1,0 +1,17 @@
+<div class="picker-wrapper">
+  <app-button
+    [label]="label"
+    (aoClicar)="toggle()">
+  </app-button>
+
+  <div *ngIf="isOpen" class="date-picker-container">
+    <div class="modal-container">
+      <div
+        *ngFor="let item of items"
+        class="item"
+        (click)="selecionar(item)">
+        {{ getLabel(item) }}
+      </div>
+    </div>
+  </div>
+</div>
