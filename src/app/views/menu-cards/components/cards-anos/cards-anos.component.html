@@ -3,12 +3,12 @@
 </app-menu>
 
 <ng-template #menu__cards>
-      <app-loading *ngIf="loading"></app-loading>
-  <div class="titulo-container" *ngIf="!loading">
+      <app-loading *ngIf="loading()"></app-loading>
+  <div class="titulo-container" *ngIf="!loading()">
     <p>Selecione o ano:</p>
   </div>
 
-  <app-menu-cards [items]="anos" [labelKey]="'anoDescricao'"
+  <app-menu-cards [items]="anos()" [labelKey]="'anoDescricao'"
     (selecionado)="aoClicarNoCardAnoDeveIrParaMeses($event)"></app-menu-cards>
 
 </ng-template>
