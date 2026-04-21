@@ -10,6 +10,12 @@ export const environment = {
     atualizarDespesa: 'https://backend-gerenciamento-gastos.onrender.com/api/gastos/atualizarDespesa',
     deletarDespesa: 'https://backend-gerenciamento-gastos.onrender.com/api/gastos/deletarDespesa',
     registarUsuario: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/registro',
-    buscarUsuario: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/buscarUsuario/'
+    buscarUsuario: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/buscarUsuario/',
+    logout: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/logout/',
+    me: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/me',
+    despesas: 'https://backend-gerenciamento-gastos.onrender.com/api/despesa/',
+    categorias: 'https://backend-gerenciamento-gastos.onrender.com/api/categoria/',
+    dashboard: 'https://backend-gerenciamento-gastos.onrender.com/api/dashboard/',
+    mesesDashboard: 'https://backend-gerenciamento-gastos.onrender.com/api/calendario/dashboard/meses'
   }
 };
