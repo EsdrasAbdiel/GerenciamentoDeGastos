@@ -35,6 +35,8 @@ O projeto surgiu a partir de um problema real:
 * Dashboard com visão geral
 * Autenticação com JWT
 * Proteção de rotas no frontend
+* Responsividade para telas menores
+* Componentes reutilizaveis
 
 ---
 
