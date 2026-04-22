@@ -34,26 +34,26 @@
       <div class="botoes-dashboard" *ngIf="!loading">
         Filtrar dados por:
         <app-date-picker [label]="'Mês'" [items]="meses()" [labelKey]="'nomeAbreviado'"
-          (selecionado)="this.dadosMes($event)" [isOpen]="pickerAberto === 'mes'"
+          (selecionado)="this.dadosMes($event)" [isOpen]="pickerAberto === calendario.mes"
           (abrirFechar)="togglePicker('mes')"></app-date-picker>
         <app-date-picker [label]="'Ano'" [items]="anos()" [labelKey]="'id'" (selecionado)="this.dadosAnos($event)"
-          [isOpen]="pickerAberto === 'ano'" (abrirFechar)="togglePicker('ano')"></app-date-picker>
+          [isOpen]="pickerAberto === calendario.ano" (abrirFechar)="togglePicker('ano')"></app-date-picker>
       </div>
       <div class="dashboard">
-        <app-loading-skeleton-dashboard *ngIf="loading; else graficoComparativo" class="grafico-comparativo-container"></app-loading-skeleton-dashboard>
-              <app-loading-skeleton-dashboard *ngIf="loading; else graficoPizza" class="grafico-pizza-container"></app-loading-skeleton-dashboard>
-
+        <app-loading-skeleton-dashboard *ngIf="loading; else graficoComparativo"
+          class="grafico-comparativo-container"></app-loading-skeleton-dashboard>
+        <app-loading-skeleton-dashboard *ngIf="loading; else graficoPizza"
+          class="grafico-pizza-container"></app-loading-skeleton-dashboard>
       </div>
     </mat-card>
   </div>
-
 </app-menu>
 
 <ng-template #graficoComparativo>
-  <div echarts [options]="chartOptionComparativo" (chartInit)="onChartInit($event)" class="grafico-comparativo-container"></div>
+  <div echarts [options]="chartOptionComparativo" (chartInit)="onChartInit($event)"
+    class="grafico-comparativo-container"></div>
 </ng-template>
 
 <ng-template #graficoPizza>
-          <div echarts [options]="barOption" class="grafico-pizza-container"></div>
-
+  <div echarts [options]="barOption" class="grafico-pizza-container"></div>
 </ng-template>

@@ -4,7 +4,7 @@ import { Component, Input, OnInit } from '@angular/core';
 @Component({
   selector: 'app-loading-skeleton-dashboard',
   standalone: true,
-  imports: [NgIf],
+  imports: [],
   templateUrl: './loading-skeleton-dashboard.component.html',
   styleUrl: './loading-skeleton-dashboard.component.scss'
 })
