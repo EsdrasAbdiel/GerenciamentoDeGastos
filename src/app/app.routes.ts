@@ -1,5 +1,4 @@
 import { Routes } from '@angular/router';
-import { ConsultaComponent } from './views/consulta/consulta.component';
 import { DetalhesComponent } from './views/detalhes/detalhes.component';
 import { LoginComponent } from './views/auth/components/login/login.component';
 import { HomeComponent } from './views/dashboard/dashboard.component';
@@ -21,9 +20,6 @@ export const routes: Routes = [
   },
   {
     path: ':ano/card-meses', canActivate: [authGuard], component: CardsMesesComponent
-  },
-  {
-    path: 'consulta', canActivate: [authGuard], component: ConsultaComponent
   },
   {
     path: 'card-anos', canActivate: [authGuard], component: CardsAnosComponent

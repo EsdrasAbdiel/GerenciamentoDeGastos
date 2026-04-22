@@ -1,7 +1,6 @@
 import { Component, ContentChild, AfterContentInit } from '@angular/core';
 import { InputComponent } from '../input/input.component';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'app-password-input',

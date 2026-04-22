@@ -3,32 +3,30 @@
   <span>{{ tituloSnackbar }}</span>
   <span class="spacer"></span>
 </mat-toolbar>
-  <!-- Container do Drawer + Conteúdo -->
-  <mat-drawer-container class="example-container" hasBackdrop="true">
-    <mat-drawer #drawer mode="over" position="start" class="year-menu-container">
-      <mat-nav-list>
-        <mat-list-item routerLink="/home">
-          <mat-icon matListItemIcon>dashboard_outlined</mat-icon>
-          <span matListItemTitle>Dashboard</span>
-        </mat-list-item>
-        <mat-list-item routerLink="/card-anos">
-          <mat-icon matListItemIcon>inbox</mat-icon>
-          <span matListItemTitle>Despesas</span>
-        </mat-list-item>
-        <mat-list-item (click)="drawer.close()">
-          <mat-icon matListItemIcon>close</mat-icon>
-          <span matListItemTitle>Fechar menu</span>
-        </mat-list-item>
-        <mat-list-item (click)="deveFazerLogout()">
-          <mat-icon matListItemIcon>logout</mat-icon>
-          <span matListItemTitle>Logout</span>
-        </mat-list-item>
-      </mat-nav-list>
-    </mat-drawer>
+<mat-drawer-container class="example-container" hasBackdrop="true">
+  <mat-drawer #drawer mode="over" position="start" class="year-menu-container">
+    <mat-nav-list>
+      <mat-list-item routerLink="/home">
+        <mat-icon matListItemIcon>dashboard_outlined</mat-icon>
+        <span matListItemTitle>Dashboard</span>
+      </mat-list-item>
+      <mat-list-item routerLink="/card-anos">
+        <mat-icon matListItemIcon>inbox</mat-icon>
+        <span matListItemTitle>Despesas</span>
+      </mat-list-item>
+      <mat-list-item (click)="drawer.close()">
+        <mat-icon matListItemIcon>close</mat-icon>
+        <span matListItemTitle>Fechar menu</span>
+      </mat-list-item>
+      <mat-list-item (click)="deveFazerLogout()">
+        <mat-icon matListItemIcon>logout</mat-icon>
+        <span matListItemTitle>Logout</span>
+      </mat-list-item>
+    </mat-nav-list>
+  </mat-drawer>
 
-    <!-- Conteúdo principal -->
-    <mat-drawer-content>
-        <ng-content />
+  <mat-drawer-content>
+    <ng-content />
 
-    </mat-drawer-content>
-  </mat-drawer-container>
+  </mat-drawer-content>
+</mat-drawer-container>

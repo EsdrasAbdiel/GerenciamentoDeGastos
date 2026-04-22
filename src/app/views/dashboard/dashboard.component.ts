@@ -10,13 +10,12 @@ import { echarts } from '../../../assets/echarts'
 import { DashboardService } from '../../services/dashboard.service';
 import { MatIconModule } from '@angular/material/icon';
 import { FormGroup, FormsModule, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
-import { LoadingComponent } from '../../components/loading/loading.component';
 import { Dashboard } from '../../models/dashboard.model';
 import { ResumoFinanceiroMensal } from '../../models/resumo-financeiro-mensal.model';
 import { DespesaItem } from '../../models/despesaItem.model';
 import { CalendarioService } from '../../services/calendario.service';
 import { Despesa } from '../detalhes/detalhes.component';
-import { DatePickerComponent } from '../../components/data-picker/date-picker.component';
+import { DatePickerComponent } from '../../components/date-picker/date-picker.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Ano } from '../../models/ano.model';
 import { AuthService } from '../../services/auth.service';
@@ -24,11 +23,12 @@ import { graficoBarraVerticalDashboard } from '../../utils/grafico-barra-vertica
 import { graficoBarraHorizontalDashboard } from '../../utils/grafico-barra-horizontal.dashboard.utils';
 import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
 import { LoadingSkeletonDashboardComponent } from '../../components/loading-skeleton-dashboard/loading-skeleton-dashboard.component';
+import { Calendario } from '../../enums/calendario.enum';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [LoadingSkeletonDashboardComponent, LoadingSkeletonComponent, DatePickerComponent, MenuComponent, CommonModule, NgxEchartsModule, MatCardModule, MatIconModule, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule, LoadingComponent],
+  imports: [LoadingSkeletonDashboardComponent, LoadingSkeletonComponent, DatePickerComponent, MenuComponent, CommonModule, NgxEchartsModule, MatCardModule, MatIconModule, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
   providers: [
     provideEchartsCore({ echarts })
   ],
@@ -55,6 +55,7 @@ export class HomeComponent implements OnInit {
   mesesDashboard: MesDashboard[] = [];
   despesasPorCategoria: string[] = [];
   semDados: boolean = false;
+  calendario = Calendario;
 
   ano2025: ResumoFinanceiroMensal[] = [];
   ano2026: any[] = [];

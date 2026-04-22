@@ -13,10 +13,27 @@
   gap: 1rem;
 }
 
-button { cursor: pointer; }
+button {
+  cursor: pointer;
+}
 
 .botao-acoes {
   border: none;
   border-radius: 5px;
   width: 100%;
+}
+
+.buttons-container-space-between {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.buttons-container-detalhes {
+  display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    padding: 1rem 0;
+    align-items: baseline;
 }
