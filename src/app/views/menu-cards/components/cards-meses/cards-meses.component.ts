@@ -1,6 +1,5 @@
-import { GastosService } from '../../../../services/gastos.service';
 import { NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { MenuComponent } from '../../../../components/menu/menu.component';
 import { Mes } from '../../../../models/mes.model';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,6 +8,7 @@ import { MenuCardsComponent } from '../../menu-cards.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CalendarioService } from '../../../../services/calendario.service';
 import { ButtonComponent } from '../../../../components/button/button.component';
+import { AuthService } from '../../../../services/auth.service';
 
 export interface CardsMeses {
   mes: number;
@@ -26,10 +26,11 @@ export class CardsMesesComponent {
   private calendarioService = inject(CalendarioService)
   private router = inject(Router);
   private activatedRoute = inject(ActivatedRoute);
+  private authService = inject(AuthService)
 
   paramsRoute = this.activatedRoute.snapshot.params;
 
-  meses = toSignal(this.calendarioService.getMeses(this.paramsRoute['ano']), { initialValue: [] })
+  meses = toSignal(this.calendarioService.getMeses(this.paramsRoute['ano'], this.authService.buscarUsuarioId()), { initialValue: [] })
   loading = computed(() => this.meses().length === 0);
 
   aoClicarNoCardMesDeveIrParaDetalhes(card: Mes) {
