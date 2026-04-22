@@ -35,7 +35,7 @@ export class RegistroComponent {
     this.form = this.fb.group({
       nome: [null, [Validators.required]],
       email: [null, [Validators.email, Validators.required]],
-      dataNascimento: ["29/05/2004", [Validators.required]],
+      dataNascimento: [null, [Validators.required]],
       senha: [null, [Validators.required, Validators.maxLength(6), Validators.minLength(6)]],
       confirmarSenha: [null, [Validators.required, Validators.maxLength(6)]],
     })
@@ -49,19 +49,24 @@ export class RegistroComponent {
     this.router.navigate(['/auth/login'])
   }
 
+  converterData(data: string): Date {
+  const [dia, mes, ano] = data.split('/');
+  return new Date(`${ano}-${mes}-${dia}`);
+}
+
   deveCadastrarUsuario() {
     const { nome, email, dataNascimento, senha, confirmarSenha } = this.form.value
 
     const params = {
       nome,
       email,
-      dataNascimento: new Date(dataNascimento),
+      dataNascimento: this.converterData(dataNascimento),
       senha: Number(senha),
       confirmarSenha: Number(confirmarSenha),
     }
 
     if (this.form.invalid) {
-      this.form.markAllAsTouched()
+      this.form.markAllAsTouched();
     } else {
       this.authService.postRegistrarUsuario(params).pipe().subscribe(
         retorno => {
@@ -72,7 +77,7 @@ export class RegistroComponent {
           }
         },
         error => {
-          this.snackbarService.error(error ? error?.error.mensagem : 'Erro ao efetuar registro' )
+          this.snackbarService.error(error?.error.mensagem ? error?.error.mensagem : 'Erro ao efetuar registro' )
         }
       )
     }
