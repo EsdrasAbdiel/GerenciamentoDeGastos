@@ -1,59 +1,60 @@
-# GerenciamentoGastos
+# 💰 Sistema de Gerenciamento de Gastos
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.2.
+Aplicação full stack desenvolvida para substituir o controle financeiro manual em Excel, reduzindo a necessidade de copiar e colar dados e centralizando informações em um sistema automatizado.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🚀 Motivação
 
-```bash
-ng serve
-```
+O projeto surgiu a partir de um problema real:
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+> O controle de gastos em planilhas exigia entrada manual constante, tornando o processo repetitivo e propenso a erros.
 
-## Code scaffolding
+---
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+## 🧱 Arquitetura
 
-```bash
-ng generate component component-name
-```
+* **Frontend:** Angular
+* **Backend:** .NET C# (API REST)
+* **Banco de Dados:** PostgreSQL (Neon)
+* **Autenticação:** JWT
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🌍 Deploy
 
-## Building
+* Frontend hospedado no GitHub Pages
+* Backend hospedado no Render
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## ⚙️ Funcionalidades
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+* Cadastro de receitas e despesas
+* Filtro por mês e ano
+* Dashboard com visão geral
+* Autenticação com JWT
+* Proteção de rotas no frontend
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🧠 Diferenciais
 
-```bash
-ng test
-```
+* Estrutura full stack desacoplada
+* Organização para evitar repetição de código
+* Base preparada para automação de dados financeiros
 
-## Running end-to-end tests
+---
 
-For end-to-end (e2e) testing, run:
+## 🚧 Próximos passos
 
-```bash
-ng e2e
-```
+* [ ] Importação de extrato em PDF
+* [ ] Captura automática de notificações (Android)
+* [ ] Classificação inteligente de gastos
+* [ ] Evolução para micro front-end
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+---
 
-## Additional Resources
+## 📈 Objetivo
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+Evoluir o sistema para uma solução automatizada de controle financeiro pessoal, reduzindo ao máximo a entrada manual de dados.
