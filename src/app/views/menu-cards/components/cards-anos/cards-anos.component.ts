@@ -2,14 +2,12 @@ import { NgIf, NgTemplateOutlet } from '@angular/common';
 import { Component, computed, inject, OnInit } from '@angular/core';
 import { MenuComponent } from '../../../../components/menu/menu.component';
 import { Router } from "@angular/router";
-import { GastosService } from '../../../../services/gastos.service';
 import { Ano } from '../../../../models/ano.model';
 import { LoadingComponent } from '../../../../components/loading/loading.component';
 import { MenuCardsComponent } from '../../menu-cards.component';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { SnackbarService } from '../../../../services/snackbar.service';
 import { CalendarioService } from '../../../../services/calendario.service';
-
 
 @Component({
   selector: 'app-cards-anos',

@@ -3,7 +3,7 @@
 </app-menu>
 
 <ng-template #menu__cards>
-      <app-loading *ngIf="loading()"></app-loading>
+  <app-loading *ngIf="loading()"></app-loading>
   <div class="titulo-container" *ngIf="!loading()">
     <app-button [label]="'Voltar'" classeBotao="'voltar'" (aoClicar)="deveVoltarParaMenuAnos()"></app-button>
     <span>Selecione o mês:</span>

@@ -1,4 +1,4 @@
-import { CurrencyPipe, NgClass, NgStyle } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
 
 @Component({
