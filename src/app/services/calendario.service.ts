@@ -17,8 +17,8 @@ export class CalendarioService {
     return this.http.get<Ano[]>(environment.BASE_URL.listarAnos)
   }
 
-  getMeses(ano: number): Observable<Mes[]> {
-    return this.http.get<Mes[]>(`${environment.BASE_URL.listarMeses}`, { params: { ano } })
+  getMeses(ano: number, usuarioId: string): Observable<Mes[]> {
+    return this.http.get<Mes[]>(`${environment.BASE_URL.listarMeses}`, { params: { ano, usuarioId } })
   }
 
   getMesesDashboard(): Observable<MesDashboard[]> {
