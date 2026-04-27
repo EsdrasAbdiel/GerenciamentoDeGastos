@@ -9,6 +9,7 @@ import { AuthComponent } from './views/auth/auth.component';
 import { RegistroComponent } from './views/auth/components/registro/registro.component';
 import { EsqueciSenhaComponent } from './views/auth/components/esqueci-senha/esqueci-senha.component';
 import { authGuard } from './guards/auth.guard';
+import { ExportacaoPdfComponent } from './views/exportacao-pdf/exportacao-pdf.component';
 
 export const routes: Routes = [
   {
@@ -33,6 +34,9 @@ export const routes: Routes = [
   },
   {
     path: ':ano/:mes/:id', canActivate: [authGuard], component: DetalhesComponent
+  },
+  {
+    path: 'exportacao-pdf', component: ExportacaoPdfComponent
   },
 
   {
