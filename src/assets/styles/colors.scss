@@ -104,3 +104,27 @@ $ph-gray-color-hover: #a3a3a3;
   .voltar:hover {
     background-color: var(--ph-gray-hover) !important;
   }
+
+  .icone-editar {
+    color: var(--ph-warning) !important;
+  }
+
+  .icone-excluir {
+    color: var(--ph-error) !important;
+  }
+
+  .icone-confirmar {
+    color: var(--ph-success) !important;
+  }
+
+  .icone-cancelar {
+    color: var(--ph-error) !important;
+  }
+
+  .icone-adicionar {
+    color: var(--ph-primary) !important;
+  }
+
+  .icone-desabilitado {
+    color: var(--ph-gray);
+  }

@@ -1,0 +1,65 @@
+@use '../../../assets/styles/colors.scss';
+
+.adicionar-icon {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 12px;
+  margin-top: auto;
+}
+
+.titulo-card-detalhe-container {
+  padding: 8px 0 important;
+
+
+}
+
+  .titulo-card-detalhe {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 5px 0;
+
+    p {
+      font-size: 18px;
+      font-weight: 600;
+    }
+  }
+
+  mat-grid-list {
+  flex: 1;
+  overflow-y: auto;
+}
+
+.scroll-dark {
+  overflow-y: auto;
+
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+}
+
+/* Chrome, Edge, Safari */
+.scroll-dark::-webkit-scrollbar {
+  width: 6px;
+}
+
+.scroll-dark::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-dark::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
+/* hover (fica mais visível) */
+.scroll-dark:hover::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+}
+
+/* quando está clicando */
+.scroll-dark::-webkit-scrollbar-thumb:active {
+  background: rgba(255, 255, 255, 0.5);
+}

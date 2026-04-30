@@ -10,6 +10,6 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class IconButtonComponent {
   @Input() icone = '';
-  @Input() desabilitado = '';
+  @Input() desabilitado: boolean = false;
   @Input() cor = '';
 }

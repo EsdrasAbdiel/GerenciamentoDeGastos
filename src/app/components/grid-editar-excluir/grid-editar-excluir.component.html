@@ -1,0 +1,110 @@
+<mat-card class="card-container">
+
+  <mat-card-title class="titulo-card-detalhe">{{ titulo }}</mat-card-title>
+
+  <mat-grid-list [cols]="totalColunas" rowHeight="52px" gutterSize="8px" class="scroll-dark">
+
+    <!-- HEADER -->
+    <ng-container *ngFor="let coluna of colunas">
+      <mat-grid-tile class="header" [colspan]="coluna.colspan">
+        {{ coluna.tituloColuna }}
+      </mat-grid-tile>
+    </ng-container>
+
+    <mat-grid-tile [colspan]="2">Ações</mat-grid-tile>
+
+    <!-- LINHAS -->
+    <ng-container *ngFor="let item of dados; let i = index; trackBy: trackByFn">
+
+      <!-- VISUALIZAÇÃO -->
+      <ng-container *ngIf="indiceEmEdicao !== i; else editMode">
+
+        <ng-container *ngFor="let coluna of colunas">
+          <mat-grid-tile [colspan]="coluna.colspan">
+
+            <ng-container *ngIf="coluna.template; else defaultView">
+              <ng-container *ngTemplateOutlet="coluna.template; context: { $implicit: item, mode: 'view' }">
+              </ng-container>
+            </ng-container>
+
+            <ng-template #defaultView>
+              {{ item[coluna.id] ?? '-' }}
+            </ng-template>
+
+          </mat-grid-tile>
+        </ng-container>
+
+        <!-- AÇÕES -->
+        <mat-grid-tile [colspan]="2">
+          <app-icon-button icone="edit" [cor]="'icone-editar'" [desabilitado]="estaEmEdicaoOuAdicionando" (click)="editarLinha(i)"></app-icon-button>
+          <app-icon-button icone="delete" [cor]="'icone-excluir'" [desabilitado]="estaEmEdicaoOuAdicionando" (click)="removerLinha(i)"></app-icon-button>
+        </mat-grid-tile>
+
+      </ng-container>
+
+      <!-- EDIÇÃO -->
+      <ng-template #editMode>
+
+        <ng-container *ngFor="let coluna of colunas">
+          <mat-grid-tile [colspan]="coluna.colspan">
+
+            <ng-container *ngIf="coluna.template; else defaultEdit">
+              <ng-container *ngTemplateOutlet="coluna.template; context: { $implicit: item, mode: 'edit' }">
+              </ng-container>
+            </ng-container>
+
+            <ng-template #defaultEdit>
+              <input [(ngModel)]="item[coluna.id]" style="width: 100%">
+            </ng-template>
+
+          </mat-grid-tile>
+        </ng-container>
+
+        <mat-grid-tile [colspan]="2">
+          <app-icon-button icone="done" [cor]="'icone-confirmar'" (click)="salvarEdicaoInterno(i)"></app-icon-button>
+          <app-icon-button icone="close" [cor]="'icone-cancelar'" (click)="cancelarEdicao()"></app-icon-button>
+        </mat-grid-tile>
+
+      </ng-template>
+
+    </ng-container>
+
+    <!-- NOVO ITEM -->
+    <ng-container *ngIf="adicionandoNovo">
+
+      <ng-container *ngFor="let coluna of colunas">
+        <mat-grid-tile [colspan]="coluna.colspan">
+
+          <ng-container *ngIf="coluna.template; else defaultCreate">
+            <ng-container *ngTemplateOutlet="coluna.template; context: { $implicit: novoItem, mode: 'create' }">
+            </ng-container>
+          </ng-container>
+
+          <ng-template #defaultCreate>
+            <input [(ngModel)]="novoItem[coluna.id]" style="width: 100%">
+          </ng-template>
+
+        </mat-grid-tile>
+      </ng-container>
+
+      <mat-grid-tile [colspan]="2">
+        <app-icon-button icone="done" [cor]="'icone-confirmar'" (click)="salvarNovoInterno()"></app-icon-button>
+        <app-icon-button icone="close" [cor]="'icone-cancelar'" (click)="cancelarEdicao()"></app-icon-button>
+      </mat-grid-tile>
+
+    </ng-container>
+
+    <!-- SEM DADOS -->
+    <ng-container *ngIf="dados.length === 0 && !adicionandoNovo">
+      <mat-grid-tile [colspan]="8">
+        Nenhum registro encontrado
+      </mat-grid-tile>
+    </ng-container>
+
+  </mat-grid-list>
+
+  <div class="adicionar-icon">
+    <app-icon-button icone="add" [cor]="'icone-adicionar'" [desabilitado]="estaEmEdicaoOuAdicionando" (click)="adicionarLinha()"></app-icon-button>
+  </div>
+
+</mat-card>
