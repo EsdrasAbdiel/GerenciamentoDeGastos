@@ -63,3 +63,17 @@
 .scroll-dark::-webkit-scrollbar-thumb:active {
   background: rgba(255, 255, 255, 0.5);
 }
+
+.no-data {
+      width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    color: black;
+}
+
+.tabela-container {
+  background-color: transparent;
+}
+
+th, td { color: white; }

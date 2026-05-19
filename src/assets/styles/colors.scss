@@ -13,6 +13,7 @@ $ph-disabled-color: #0000001a;
 $ph-white-color: #f5f5f5;
 $ph-gray-color: #808080;
 $ph-gray-color-hover: #a3a3a3;
+$ph-background-color: #000000db;
 
 // ===================================
 // 2. Exporta como variáveis CSS no :root
@@ -28,6 +29,7 @@ $ph-gray-color-hover: #a3a3a3;
   --ph-white: #{$ph-white-color};
   --ph-gray: #{$ph-gray-color};
   --ph-gray-hover: #{$ph-gray-color-hover};
+  --ph-background-color: #{$ph-background-color};
 }
 
 // ===================================
@@ -105,26 +107,22 @@ $ph-gray-color-hover: #a3a3a3;
     background-color: var(--ph-gray-hover) !important;
   }
 
-  .icone-editar {
+  .warning {
     color: var(--ph-warning) !important;
   }
 
-  .icone-excluir {
+  .danger {
     color: var(--ph-error) !important;
   }
 
-  .icone-confirmar {
+  .success {
     color: var(--ph-success) !important;
   }
 
-  .icone-cancelar {
-    color: var(--ph-error) !important;
-  }
-
-  .icone-adicionar {
+  .primary {
     color: var(--ph-primary) !important;
   }
 
-  .icone-desabilitado {
+  .gray {
     color: var(--ph-gray);
   }

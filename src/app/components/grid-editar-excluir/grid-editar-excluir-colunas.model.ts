@@ -1,10 +1,9 @@
 import { TemplateRef } from "@angular/core";
 
-export interface GridEditarExcluirColunas<T> {
-  id: keyof T;          // chave do objeto
-  tituloColuna: string;
-  colspan: number;
-
+export interface GridEditarExcluirColunas {
+  key: string;
+  label: string;
   template?: TemplateRef<any>;
+  type: string
 }
 

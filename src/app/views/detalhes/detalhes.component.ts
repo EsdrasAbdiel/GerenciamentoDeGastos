@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
@@ -21,6 +21,11 @@ import { ModalComponent } from '../../components/modal/modal.component';
 import { ResumoFinanceiroMensalService } from '../../services/resumo-financeiro-mensal.service';
 import { CardValoresComponent } from '../../components/card-valores/card-valores.component';
 import { AuthService } from '../../services/auth.service';
+import { MatButtonModule } from '@angular/material/button';
+import { GridEditarExcluirComponent } from '../../components/grid-editar-excluir/grid-editar-excluir.component';
+import { GridEditarExcluirColunas } from '../../components/grid-editar-excluir/grid-editar-excluir-colunas.model';
+import { Grid } from './../../enums/grid.enum';
+
 
 export interface Despesa {
   f?: number;
@@ -35,6 +40,7 @@ export interface Entrada {
   id?: number;
   entradaDescricao: string;
   entradaValor: number;
+  index?: number
 }
 
 @Component({
@@ -54,15 +60,21 @@ export interface Entrada {
     LoadingComponent,
     SelectComponent,
     CardValoresComponent,
-],
+    MatButtonModule,
+    GridEditarExcluirComponent
+  ],
   templateUrl: './detalhes.component.html',
   styleUrl: './detalhes.component.scss'
 })
-export class DetalhesComponent implements OnInit {
+export class DetalhesComponent implements OnInit, AfterViewInit {
+  @ViewChild('viewValorEntrada', { static: true }) viewValorEntrada!: TemplateRef<any>;
+
   paramsRoute: any;
   form!: FormGroup;
+  formEntrada!: FormGroup
   dadosDespesasEmEdicao: Despesa[] = [];
-  dadosEntradasEmEdicao: Entrada[] = [];
+  dadosEntradas: Entrada[] = [];
+  dadosEntradasEdicao: Entrada[] = [];
   valoresSomados = 0;
   valoresEntradasSomados = 0;
   adicionarValorEntrada: boolean = false;
@@ -73,15 +85,19 @@ export class DetalhesComponent implements OnInit {
   private despesasService = inject(DespesasService);
   private dialog = inject(MatDialog);
   private authService = inject(AuthService);
+  gridEnum!: Grid
+  estadoDaLinha!: number
 
   opcoesDespesas: SelectModel[] = [];
   tituloSnackbar = '';
+  colunasEntradas: GridEditarExcluirColunas[] = []
 
   constructor(
     private router: Router,
     private fb: FormBuilder,
     private gastosService: GastosService,
     private activatedRoute: ActivatedRoute,
+    private cdr: ChangeDetectorRef
   ) {
     this.paramsRoute = this.activatedRoute.snapshot.params;
     this.form = this.fb.group({
@@ -92,10 +108,18 @@ export class DetalhesComponent implements OnInit {
       valor: [null, [Validators.required]],
       pago: [false]
     });
+
+    this.formEntrada = this.fb.group({
+      entradaDescricao: [null],
+      entradaValor: [null],
+    })
   }
 
   ngOnInit(): void {
+
+
     this.carregarDespesas();
+
     this.atualizarDespesasOpcoes();
     if (this.paramsRoute.id) {
       this.carregarDespesasExistentes();
@@ -104,6 +128,30 @@ export class DetalhesComponent implements OnInit {
     }
 
     this.tituloSnackbar = 'Cadastrar Despesa'
+
+
+  }
+
+  ngAfterViewInit(): void {
+    this.carregaColunasEntradas()
+
+    this.cdr.detectChanges()
+  }
+
+  carregaColunasEntradas() {
+    this.colunasEntradas = [
+      {
+        label: 'Descricao entrada',
+        key: 'entradaDescricao',
+        type: 'text'
+      },
+      {
+        label: 'Valor entrada',
+        key: 'entradaValor',
+        template: this.viewValorEntrada,
+        type: 'number'
+      }
+    ]
   }
 
   atualizarDespesasOpcoes() {
@@ -144,17 +192,13 @@ export class DetalhesComponent implements OnInit {
   carregarDespesasExistentes() {
     this.loading = true;
     this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
-      this.dadosDespesasEmEdicao = retorno.itensDespesa.map((itensDespesa: any, index: number) => ({
-        ...itensDespesa,
-        indice: index
-      }));
+      this.dadosDespesasEmEdicao = retorno.itensDespesa
 
-      this.dadosEntradasEmEdicao = retorno.itensEntrada.map((itensEntrada: any, index: number) => ({
-        ...itensEntrada,
-        indice: index
-      }))
+      this.dadosEntradas = retorno.itensEntrada
+
+      this.dadosEntradasEdicao = [...this.dadosEntradas]
       this.somarValores();
-      this.somarValoresEntrada();
+      this.somarValoresEntradas()
     });
 
   }
@@ -171,28 +215,10 @@ export class DetalhesComponent implements OnInit {
     });
   }
 
-  iniciarEdicaoEntrada(index: number) {
-    this.indiceEntradaEmEdicao = index;
-    const item = this.dadosEntradasEmEdicao[index];
-    this.form.patchValue({
-      entradaValor: item.entradaValor,
-      descricaoEntrada: item.entradaDescricao
-    })
-  }
-
   // Inicia adição de nova linha (no final)
   adicionarNovaLinha() {
     this.indiceDespesaEmEdicao = this.dadosDespesasEmEdicao.length; // coloca no final
     this.form.reset();
-  }
-
-  adicionarNovaLinhaEntrada() {
-    this.indiceEntradaEmEdicao = this.dadosEntradasEmEdicao.length; // coloca no final
-    this.form.reset();
-  }
-
-  gerarIdPorItemEntrada() {
-    return this.dadosEntradasEmEdicao.length + 1;
   }
 
   gerarIdPorItemDespesa() {
@@ -201,7 +227,7 @@ export class DetalhesComponent implements OnInit {
 
   // Confirma (edição ou adição)
   confirmar() {
-    const {descricao, valor, pago} = this.form.value;
+    const { descricao, valor, pago } = this.form.value;
 
 
     if (this.indiceDespesaEmEdicao === this.dadosDespesasEmEdicao.length) {
@@ -227,31 +253,6 @@ export class DetalhesComponent implements OnInit {
     this.somarValores();
   }
 
-  confirmarEntrada() {
-
-
-    const valor = this.form.value;
-
-    if (this.indiceEntradaEmEdicao === this.dadosEntradasEmEdicao.length) {
-      // É uma NOVA linha
-      this.dadosEntradasEmEdicao.push({
-        //id: this.gerarIdPorItemEntrada(),
-        entradaDescricao: valor.descricaoEntrada,
-        entradaValor: Number(valor.entradaValor)
-      });
-    } else {
-      // É edição de linha existente
-      this.dadosEntradasEmEdicao[this.indiceEntradaEmEdicao] = {
-        ...this.dadosEntradasEmEdicao[this.indiceEntradaEmEdicao],
-        entradaDescricao: valor.descricaoEntrada,
-        entradaValor: Number(valor.entradaValor)
-      };
-    }
-
-    this.cancelarEdicaoEntrada();
-    this.somarValoresEntrada();
-  }
-
   // Cancela edição/adição
   cancelarEdicao() {
     this.indiceDespesaEmEdicao = -1;
@@ -275,16 +276,6 @@ export class DetalhesComponent implements OnInit {
     }
   }
 
-  removerLinhaEntrada(index: number) {
-    if (confirm('Deseja realmente excluir esta despesa?')) {
-      this.dadosEntradasEmEdicao.splice(index, 1);
-      //this.somarValores();
-      if (this.indiceEntradaEmEdicao >= this.dadosEntradasEmEdicao.length) {
-        this.indiceEntradaEmEdicao = -1;
-      }
-    }
-  }
-
   // Desabilita botões de editar/excluir enquanto estiver editando ou adicionando
   botaoDesabilitado(): boolean {
     return this.indiceDespesaEmEdicao !== -1;
@@ -298,16 +289,15 @@ export class DetalhesComponent implements OnInit {
     this.valoresSomados = this.dadosDespesasEmEdicao.reduce((acc, item) => acc + item.valor, 0);
   }
 
-  somarValoresEntrada() {
-    this.valoresEntradasSomados = this.dadosEntradasEmEdicao.reduce((acc, item) => acc + item.entradaValor, 0);
+  somarValoresEntradas() {
+    this.valoresEntradasSomados = this.dadosEntradas.reduce((acc, item) => acc + item.entradaValor, 0);
+
+    console.log(this.valoresEntradasSomados);
+
   }
 
   // TrackBy para performance
   trackByIndex(index: number): number {
-    return index;
-  }
-
-  trackByIndexEntrada(index: number): number {
     return index;
   }
 
@@ -317,7 +307,7 @@ export class DetalhesComponent implements OnInit {
       return;
     }
 
-    if (this.dadosEntradasEmEdicao.length === 0) {
+    if (this.dadosDespesasEmEdicao.length === 0) {
       alert('Para salvar o registro de gastos, deve adicionar uma entrada');
       return;
     }
@@ -326,7 +316,7 @@ export class DetalhesComponent implements OnInit {
     if (!this.paramsRoute.id) {
       const paramsCadastro = {
         despesas: this.dadosDespesasEmEdicao,
-        entradas: this.dadosEntradasEmEdicao,
+        entradas: this.dadosEntradasEdicao,
         valorDespesaTotal: this.valoresSomados,
         valorEntradaTotal: this.valoresEntradasSomados,
         dataInclusao: new Date(),
@@ -346,7 +336,7 @@ export class DetalhesComponent implements OnInit {
       const paramsAlteracao = {
         id: this.paramsRoute.id,
         despesas: this.dadosDespesasEmEdicao,
-        entradas: this.dadosEntradasEmEdicao,
+        entradas: this.dadosEntradasEdicao,
         valorDespesaTotal: this.valoresSomados,
         valorEntradaTotal: this.valoresEntradasSomados,
         dataInclusao: new Date(),
@@ -360,6 +350,46 @@ export class DetalhesComponent implements OnInit {
       })
     }
   }
+
+  salvarLinhaEntrada(event: Entrada) {
+
+    if (this.estadoDaLinha === Grid.editar) {
+      this.dadosEntradasEdicao.map((linha, index) => {
+        if (index === linha.index) {
+          return this.formEntrada.value
+        }
+        return linha
+      });
+    } else if (this.estadoDaLinha === Grid.adicionar) {
+      const { entradaDescricao, entradaValor } = this.form.value;
+
+      const adicionandoLinha = { entradaDescricao: entradaDescricao, entradaValor: Number(entradaValor) }
+
+      this.dadosEntradasEdicao.push(adicionandoLinha);
+
+
+    }
+      console.log(this.dadosEntradasEdicao);
+
+  }
+
+  editarLinhaEntrada(event: any) {
+    this.estadoDaLinha = Grid.editar
+  }
+
+excluirLinhaEntrada(event: Entrada) {
+
+  this.dadosEntradasEdicao =
+    this.dadosEntradasEdicao.filter(
+      linha => linha !== event
+    );
+
+    this.dadosEntradas = [...this.dadosEntradasEdicao]
+}
+
+adicionarLinhaEntrada() {
+  this.estadoDaLinha = Grid.adicionar
+}
 
   excluir() {
     var confirmar = confirm('Deseja excluir toda a despesa??');

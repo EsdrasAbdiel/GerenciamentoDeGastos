@@ -37,3 +37,7 @@ input[type="number"]::-webkit-inner-spin-button {
 input[type="number"] {
   -moz-appearance: textfield;
 }
+
+.mdc-checkbox--disabled .mdc-checkbox__background {
+  border-color: #E5E5E5 !important;
+}
