@@ -19,11 +19,13 @@
       <div class="registro-card-login">
         <span>Não tem cadastro? <ins (click)="deveFazerRegistro()">Cadastre-se</ins></span>
       </div>
+
     </form>
+
   </mat-card>
+            <app-loading *ngIf="loading"></app-loading>
 
 </div>
-  <app-loading *ngIf="loading"></app-loading>
 
 
 

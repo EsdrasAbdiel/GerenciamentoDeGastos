@@ -1,5 +1,5 @@
 <mat-toolbar color="primary" class="toolbar-menu">
-  <app-icon-button [icone]="'menu_outlined'" cor="ph-white" (click)="drawer.toggle()"></app-icon-button>
+  <app-icon-button [icone]="'menu_outlined'" [cor]="'white'" (click)="drawer.toggle()"></app-icon-button>
   <span>{{ tituloSnackbar }}</span>
   <span class="spacer"></span>
 </mat-toolbar>
@@ -14,10 +14,6 @@
         <mat-list-item routerLink="/card-anos">
           <mat-icon matListItemIcon>inbox</mat-icon>
           <span matListItemTitle>Despesas</span>
-        </mat-list-item>
-        <mat-list-item (click)="drawer.close()">
-          <mat-icon matListItemIcon>close</mat-icon>
-          <span matListItemTitle>Fechar menu</span>
         </mat-list-item>
         <mat-list-item (click)="deveFazerLogout()">
           <mat-icon matListItemIcon>logout</mat-icon>

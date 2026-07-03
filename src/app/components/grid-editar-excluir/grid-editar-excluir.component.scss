@@ -1,79 +1,107 @@
 @use '../../../assets/styles/colors.scss';
 
-.adicionar-icon {
-  width: 100%;
+.tabela-card {
   display: flex;
-  justify-content: center;
-  margin-bottom: 12px;
-  margin-top: auto;
+  flex-direction: column;
+  width: 100%;
 }
 
-.titulo-card-detalhe-container {
-  padding: 8px 0 important;
-
-
-}
-
-  .titulo-card-detalhe {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 5px 0;
-
-    p {
-      font-size: 18px;
-      font-weight: 600;
-    }
-  }
-
-  mat-grid-list {
-  flex: 1;
+.table-wrapper {
+  max-height: 500px;
   overflow-y: auto;
+  overflow-x: hidden;
+
+  border-radius: 6px;
 }
 
-.scroll-dark {
-  overflow-y: auto;
-
-  /* Firefox */
-  scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.25) transparent;
+/* Scroll */
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* Chrome, Edge, Safari */
-.scroll-dark::-webkit-scrollbar {
-  width: 6px;
-}
-
-.scroll-dark::-webkit-scrollbar-track {
+.table-wrapper::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.scroll-dark::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
-  border-radius: 10px;
-  transition: all 0.3s ease;
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
 }
 
-/* hover (fica mais visível) */
-.scroll-dark:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.35);
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
 }
 
-/* quando está clicando */
-.scroll-dark::-webkit-scrollbar-thumb:active {
-  background: rgba(255, 255, 255, 0.5);
-}
-
-.no-data {
-      width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    color: black;
-}
-
+/* Tabela */
 .tabela-container {
-  background-color: transparent;
+  width: 100%;
+  table-layout: fixed;
+  background: transparent;
 }
 
-th, td { color: white; }
+/* Header */
+.mat-mdc-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #2b2b2b;
+}
+
+.mat-mdc-header-cell {
+  background: #2b2b2b !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Células */
+.mat-mdc-cell {
+  color: white;
+}
+
+th,
+td {
+  color: white;
+  vertical-align: middle;
+}
+
+/* Larguras */
+.mat-column-acoes {
+  width: 120px;
+  text-align: center;
+}
+
+// .mat-column-descricao {
+//   width: 50%;
+// }
+
+// .mat-column-valorDespesa {
+//   width: 30%;
+// }
+
+/* Centralizar ações */
+.mat-column-acoes .mdc-data-table__cell,
+.mat-column-acoes {
+  text-align: center;
+}
+
+/* Linha */
+.mat-mdc-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Sem dados */
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  color: white;
+}
+
+/* Botão adicionar */
+.adicionar-icon {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}

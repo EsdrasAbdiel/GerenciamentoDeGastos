@@ -129,7 +129,6 @@ Object.assign(this.editingRow, this.rowOriginal);
   }
 
   adicionarLinha() {
-
     this.editandoLinha = true;
 
     const novaLinha: any = {};
