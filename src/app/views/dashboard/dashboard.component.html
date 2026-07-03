@@ -30,13 +30,13 @@
         </app-loading-skeleton>
       </mat-card>
     </div>
-    <mat-card class="card-container dashboard">
+    <mat-card class="card-container card-dashboard">
       <div class="botoes-dashboard" *ngIf="!loading">
         Filtrar dados por:
         <app-date-picker [label]="'Mês'" [items]="meses()" [labelKey]="'nomeAbreviado'"
           (selecionado)="this.dadosMes($event)" [isOpen]="pickerAberto === 'mes'"
           (abrirFechar)="togglePicker('mes')"></app-date-picker>
-        <app-date-picker [label]="'Ano'" [items]="anos()" [labelKey]="'id'" (selecionado)="this.dadosAnos($event)"
+        <app-date-picker [label]="'Ano'" [items]="anos()" [labelKey]="'id'" (selecionado)="this.dadosAnos($event.id)"
           [isOpen]="pickerAberto === 'ano'" (abrirFechar)="togglePicker('ano')"></app-date-picker>
       </div>
       <div class="dashboard">

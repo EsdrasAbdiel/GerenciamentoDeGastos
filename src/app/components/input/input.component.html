@@ -4,7 +4,9 @@
         [type]="type"
         [placeholder]="placeholder"
         [disabled]="disabled"
-        (input)="onInput($event)">
+        (input)="onInput($event)"
+        [value]="value"
+        >
     <ng-container *ngIf="error">
         <div class="input-error">
             <ng-container *ngTemplateOutlet="error"></ng-container>

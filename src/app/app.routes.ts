@@ -3,13 +3,13 @@ import { ConsultaComponent } from './views/consulta/consulta.component';
 import { DetalhesComponent } from './views/detalhes/detalhes.component';
 import { LoginComponent } from './views/auth/components/login/login.component';
 import { HomeComponent } from './views/dashboard/dashboard.component';
-import { CardsAnosComponent } from './views/menu-cards/components/cards-anos/cards-anos.component';
-import { CardsMesesComponent } from './views/menu-cards/components/cards-meses/cards-meses.component';
 import { AuthComponent } from './views/auth/auth.component';
 import { RegistroComponent } from './views/auth/components/registro/registro.component';
 import { EsqueciSenhaComponent } from './views/auth/components/esqueci-senha/esqueci-senha.component';
 import { authGuard } from './guards/auth.guard';
 import { ExportacaoPdfComponent } from './views/exportacao-pdf/exportacao-pdf.component';
+import { CalendarioComponent } from './components/calendario/calendario.component';
+import { MenuCardsComponent } from './views/menu-cards/menu-cards.component';
 
 export const routes: Routes = [
   {
@@ -21,13 +21,10 @@ export const routes: Routes = [
     ]
   },
   {
-    path: ':ano/card-meses', canActivate: [authGuard], component: CardsMesesComponent
-  },
-  {
     path: 'consulta', canActivate: [authGuard], component: ConsultaComponent
   },
   {
-    path: 'card-anos', canActivate: [authGuard], component: CardsAnosComponent
+    path: 'card-anos', canActivate: [authGuard], component: MenuCardsComponent
   },
   {
     path: ':ano/:mes/detalhes', canActivate: [authGuard], component: DetalhesComponent
@@ -41,6 +38,10 @@ export const routes: Routes = [
 
   {
     path: 'home', canActivate: [authGuard], component: HomeComponent
+  },
+
+  {
+    path: 'calendario', component: CalendarioComponent
   },
 
   {

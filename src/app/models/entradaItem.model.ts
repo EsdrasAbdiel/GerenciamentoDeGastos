@@ -3,4 +3,5 @@ export interface EntradaItem {
   entradaDescricao: string;
   entradaValor: number;
   entrada_Id: string;
+  dataPagamento: Date;
 }

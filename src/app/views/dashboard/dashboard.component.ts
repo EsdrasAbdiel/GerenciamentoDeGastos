@@ -111,7 +111,7 @@ export class HomeComponent implements OnInit {
 
 
 
-      this.dadosAnos({ id: this.anoAtual, anoDescricao: this.anoAtual });
+      this.dadosAnos(this.anoAtual);
 
       this.loading = false;
 
@@ -172,8 +172,8 @@ export class HomeComponent implements OnInit {
     this.carregarGraficoDespesasPorCategoria(despesasPorCategoria, itensDespesas, semDados)
   }
 
-  dadosAnos(ano: Ano) {
-    const resumoDoAno = this.filtrarResumoPorAno(ano.id);
+  dadosAnos(ano: number) {
+    const resumoDoAno = this.filtrarResumoPorAno(ano);
     var semDados = false;
 
     if (!resumoDoAno?.length) {
@@ -187,8 +187,6 @@ export class HomeComponent implements OnInit {
     const despesas = resumoDoAno.flatMap(resumo => resumo.itensDespesa ?? []);
 
     const { categorias, valores } = this.agruparESomarDespesas(despesas);
-    console.log(categorias, valores);
-
 
     const itensDespesas = resumoDoAno.map(resumo =>
       this.somarItensPorMes(
@@ -247,7 +245,7 @@ export class HomeComponent implements OnInit {
   }
 
   private somarItensPorMes(itens: number[]) {
-    return itens.reduce((total: any, valor: any) => total + valor)
+    return itens.reduce((total: any, valor: any) => total + valor, 0)
   }
 
   private buscarResumoDoMes(mes: number): ResumoFinanceiroMensal | undefined {
