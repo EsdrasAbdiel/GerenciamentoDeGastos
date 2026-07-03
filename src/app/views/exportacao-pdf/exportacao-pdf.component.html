@@ -1,0 +1,29 @@
+<app-menu [tituloSnackbar]="'Importar Extrato'">
+  <input type="file" (change)="onFileSelected($event)" style="width: 30%" />
+
+<table *ngIf="dados.length > 0">
+  <thead>
+    <tr>
+      <th>Data</th>
+      <th>Descrição</th>
+      <th>Tipo</th>
+      <th>Valor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let item of dados">
+      <td>{{ item.data }}</td>
+      <td>{{ item.descricao }}</td>
+      <td [ngClass]="item.tipo === 'Saida' ? 'negativo' : 'positivo'">{{ item.tipo }}</td>
+      <td [ngClass]="item.tipo === 'Saida' ? 'negativo' : 'positivo'">
+        {{ item.valor | currency:'BRL' }}
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<button *ngIf="dados.length > 0" (click)="confirmar()">
+  Confirmar Importação
+</button>
+
+</app-menu>
