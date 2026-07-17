@@ -59,7 +59,7 @@
           Ações
         </th>
 
-        <td mat-cell *matCellDef="let row">
+        <td mat-cell *matCellDef="let row; let rowIndex = index;">
 
           <app-icon-button
             *ngIf="!isEditing(row)"

@@ -97,7 +97,9 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   private dialog = inject(MatDialog);
   private authService = inject(AuthService);
   gridEnum!: Grid
-  estadoDaLinha!: number
+  estadoDaLinhaDespesa!: number
+  estadoDaLinhaEntrada!: number
+  indiceLinhaDespesaEdicao!: number;
   StatusCompetencia = StatusCompetencia;
   statusCompetenciaMes!: number;
   opcoesDespesas: SelectModel[] = [];
@@ -230,6 +232,9 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
       this.dadosDespesas = retorno.itensDespesa
 
+      console.log(retorno.itensDespesa);
+      
+
       this.dadosEntradas = retorno.itensEntrada.map(item => {
         return {
           ...item,
@@ -307,14 +312,14 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   salvarLinhaEntrada(event: Entrada) {
-    if (this.estadoDaLinha === Grid.editar) {
+    if (this.estadoDaLinhaEntrada === Grid.editar) {
       this.dadosEntradasEdicao.map((linha, index) => {
         if (index === event.index) {
           return this.formEntrada.value
         }
         return linha
       });
-    } else if (this.estadoDaLinha === Grid.adicionar) {
+    } else if (this.estadoDaLinhaEntrada === Grid.adicionar) {
       const { entradaDescricao, entradaValor } = this.formEntrada.value;
 
       const adicionandoLinha = { entradaDescricao: entradaDescricao, entradaValor: Number(entradaValor) }
@@ -325,17 +330,24 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     this.atualizarValores();
   }
 
-  salvarLinhaDespesa(event: any) {
-    console.log(event);
-    if (this.estadoDaLinha === Grid.editar) {
-
+  salvarLinhaDespesa(event: Despesa) {
+    if (this.estadoDaLinhaDespesa === Grid.editar) {
       this.dadosDespesasEdicao.map((linha, index) => {
-        if (index === event.index) {
-          return this.formDespesa.value
+        if (index === this.indiceLinhaDespesaEdicao) {
+          console.log(this.formDespesa.value);
+
+          const objetoAtualizado = {
+            ...this.formDespesa.value,
+            valor: Number(this.formDespesa.get('valor')?.value)
+          }
+          
+          return objetoAtualizado
         }
+
+        
         return linha;
       });
-    } else if (this.estadoDaLinha === Grid.adicionar) {
+    } else if (this.estadoDaLinhaDespesa === Grid.adicionar) {
       const { descricao, valor, pago } = this.formDespesa.value;
       const adicionandoLinha = { descricao: descricao, valor: Number(valor), pago: Boolean(pago) }
       this.dadosDespesasEdicao.push(adicionandoLinha);
@@ -345,13 +357,18 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   editarLinhaEntrada(event: any) {
-    this.estadoDaLinha = Grid.editar;
+    this.estadoDaLinhaEntrada = Grid.editar;
 
     this.atualizarValores();
   }
 
   editarLinhaDespesa(event: any) {
-    this.estadoDaLinha = Grid.editar;
+    this.estadoDaLinhaDespesa = Grid.editar;
+
+    this.indiceLinhaDespesaEdicao = event.index
+
+    console.log(event);
+    
 
     this.atualizarValores();
   }
@@ -373,13 +390,13 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   adicionarLinhaDespesa() {
-    this.estadoDaLinha = Grid.adicionar;
+    this.estadoDaLinhaDespesa = Grid.adicionar;
 
     this.atualizarValores();
   }
 
   adicionarLinhaEntrada() {
-    this.estadoDaLinha = Grid.adicionar;
+    this.estadoDaLinhaEntrada = Grid.adicionar;
 
     this.atualizarValores();
   }

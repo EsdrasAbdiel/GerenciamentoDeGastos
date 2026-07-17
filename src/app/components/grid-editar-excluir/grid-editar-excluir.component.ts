@@ -5,6 +5,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table'
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { GridEditarExcluirColunas } from './grid-editar-excluir-colunas.model';
+import { Despesa } from '../../models/despesa.model';
 
 @Component({
   selector: 'app-grid-editar-excluir',
@@ -24,7 +25,7 @@ export class GridEditarExcluirComponent<T> implements OnInit {
   @Input() rowEditTemplate!: TemplateRef<any>;
   @Output() confirmar = new EventEmitter<any>()
   @Output() deletar = new EventEmitter<any>();
-  @Output() editar = new EventEmitter<any>();
+  @Output() editar = new EventEmitter<{ row: Despesa, index: number }>();
   @Output() adicionar = new EventEmitter<any>();
   @Input() form!: FormGroup;
   @Input() dados: T[] = [];
@@ -92,11 +93,12 @@ export class GridEditarExcluirComponent<T> implements OnInit {
 
 onEditar(row: any) {
 
-  if (this.editingRow === row) {
-    return;
-  }
+  const index = this.dados.indexOf(row);
 
-  this.editar.emit(row);
+  this.editar.emit({
+    row,
+    index
+  });
 
   this.editingRow = row;
 
