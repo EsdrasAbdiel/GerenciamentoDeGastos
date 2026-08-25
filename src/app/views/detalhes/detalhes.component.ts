@@ -97,6 +97,8 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   tituloSnackbar = '';
   colunasEntradas: GridEditarExcluirColunas[] = [];
   colunasDespesas: GridEditarExcluirColunas[] = [];
+  estadoDaLinhaDespesa!: number;
+  estadoDaLinhaEntrada!: number;
 
   private router = inject(Router);
   private fb = inject(FormBuilder);
@@ -234,6 +236,9 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
         };
       });
 
+      console.log(retorno.itensDespesa);
+
+
       this.dadosEntradas = retorno.itensEntrada.map(item => {
         return {
           ...item,
@@ -308,7 +313,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   salvarLinhaEntrada(event: Entrada) {
-    if (this.estadoDaLinha === Grid.editar) {
+    if (this.estadoDaLinhaEntrada === Grid.editar) {
       this.dadosEntradasEdicao.map((linha, index) => {
         if (index === event.index) {
           const {dataPagamento, entradaDescricao, entradaValor} = this.formEntrada.value;
@@ -323,7 +328,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
           entradaValor: Number(linha.entradaValor)
         };
       });
-    } else if (this.estadoDaLinha === Grid.adicionar) {
+    } else if (this.estadoDaLinhaEntrada === Grid.adicionar) {
       const { entradaDescricao, entradaValor } = this.formEntrada.value;
 
       const adicionandoLinha = { id: 0, entradaDescricao: entradaDescricao, entradaValor: Number(entradaValor), dataPagamento: FormatarData(new Date), entrada_id: '00000000-0000-0000-0000-000000000000' };
@@ -346,7 +351,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
           valor: Number(linha.valor)
         };
       });
-    } else if (this.estadoDaLinha === Grid.adicionar) {
+    } else if (this.estadoDaLinhaDespesa === Grid.adicionar) {
       const { descricao, valor, pago } = this.formDespesa.value;
       const adicionandoLinha = { descricao: descricao, valor: Number(valor), pago: Boolean(pago), despesaId: '00000000-0000-0000-0000-000000000000', id: 0, dataInclusao: FormatarData(new Date) };
       this.dadosDespesasEdicao.push(adicionandoLinha);
@@ -384,7 +389,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   adicionarLinhaDespesa() {
-    this.estadoDaLinha = Grid.adicionar;
+    this.estadoDaLinhaDespesa = Grid.adicionar;
 
     this.atualizarValores();
   }
@@ -412,7 +417,7 @@ criarNovaLinhaDespesa(): DespesaItem {
 }
 
   adicionarLinhaEntrada() {
-    this.estadoDaLinha = Grid.adicionar;
+    this.estadoDaLinhaEntrada = Grid.adicionar;
 
     this.atualizarValores();
   }
