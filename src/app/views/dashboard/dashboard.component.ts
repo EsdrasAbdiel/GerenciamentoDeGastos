@@ -1,82 +1,68 @@
-import { MesDashboard } from '../../models/mes-dashboard.model';
-import { finalize } from 'rxjs';
 import { Component, inject, OnInit } from '@angular/core';
-import { MenuComponent } from '../../components/menu/menu.component';
 import { CommonModule } from '@angular/common';
-import { NgxEchartsModule, provideEchartsCore } from 'ngx-echarts'
+import { NgxEchartsModule, provideEchartsCore } from 'ngx-echarts';
 import { EChartsOption } from 'echarts/types/dist/shared';
 import { MatCardModule } from '@angular/material/card';
-import { echarts } from '../../../assets/echarts'
-import { DashboardService } from '../../services/dashboard.service';
+import { echarts } from '../../../assets/echarts';
 import { MatIconModule } from '@angular/material/icon';
 import { FormGroup, FormsModule, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
-import { LoadingComponent } from '../../components/loading/loading.component';
-import { Dashboard } from '../../models/dashboard.model';
-import { ResumoFinanceiroMensal } from '../../models/resumo-financeiro-mensal.model';
-import { DespesaItem } from '../../models/despesaItem.model';
-import { CalendarioService } from '../../services/calendario.service';
-import { Despesa } from '../detalhes/detalhes.component';
-import { DatePickerComponent } from '../../components/data-picker/date-picker.component';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { Ano } from '../../models/ano.model';
-import { AuthService } from '../../services/auth.service';
-import { graficoBarraVerticalDashboard } from '../../utils/grafico-barra-vertical-dashboard.util';
-import { graficoBarraHorizontalDashboard } from '../../utils/grafico-barra-horizontal.dashboard.utils';
-import { LoadingSkeletonComponent } from '../../components/loading-skeleton/loading-skeleton.component';
-import { LoadingSkeletonDashboardComponent } from '../../components/loading-skeleton-dashboard/loading-skeleton-dashboard.component';
+import { ECharts } from 'echarts/core';
+import { DespesaItem, MesDashboard, ResumoFinanceiroMensal } from '../../models';
+import { AuthService, CalendarioService, DashboardService } from '../../services';
+import { LoadingSkeletonDashboardComponent, LoadingSkeletonComponent, DatePickerComponent, MenuComponent } from '../../components';
+import { graficoBarraHorizontalDashboard, graficoBarraVerticalDashboard } from '../../utils';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [LoadingSkeletonDashboardComponent, LoadingSkeletonComponent, DatePickerComponent, MenuComponent, CommonModule, NgxEchartsModule, MatCardModule, MatIconModule, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule, LoadingComponent],
+  imports: [LoadingSkeletonDashboardComponent, LoadingSkeletonComponent, DatePickerComponent, MenuComponent, CommonModule, NgxEchartsModule, MatCardModule, MatIconModule, ɵInternalFormsSharedModule, ReactiveFormsModule, FormsModule],
   providers: [
     provideEchartsCore({ echarts })
   ],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
-export class HomeComponent implements OnInit {
+export class DashboardComponent implements OnInit {
   private dashboardService = inject(DashboardService);
   private calendarioService = inject(CalendarioService);
   private authService = inject(AuthService);
 
-  constructor() { }
-
   form!: FormGroup;
-  valorEntrada: number = 0;
-  valorSaida: number = 0;
-  valorSaldo: number = 0;
-  quantidadeRegistros: number = 0;
-  buscaPersonalizada: boolean = false;
+  valorEntrada = 0;
+  valorSaida = 0;
+  valorSaldo = 0;
+  quantidadeRegistros = 0;
+  buscaPersonalizada = false;
   loading!: boolean;
-  registros: any[] = [];
+  registros: ResumoFinanceiroMensal[] = [];
   anoAtual: number = new Date().getFullYear();
   mesAtual!: number;
   mesesDashboard: MesDashboard[] = [];
   despesasPorCategoria: string[] = [];
-  semDados: boolean = false;
+  semDados = false;
 
   ano2025: ResumoFinanceiroMensal[] = [];
-  ano2026: any[] = [];
+  ano2026: ResumoFinanceiroMensal[] = [];
 
   despesas: number[] = [];
 
-  dadosXAxis: any[] = []
+  dadosXAxis: string[] = [];
 
   chartOptionComparativo!: EChartsOption;
-  barOption!: EChartsOption
+  barOption!: EChartsOption;
 
   graficoBarraVerticalDashboard = graficoBarraVerticalDashboard;
   graficoBarraHorizontalDashboard = graficoBarraHorizontalDashboard;
 
-  readonly anos = toSignal(this.calendarioService.getAnos(), { initialValue: [] })
-  readonly meses = toSignal(this.calendarioService.getMesesDashboard(), { initialValue: [] })
+  readonly anos = toSignal(this.calendarioService.getAnos(), { initialValue: [] });
+  readonly meses = toSignal(this.calendarioService.getMesesDashboard(), { initialValue: [] });
 
   pickerAberto: 'mes' | 'ano' | null = null;
 
-  chartInstance: any;
+  chartInstance: ECharts | null = null;
 
-  onChartInit(ec: any) {
+  onChartInit(ec: ECharts) {
     this.chartInstance = ec;
   }
 
@@ -86,28 +72,29 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.carregarDadosCalendario()
+    this.carregarDadosCalendario();
     this.carregarInformacoes();
   }
 
   carregarDadosCalendario() {
     this.calendarioService.getMesesDashboard().subscribe(retorno => {
-      this.mesesDashboard = retorno
-    })
+      this.mesesDashboard = retorno;
+    });
   }
 
   carregarInformacoes() {
     this.loading = true;
-    this.dashboardService.dashboard(this.authService.buscarUsuarioId()).subscribe((retorno: Dashboard) => {
+    this.dashboardService.dashboard(this.authService.buscarUsuarioId()).subscribe(retorno => {
+      const dashboard = retorno;
 
-      this.valorEntrada = retorno.totalEntradas;
-      this.valorSaida = retorno.totalDespesas;
-      this.valorSaldo = retorno.totalSaldo;
-      this.quantidadeRegistros = retorno.quantidadeRegistro;
-      this.registros = retorno.registros
+      this.valorEntrada = dashboard.totalEntradas;
+      this.valorSaida = dashboard.totalDespesas;
+      this.valorSaldo = dashboard.totalSaldo;
+      this.quantidadeRegistros = dashboard.quantidadeRegistro;
+      this.registros = dashboard.registros;
 
-      this.ano2025 = retorno.registros.filter((r: ResumoFinanceiroMensal) => r.ano === (this.anoAtual - 1)).sort((a: any, b: any) => a.mes - b.mes);
-      this.ano2026 = retorno.registros.filter((r: ResumoFinanceiroMensal) => r.ano === this.anoAtual).sort((a: any, b: any) => a.mes - b.mes);
+      this.ano2025 = dashboard.registros.filter((r: ResumoFinanceiroMensal) => r.ano === (this.anoAtual - 1)).sort((a: ResumoFinanceiroMensal, b: ResumoFinanceiroMensal) => a.mes - b.mes);
+      this.ano2026 = dashboard.registros.filter((r: ResumoFinanceiroMensal) => r.ano === this.anoAtual).sort((a: ResumoFinanceiroMensal, b: ResumoFinanceiroMensal) => a.mes - b.mes);
 
 
 
@@ -121,11 +108,11 @@ export class HomeComponent implements OnInit {
 
 
 
-    })
+    });
   }
 
   carregarGraficoComparativo(itensDespesas: number[], itensEntradas: number[], dataXAxis: string[], semDados: boolean) {
-    this.chartOptionComparativo = this.graficoBarraVerticalDashboard(itensDespesas, itensEntradas, dataXAxis, semDados)
+    this.chartOptionComparativo = this.graficoBarraVerticalDashboard(itensDespesas, itensEntradas, dataXAxis, semDados);
 
     setTimeout(() => {
       this.chartInstance?.setOption(this.chartOptionComparativo, true);
@@ -139,13 +126,13 @@ export class HomeComponent implements OnInit {
 
   dadosMes(mes: MesDashboard) {
     const resumoDoMes = this.buscarResumoDoMes(mes.id);
-    var semDados = false;
+    let semDados = false;
 
     if (!resumoDoMes) {
       this.resetarDados();
       this.carregarGraficoComparativo([0], [0], [], true);
       this.carregarGraficoDespesasPorCategoria([], [], true);
-      semDados = true
+      semDados = true;
       return;
     }
 
@@ -160,7 +147,7 @@ export class HomeComponent implements OnInit {
 
     const itensEntradasSomados = this.somarItensPorMes(itensEntradas);
     const itensDespesasSomados = this.somarItensPorMes(itensDespesas);
-    const dadosXAxis = this.mesesDashboard.filter((m: MesDashboard) => m.id === this.mesAtual).map((mes: MesDashboard) => mes.nomeAbreviado)
+    const dadosXAxis = this.mesesDashboard.filter((m: MesDashboard) => m.id === this.mesAtual).map((mes: MesDashboard) => mes.nomeAbreviado);
 
 
     this.valorEntrada = itensEntradasSomados;
@@ -169,12 +156,12 @@ export class HomeComponent implements OnInit {
     this.quantidadeRegistros = 1;
 
     this.carregarGraficoComparativo([itensDespesasSomados], [itensEntradasSomados], dadosXAxis, semDados);
-    this.carregarGraficoDespesasPorCategoria(despesasPorCategoria, itensDespesas, semDados)
+    this.carregarGraficoDespesasPorCategoria(despesasPorCategoria, itensDespesas, semDados);
   }
 
   dadosAnos(ano: number) {
     const resumoDoAno = this.filtrarResumoPorAno(ano);
-    var semDados = false;
+    let semDados = false;
 
     if (!resumoDoAno?.length) {
       this.resetarDados();
@@ -240,12 +227,15 @@ export class HomeComponent implements OnInit {
     return itens.map(selector);
   }
 
-  private mapearDespesasPorCategoria(itens: DespesaItem[], selector: (item: Despesa) => string): string[] {
-    return itens.map(selector);
-  }
+private mapearDespesasPorCategoria(
+  itens: DespesaItem[],
+  selector: (item: DespesaItem) => string
+): string[] {
+  return itens.map(selector);
+}
 
   private somarItensPorMes(itens: number[]) {
-    return itens.reduce((total: any, valor: any) => total + valor, 0)
+    return itens.reduce((total: number, valor: number) => total + valor, 0);
   }
 
   private buscarResumoDoMes(mes: number): ResumoFinanceiroMensal | undefined {
@@ -253,7 +243,7 @@ export class HomeComponent implements OnInit {
   }
 
   private filtrarResumoPorAno(ano: number): ResumoFinanceiroMensal[] {
-    this.ano2026 = this.registros.filter((r: ResumoFinanceiroMensal) => r.ano === ano).sort((a: any, b: any) => a.mes - b.mes);
+    this.ano2026 = this.registros.filter((r: ResumoFinanceiroMensal) => r.ano === ano).sort((a: ResumoFinanceiroMensal, b: ResumoFinanceiroMensal) => a.mes - b.mes);
     return this.ano2026.filter(r => r.ano === ano);
   }
 

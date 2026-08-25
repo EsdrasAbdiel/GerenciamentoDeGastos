@@ -1,15 +1,15 @@
-import { NgStyle, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-icon-button',
-  imports: [MatIconModule, NgClass],
-  templateUrl: './icon-button.component.html',
-  styleUrl: './icon-button.component.scss'
+	selector: 'app-icon-button',
+	imports: [MatIconModule, NgClass],
+	templateUrl: './icon-button.component.html',
+	styleUrl: './icon-button.component.scss'
 })
 export class IconButtonComponent {
   @Input() icone = '';
-  @Input() desabilitado: boolean = false;
+  @Input() desabilitado = false;
   @Input() cor = '';
 }

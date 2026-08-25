@@ -1,5 +1,5 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { AfterViewInit, ChangeDetectorRef, Component, inject, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatCardModule } from '@angular/material/card';
 import { MatGridListModule } from '@angular/material/grid-list';
@@ -8,26 +8,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MenuComponent } from '../../components/menu/menu.component';
-import { GastosService } from '../../services/gastos.service';
-import { MatCheckboxModule } from '@angular/material/checkbox'
-import { MatTooltipModule } from '@angular/material/tooltip'
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { finalize } from 'rxjs';
-import { LoadingComponent } from '../../components/loading/loading.component';
-import { SelectComponent, SelectModel } from '../../components/select/select.component';
-import { DespesasService } from '../../services/despesas.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalComponent } from '../../components/modal/modal.component';
-import { ResumoFinanceiroMensalService } from '../../services/resumo-financeiro-mensal.service';
-import { CardValoresComponent } from '../../components/card-valores/card-valores.component';
 import { AuthService } from '../../services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
-import { GridEditarExcluirComponent } from '../../components/grid-editar-excluir/grid-editar-excluir.component';
 import { GridEditarExcluirColunas } from '../../components/grid-editar-excluir/grid-editar-excluir-colunas.model';
 import { Grid } from './../../enums/grid.enum';
-import { InputComponent } from './../../components/input/input.component'
-import { StatusCompetencia } from '../../components/calendario/calendario.component';
-import { ButtonComponent } from '../../components/button/button.component';
+import { DespesaItem } from '../../models/despesaItem.model';
+import { EntradaItem } from '../../models/entradaItem.model';
+import { FormatarData } from '../../utils/formatar-data.util';
+import { ButtonComponent, CardValoresComponent, GridEditarExcluirComponent, InputComponent, MenuComponent, ModalComponent, SelectModel, StatusCompetencia } from '../../components';
+import { DespesasService, GastosService, ResumoFinanceiroMensalService } from '../../services';
 
 
 export interface Despesa {
@@ -61,8 +54,6 @@ export interface Entrada {
     MenuComponent,
     MatCheckboxModule,
     MatTooltipModule,
-    LoadingComponent,
-    SelectComponent,
     CardValoresComponent,
     MatButtonModule,
     GridEditarExcluirComponent,
@@ -73,76 +64,77 @@ export interface Entrada {
   styleUrl: './detalhes.component.scss'
 })
 export class DetalhesComponent implements OnInit, AfterViewInit {
-  @ViewChild('viewValorEntrada', { static: true }) viewValorEntrada!: TemplateRef<any>;
-  @ViewChild('viewDataPagamento', { static: true }) viewDataPagamento!: TemplateRef<any>;
-  @ViewChild('viewPago', { static: true }) viewPago!: TemplateRef<any>;
-  @ViewChild('viewValorDespesa', { static: true }) viewValorDespesa!: TemplateRef<any>;
-  @ViewChild('viewDescricaoDespesa', { static: true }) viewDescricaoDespesa!: TemplateRef<any>;
+  @ViewChild('viewValorEntrada', { static: true }) viewValorEntrada!: TemplateRef<unknown>;
+  @ViewChild('viewDataPagamento', { static: true }) viewDataPagamento!: TemplateRef<unknown>;
+  @ViewChild('viewPago', { static: true }) viewPago!: TemplateRef<unknown>;
+  @ViewChild('viewValorDespesa', { static: true }) viewValorDespesa!: TemplateRef<unknown>;
+  @ViewChild('viewDescricaoDespesa', { static: true }) viewDescricaoDespesa!: TemplateRef<unknown>;
+  @ViewChild('viewDataInclusao', { static: true }) viewDataInclusao!: TemplateRef<unknown>;
 
-  paramsRoute: any;
+
+
   formDespesa!: FormGroup;
-  formEntrada!: FormGroup
-  dadosDespesas: Despesa[] = [];
-  dadosEntradas: Entrada[] = [];
-  dadosEntradasEdicao: Entrada[] = [];
-  dadosDespesasEdicao: Despesa[] = [];
+  formEntrada!: FormGroup;
+  dadosDespesas: DespesaItem[] = [];
+  dadosEntradas: EntradaItem[] = [];
+  dadosEntradasEdicao: EntradaItem[] = [];
+  dadosDespesasEdicao: DespesaItem[] = [];
   valoresSomados = 0;
   valoresEntradasSomados = 0;
-  adicionarValorEntrada: boolean = false;
+  adicionarValorEntrada = false;
   loading = false;
-  indiceDespesaEmEdicao: number = -1;
-  indiceEntradaEmEdicao: number = -1;
-  private resumoFinanceiroMensalService = inject(ResumoFinanceiroMensalService)
+  indiceDespesaEmEdicao = -1;
+  indiceEntradaEmEdicao = -1;
+  private resumoFinanceiroMensalService = inject(ResumoFinanceiroMensalService);
   private despesasService = inject(DespesasService);
   private dialog = inject(MatDialog);
   private authService = inject(AuthService);
-  gridEnum!: Grid
-  estadoDaLinha!: number
+  gridEnum!: Grid;
+  estadoDaLinha!: number;
   StatusCompetencia = StatusCompetencia;
   statusCompetenciaMes!: number;
   opcoesDespesas: SelectModel[] = [];
   tituloSnackbar = '';
-  colunasEntradas: GridEditarExcluirColunas[] = []
-  colunasDespesas: GridEditarExcluirColunas[] = []
+  colunasEntradas: GridEditarExcluirColunas[] = [];
+  colunasDespesas: GridEditarExcluirColunas[] = [];
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private gastosService: GastosService,
-    private activatedRoute: ActivatedRoute,
-    private cdr: ChangeDetectorRef
-  ) {
-    this.paramsRoute = this.activatedRoute.snapshot.params;
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private gastosService = inject(GastosService);
+  private activatedRoute = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
+  private paramsRoute: Params = this.activatedRoute.snapshot.params;
+
+  ngOnInit(): void {
     this.formDespesa = this.fb.group({
       descricao: [null, [Validators.required]],
       valor: [null, [Validators.required]],
-      pago: [false]
+      pago: [false],
+      dataInclusao: [null]
     });
 
     this.formEntrada = this.fb.group({
       entradaDescricao: [null],
       entradaValor: [null],
       dataPagamento: [null]
-    })
-  }
+    });
 
-  ngOnInit(): void {
     this.carregarDespesas();
 
     this.atualizarDespesasOpcoes();
-    if (this.paramsRoute.id) {
+    if (this.paramsRoute['id']) {
       this.carregarDespesasExistentes();
-      this.tituloSnackbar = 'Editar Despesa'
+      this.tituloSnackbar = 'Editar Despesa';
       return;
     }
-    this.tituloSnackbar = 'Cadastrar Despesa'
+    this.tituloSnackbar = 'Cadastrar Despesa';
   }
 
   ngAfterViewInit(): void {
-    this.carregaColunasEntradas()
-    this.carregaColunasDespesas()
+    this.carregaColunasEntradas();
+    this.carregaColunasDespesas();
 
-    this.cdr.detectChanges()
+    this.cdr.detectChanges();
   }
 
   carregaColunasEntradas() {
@@ -164,7 +156,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
         type: 'date',
         template: this.viewDataPagamento
       }
-    ]
+    ];
   }
 
   carregaColunasDespesas() {
@@ -186,8 +178,14 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
         key: 'pago',
         type: 'checkbox',
         template: this.viewPago
+      },
+      {
+        label: 'Data inclusão',
+        key: 'dataInclusao',
+        type: 'date',
+        template: this.viewDataInclusao
       }
-    ]
+    ];
   }
 
   atualizarDespesasOpcoes() {
@@ -196,16 +194,16 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
         if (retorno)
           this.carregarDespesas();
       }
-    )
+    );
   }
 
   verificacaoValorPositivoOuNegativo(valor: number) {
     if (valor > 0) {
       return '#28A745';
     } else if (valor < 0) {
-      return '#DC3545'
+      return '#DC3545';
     } else {
-      return '#808080'
+      return '#808080';
     }
   }
 
@@ -213,49 +211,56 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     this.despesasService.buscarDespesas().subscribe(retorno => {
       this.opcoesDespesas = retorno.map(d => ({
         id: d.id,
-        nome: d.descricao
+        descricao: d.descricao
       }));
-    })
+    });
   }
 
   deveCadastrarNovaDespesa() {
     this.dialog.open(ModalComponent, {
       width: '100%',
       maxWidth: '50px'
-    })
+    });
   }
 
   carregarDespesasExistentes() {
     this.loading = true;
-    this.gastosService.getDespesaPeloId(this.paramsRoute.id).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
-      this.dadosDespesas = retorno.itensDespesa
+    this.gastosService.getDespesaPeloId(this.paramsRoute['id']).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
+      this.dadosDespesas = retorno.itensDespesa.map(item => {
+        return {
+          ...item,
+          valor: -Math.abs(item.valor),
+          dataInclusao: new Date(item.dataInclusao).toISOString().split('T')[0]
+        };
+      });
 
       this.dadosEntradas = retorno.itensEntrada.map(item => {
         return {
           ...item,
           dataPagamento: new Date(item.dataPagamento).toISOString().split('T')[0]
-        }
-      })
+        };
+      });
 
-      this.dadosDespesasEdicao = [...this.dadosDespesas]
+      this.dadosDespesasEdicao = [...this.dadosDespesas];
 
       this.statusCompetenciaMes = retorno.statusCompetenciaMes;
 
-      console.log(this.dadosDespesasEdicao);
-
-      this.dadosEntradasEdicao = [...this.dadosEntradas]
+      this.dadosEntradasEdicao = [...this.dadosEntradas];
       this.somarValores();
-      this.somarValoresEntradas()
+      this.somarValoresEntradas();
     });
 
   }
 
   somarValores() {
-    this.valoresSomados = this.dadosDespesasEdicao.reduce((acc, item) => acc + item.valor, 0);
+    this.valoresSomados = this.dadosDespesasEdicao.reduce((acc, item) => acc + Number(item.valor), 0);
   }
 
   somarValoresEntradas() {
-    this.valoresEntradasSomados = this.dadosEntradasEdicao.reduce((acc, item) => acc + item.entradaValor, 0);
+    const valorEntrada = this.dadosEntradasEdicao.reduce((acc, item) => acc + Number(item.entradaValor), 0);
+    console.log(valorEntrada);
+
+    this.valoresEntradasSomados = valorEntrada;
   }
 
   atualizarValores() {
@@ -264,45 +269,41 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   salvarNoBackend() {
-    if (!this.paramsRoute.id) {
+    if (!this.paramsRoute['id']) {
       const paramsCadastro = {
         despesas: this.dadosDespesasEdicao,
         entradas: this.dadosEntradasEdicao,
         valorDespesaTotal: this.valoresSomados,
         valorEntradaTotal: this.valoresEntradasSomados,
-        dataInclusao: new Date(),
-        mes: Number(this.paramsRoute.mes),
-        ano: Number(this.paramsRoute.ano),
+        dataInclusao: FormatarData(new Date()),
+        mes: Number(this.paramsRoute['mes']),
+        ano: Number(this.paramsRoute['ano']),
         usuarioId: this.authService.buscarUsuarioId()
       };
 
-      console.log(paramsCadastro);
-
       this.gastosService.postCadastroDespesas(paramsCadastro).subscribe(retorno => {
         if (retorno.sucesso) {
-          alert(retorno.mensagem)
+          alert(retorno.mensagem);
         } else {
-          console.error(retorno.erro)
+          console.error(retorno.erro);
         }
       });
     } else {
       const paramsAlteracao = {
-        id: this.paramsRoute.id,
+        id: this.paramsRoute['id'],
         despesas: this.dadosDespesasEdicao,
         entradas: this.dadosEntradasEdicao,
         valorDespesaTotal: this.valoresSomados,
         valorEntradaTotal: this.valoresEntradasSomados,
-        dataInclusao: new Date(),
-        mes: Number(this.paramsRoute.mes),
-        ano: Number(this.paramsRoute.ano),
+        dataInclusao: FormatarData(new Date()),
+        mes: Number(this.paramsRoute['mes']),
+        ano: Number(this.paramsRoute['ano']),
         usuarioId: this.authService.buscarUsuarioId()
       };
 
-      console.log(paramsAlteracao);
-
-      this.gastosService.putDespesaPeloId(this.paramsRoute.id, paramsAlteracao).subscribe(retorno => {
-        alert(retorno.sucesso ? retorno.mensagem : retorno.mensagem)
-      })
+      this.gastosService.putDespesaPeloId(this.paramsRoute['id'], paramsAlteracao).subscribe(retorno => {
+        alert(retorno.sucesso ? retorno.mensagem : retorno.mensagem);
+      });
     }
   }
 
@@ -310,14 +311,22 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     if (this.estadoDaLinha === Grid.editar) {
       this.dadosEntradasEdicao.map((linha, index) => {
         if (index === event.index) {
-          return this.formEntrada.value
+          const {dataPagamento, entradaDescricao, entradaValor} = this.formEntrada.value;
+          return {
+            dataPagamento,
+            entradaDescricao,
+            entradaValor: Number(entradaValor)
+          };
         }
-        return linha
+        return {
+          ...linha,
+          entradaValor: Number(linha.entradaValor)
+        };
       });
     } else if (this.estadoDaLinha === Grid.adicionar) {
       const { entradaDescricao, entradaValor } = this.formEntrada.value;
 
-      const adicionandoLinha = { entradaDescricao: entradaDescricao, entradaValor: Number(entradaValor) }
+      const adicionandoLinha = { id: 0, entradaDescricao: entradaDescricao, entradaValor: Number(entradaValor), dataPagamento: FormatarData(new Date), entrada_id: '00000000-0000-0000-0000-000000000000' };
 
       this.dadosEntradasEdicao.push(adicionandoLinha);
     }
@@ -325,32 +334,34 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     this.atualizarValores();
   }
 
-  salvarLinhaDespesa(event: any) {
-    console.log(event);
+  salvarLinhaDespesa(event: Despesa) {
     if (this.estadoDaLinha === Grid.editar) {
 
       this.dadosDespesasEdicao.map((linha, index) => {
         if (index === event.index) {
-          return this.formDespesa.value
+          return this.formDespesa.value;
         }
-        return linha;
+        return {
+          ...linha,
+          valor: Number(linha.valor)
+        };
       });
     } else if (this.estadoDaLinha === Grid.adicionar) {
       const { descricao, valor, pago } = this.formDespesa.value;
-      const adicionandoLinha = { descricao: descricao, valor: Number(valor), pago: Boolean(pago) }
+      const adicionandoLinha = { descricao: descricao, valor: Number(valor), pago: Boolean(pago), despesaId: '00000000-0000-0000-0000-000000000000', id: 0, dataInclusao: FormatarData(new Date) };
       this.dadosDespesasEdicao.push(adicionandoLinha);
     }
 
     this.atualizarValores();
   }
 
-  editarLinhaEntrada(event: any) {
+  editarLinhaEntrada() {
     this.estadoDaLinha = Grid.editar;
 
     this.atualizarValores();
   }
 
-  editarLinhaDespesa(event: any) {
+  editarLinhaDespesa() {
     this.estadoDaLinha = Grid.editar;
 
     this.atualizarValores();
@@ -378,26 +389,39 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     this.atualizarValores();
   }
 
+  criarNovaLinha(): EntradaItem {
+  return {
+    dataPagamento: '',
+    entradaDescricao: '',
+    entradaValor: 0,
+    tipo: '',
+    entrada_id: '00000000-0000-0000-0000-000000000000',
+    id: 0
+  };
+}
+
+criarNovaLinhaDespesa(): DespesaItem {
+  return {
+    dataInclusao: '',
+    descricao: '',
+    despesaId: '00000000-0000-0000-0000-000000000000',
+    id: 0,
+    pago: false,
+    valor: 0,
+  }
+}
+
   adicionarLinhaEntrada() {
     this.estadoDaLinha = Grid.adicionar;
 
     this.atualizarValores();
   }
 
-  excluir() {
-    var confirmar = confirm('Deseja excluir toda a despesa??');
-
-    if (confirmar)
-      this.gastosService.deleteDespesa(this.paramsRoute.id).subscribe(retorno => {
-        alert(retorno.message);
-      })
-  }
-
   voltar() {
-    this.router.navigate([`/card-anos`]);
+    this.router.navigate(['/card-anos']);
   }
 
   get formularioDespesa() {
-    return this.formDespesa.controls
+    return this.formDespesa.controls;
   }
 }

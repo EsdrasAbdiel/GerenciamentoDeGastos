@@ -1,17 +1,17 @@
 <div class="input-container">
-    <label>{{ label }}</label>
-    <input
-        [type]="type"
-        [placeholder]="placeholder"
-        [disabled]="disabled"
-        (input)="onInput($event)"
-        [value]="value"
-        >
-    <ng-container *ngIf="error">
-        <div class="input-error">
-            <ng-container *ngTemplateOutlet="error"></ng-container>
-        </div>
-    </ng-container>
-</div>
+  <span>{{ label }}</span>
+  <input
+    [type]="type"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    (input)="onInput($event)"
+    [value]="value"
+    >
+    @if (error) {
+      <div class="input-error">
+        <ng-container *ngTemplateOutlet="error"></ng-container>
+      </div>
+    }
+  </div>
 
 

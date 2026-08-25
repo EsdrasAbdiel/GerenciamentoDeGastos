@@ -4,4 +4,7 @@ export interface DespesaItem {
   id: number;
   pago: boolean;
   valor: number;
+  dataInclusao: string
+    tipo?: string;
+
 }

@@ -4,4 +4,6 @@ export interface Mes {
   nomeAbreviado: string;
   despesaId?: string;
   statusCompetenciaMes: number;
+  valorDespesaTotal: number,
+  valorReceitaTotal: number
 }

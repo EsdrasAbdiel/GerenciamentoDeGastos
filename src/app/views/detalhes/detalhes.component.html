@@ -20,13 +20,12 @@
     flex-direction: row;
     gap: 1rem;
     align-items: baseline;">
+        <app-button [label]="'Salvar'" classeBotao="salvar" (aoClicar)="salvarNoBackend()"></app-button>
 
-        <app-button *ngIf="statusCompetenciaMes === StatusCompetencia.aberto" [label]="'Salvar'" classeBotao="salvar" (aoClicar)="salvarNoBackend()"></app-button>
-
-        <app-button *ngIf="statusCompetenciaMes === StatusCompetencia.aberto" [label]="'Excluir'" classeBotao="excluir" (aoClicar)="excluir()"></app-button>
+        <app-button [label]="'Excluir'" classeBotao="excluir"></app-button>
 
         <app-button [label]="'Voltar'" classeBotao="voltar" (aoClicar)="voltar()"></app-button>
-        
+
       </div>
     </div>
     <div class="cards-container">
@@ -55,8 +54,8 @@
 
           <app-grid-editar-excluir [colunas]="colunasEntradas" [dados]="dadosEntradas" [form]="formEntrada"
             [rowEditTemplate]="rowEditTemplate" (confirmar)="salvarLinhaEntrada($event)"
-            (deletar)="excluirLinhaEntrada($event)" (editar)="editarLinhaEntrada($event)"
-            (adicionar)="adicionarLinhaEntrada()"></app-grid-editar-excluir>
+            (deletar)="excluirLinhaEntrada($event)" (editar)="editarLinhaEntrada()"
+            (adicionar)="adicionarLinhaEntrada()" [criarNovaLinha]="criarNovaLinha"></app-grid-editar-excluir>
         </mat-card>
       </div>
       <div class="card-despesa">
@@ -88,6 +87,10 @@
             }
           </ng-template>
 
+          <ng-template #viewDataInclusao let-row>
+            {{ row.dataInclusao ? (row.dataInclusao | date:'dd/MM/yyyy') : '-' }}
+          </ng-template>
+
           <ng-template #rowEditDespesaTemplate let-row let-form="formDespesa" let-coluna="coluna">
             <ng-container [formGroup]="formDespesa">
               @switch (coluna.type) {
@@ -106,9 +109,9 @@
           </ng-template>
 
           <app-grid-editar-excluir [colunas]="colunasDespesas" [dados]="dadosDespesas" [form]="formDespesa"
-            [rowEditTemplate]="rowEditDespesaTemplate" (editar)="editarLinhaDespesa($event)"
+            [rowEditTemplate]="rowEditDespesaTemplate" (editar)="editarLinhaDespesa()"
             (confirmar)="salvarLinhaDespesa($event)" (adicionar)="adicionarLinhaDespesa()"
-            (deletar)="excluirLinhaDespesa($event)"></app-grid-editar-excluir>
+            (deletar)="excluirLinhaDespesa($event)" [criarNovaLinha]="criarNovaLinhaDespesa"></app-grid-editar-excluir>
         </mat-card>
 
       </div>

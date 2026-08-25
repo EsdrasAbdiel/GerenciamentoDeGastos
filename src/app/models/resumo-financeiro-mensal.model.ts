@@ -1,6 +1,6 @@
-import { StatusCompetencia } from "../components/calendario/calendario.component";
-import { DespesaItem } from "./despesaItem.model";
-import { EntradaItem } from "./entradaItem.model";
+import { StatusCompetencia } from '../components/calendario/calendario.component';
+import { DespesaItem } from './despesaItem.model';
+import { EntradaItem } from './entradaItem.model';
 
 export interface ResumoFinanceiroMensal {
   ano: number;

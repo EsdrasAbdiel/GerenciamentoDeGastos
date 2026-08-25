@@ -8,64 +8,63 @@
         <app-input [label]="'Nome'" formControlName="nome" [error]="erroNome" />
         <app-input [label]="'Data de Nascimento'" formControlName="dataNascimento" [error]="erroDataNascimento"
           [placeholder]="'00/00/0000'" />
-      </div>
+        </div>
         <app-input [type]="'text'" [label]="'Email'" formControlName="email" [error]="erroEmail" style="display: flex; flex-direction: column; margin-bottom: 1rem;" />
-      <div class="campos-form-container">
-        <app-password-input>
-          <app-input formControlName="senha" [label]="'Senha'" [type]="'number'" [error]="erroSenha"
-            [mask]="'000000'" />
-        </app-password-input>
-        <app-password-input>
-          <app-input formControlName="confirmarSenha" [label]="'Confirmar Senha'" [type]="'number'"
-            [error]="erroConfirmarSenha" [mask]="'000000'" />
-        </app-password-input>
+        <div class="campos-form-container">
+          <app-password-input>
+            <app-input formControlName="senha" [label]="'Senha'" [type]="'number'" [error]="erroSenha"
+              [mask]="'000000'" />
+            </app-password-input>
+            <app-password-input>
+              <app-input formControlName="confirmarSenha" [label]="'Confirmar Senha'" [type]="'number'"
+                [error]="erroConfirmarSenha" [mask]="'000000'" />
+              </app-password-input>
+            </div>
+            <div class="button-width-100">
+              <app-button [label]="'Cadastrar'" [classeBotao]="'btn-primary'" (aoClicar)="deveCadastrarUsuario()"></app-button>
+            </div>
+            <div class="login-card-registro">
+              <button (click)="deveFazerLogin()">Já possui cadastro? Fazer login</button>
+            </div>
+          </form>
+        </mat-card>
       </div>
-      <div class="button-width-100">
-        <app-button [label]="'Cadastrar'" [classeBotao]="'btn-primary'" (aoClicar)="deveCadastrarUsuario()"></app-button>
-      </div>
-      <div class="login-card-registro">
-        <span>Já possui cadastro? <ins (click)="deveFazerLogin()">Fazer login</ins></span>
-      </div>
-    </form>
-  </mat-card>
-</div>
 
-<ng-template #erroNome>
-  <ng-container *ngIf="deveVerificarCampoSemValorETocado('nome')">
-    *Campo Obrigatorio
-  </ng-container>
-</ng-template>
+      <ng-template #erroNome>
+        @if (deveVerificarCampoSemValorETocado('nome')) {
+          *Campo Obrigatorio
+        }
+      </ng-template>
 
-<ng-template #erroDataNascimento>
-  <ng-container *ngIf="deveVerificarCampoSemValorETocado('dataNascimento')">
-    *Campo Obrigatorio
-  </ng-container>
-</ng-template>
+      <ng-template #erroDataNascimento>
+        @if (deveVerificarCampoSemValorETocado('dataNascimento')) {
+          *Campo Obrigatorio
+        }
+      </ng-template>
 
-<ng-template #erroEmail>
-  <ng-container *ngIf="deveVerificarCampoSemValorETocado('email')">
-    *Campo Obrigatorio
-  </ng-container>
-  <ng-container *ngIf="formulario['email']?.value && formulario['email']?.invalid">
-    *Email invalido
-  </ng-container>
-</ng-template>
+      <ng-template #erroEmail>
+        @if (deveVerificarCampoSemValorETocado('email')) {
+          *Campo Obrigatorio
+        }
+        @if (formulario['email'].value && formulario['email'].invalid) {
+          *Email invalido
+        }
+      </ng-template>
 
-<ng-template #erroSenha>
-  <ng-container *ngIf="deveVerificarCampoSemValorETocado('senha')">
-    *Campo Obrigatorio
-  </ng-container>
-  <ng-container *ngIf="formulario['senha']?.value && formulario['senha']?.invalid">
-    *Digite 6 números
-  </ng-container>
-</ng-template>
+      <ng-template #erroSenha>
+        @if (deveVerificarCampoSemValorETocado('senha')) {
+          *Campo Obrigatorio
+        }
+        @if (formulario['senha'].value && formulario['senha'].invalid) {
+          *Digite 6 números
+        }
+      </ng-template>
 
-<ng-template #erroConfirmarSenha>
-  <ng-container *ngIf="deveVerificarCampoSemValorETocado('confirmarSenha')">
-    <span>*Digite sua senha</span>
-  </ng-container>
-  <ng-container
-    *ngIf="form.get('confirmarSenha')?.value && form.get('confirmarSenha')?.touched && form.get('senha')?.value != form.get('confirmarSenha')?.value">
-    <span>*As senhas devem ser iguais</span>
-  </ng-container>
-</ng-template>
+      <ng-template #erroConfirmarSenha>
+        @if (deveVerificarCampoSemValorETocado('confirmarSenha')) {
+          <span>*Digite sua senha</span>
+        }
+        @if (form.get('confirmarSenha')?.value && form.get('confirmarSenha')?.touched && form.get('senha')?.value !== form.get('confirmarSenha')?.value) {
+          <span>*As senhas devem ser iguais</span>
+        }
+      </ng-template>

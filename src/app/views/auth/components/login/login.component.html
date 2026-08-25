@@ -14,16 +14,18 @@
         <app-button [label]="'Login'" (aoClicar)="deveBuscarUsuario()" [classeBotao]="'btn-primary'"></app-button>
       </div>
       <div style="font-size: 16px; color: #b2b2c9;">
-        <ins (click)="deveRedefinirSenha()">Esqueci a senha.</ins>
+        <button (click)="deveRedefinirSenha()">Esqueci a senha.</button>
       </div>
       <div class="registro-card-login">
-        <span>Não tem cadastro? <ins (click)="deveFazerRegistro()">Cadastre-se</ins></span>
+        <button (click)="deveFazerRegistro()">Não tem cadastro? Cadastre-se</button>
       </div>
 
     </form>
 
   </mat-card>
-            <app-loading *ngIf="loading"></app-loading>
+  @if (loading) {
+    <app-loading></app-loading>
+  }
 
 </div>
 
@@ -32,19 +34,19 @@
 
 
 <ng-template #erroSenha>
-  <ng-container *ngIf="!form.get('senha')?.value && form.get('senha')?.touched">
+  @if (!form.get('senha')?.value && form.get('senha')?.touched) {
     *Campo Obrigatorio
-  </ng-container>
-  <ng-container *ngIf="form.get('senha')?.invalid && form.get('senha')?.value">
+  }
+  @if (form.get('senha')?.invalid && form.get('senha')?.value) {
     *Digite 6 digitos numericos
-  </ng-container>
+  }
 </ng-template>
 
 <ng-template #erroEmail>
-  <ng-container *ngIf="!form.get('email')?.value && form.get('email')?.touched">
+  @if (!form.get('email')?.value && form.get('email')?.touched) {
     *Campo Obrigatorio
-  </ng-container>
-  <ng-container *ngIf="form.get('email')?.hasError('gmail')">
+  }
+  @if (form.get('email')?.hasError('gmail')) {
     *Deve conter dominio valido.
-  </ng-container>
+  }
 </ng-template>

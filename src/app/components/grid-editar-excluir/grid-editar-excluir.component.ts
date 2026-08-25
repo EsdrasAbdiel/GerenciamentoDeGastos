@@ -1,8 +1,8 @@
-import { NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
-import { Component, EventEmitter, Input, OnInit, Output, TemplateRef } from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table'
+import { MatTableModule } from '@angular/material/table';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
 import { GridEditarExcluirColunas } from './grid-editar-excluir-colunas.model';
 
@@ -12,66 +12,51 @@ import { GridEditarExcluirColunas } from './grid-editar-excluir-colunas.model';
   imports: [
     MatTableModule,
     MatIconModule,
-    NgFor,
     NgTemplateOutlet,
-    NgIf,
     IconButtonComponent
   ],
   templateUrl: './grid-editar-excluir.component.html',
   styleUrl: './grid-editar-excluir.component.scss'
 })
-export class GridEditarExcluirComponent<T> implements OnInit {
-  @Input() rowEditTemplate!: TemplateRef<any>;
-  @Output() confirmar = new EventEmitter<any>()
-  @Output() deletar = new EventEmitter<any>();
-  @Output() editar = new EventEmitter<any>();
-  @Output() adicionar = new EventEmitter<any>();
+export class GridEditarExcluirComponent<T extends object> {
+  @Input() rowEditTemplate!: TemplateRef<unknown>;
+  @Output() confirmar = new EventEmitter<T>();
+  @Output() deletar = new EventEmitter<T>();
+  @Output() editar = new EventEmitter<T>();
+  @Output() adicionar = new EventEmitter<T>();
+  @Input() criarNovaLinha!: () => T;
+  @Input() tipoGrid: 'consulta' | 'edicao' = 'consulta'
+
   @Input() form!: FormGroup;
   @Input() dados: T[] = [];
-  _colunas: GridEditarExcluirColunas[] = []
-  displayedColumns: string[] = []
+  _colunas: GridEditarExcluirColunas[] = [];
+  displayedColumns: string[] = [];
 
-  editingRow: any = null;
+  editingRow: T | null = null;
 
   editandoLinha = false;
 
-  isExpansionDetailRow = (_: number, row: any) => {
+  isExpansionDetailRow = (_: number, row: T) => {
     return this.isEditing(row);
   };
 
 
-  @Input() set colunas(value: any[]) {
+  @Input() set colunas(value: GridEditarExcluirColunas[]) {
     if (!value) return;
-    const colunas = value;
 
-    console.log(value);
-
-
-    this.displayedColumns = colunas.map((column: any) => column.key);
+    this.displayedColumns = value.map(column => column.key);
     this.displayedColumns.push('acoes');
 
     this._colunas = value;
-
-
   }
 
-  visualizar: boolean = true;
+  visualizar = true;
 
-  ngOnInit(): void {
-    console.log(this.displayedColumns);
-    console.log(this._colunas);
+  onDelete(row: T): void {
+    this.deletar.emit(row);
   }
 
-  editarLinha(linha: any) {
-    console.log(linha);
-
-  }
-
-  onDelete(row: any) {
-    this.deletar.emit(row)
-  }
-
-  onConfirmar(row: any) {
+  onConfirmar(row: T): void {
 
     if (this.form.invalid) {
       this.form.markAllAsTouched();
@@ -88,50 +73,50 @@ export class GridEditarExcluirComponent<T> implements OnInit {
   }
 
 
-  private rowOriginal: any;
+  private rowOriginal: T | null = null;
 
-onEditar(row: any) {
+  onEditar(row: T): void {
 
-  if (this.editingRow === row) {
-    return;
+    if (this.editingRow === row) {
+      return;
+    }
+
+    this.editar.emit(row);
+
+    this.editingRow = row;
+    this.rowOriginal = structuredClone(row);
+
+    this.form.reset();
+    this.form.patchValue(row);
   }
 
-  this.editar.emit(row);
-
-  this.editingRow = row;
-
-  this.rowOriginal = structuredClone(row);
-
-  this.form.reset();
-  this.form.patchValue(row);
-}
-
-  onCancelar() {
+  onCancelar(): void {
+    if (!this.editingRow) {
+      return;
+    }
 
     if (this.editandoLinha) {
-
       this.dados = this.dados.filter(
         item => item !== this.editingRow
       );
 
       this.editandoLinha = false;
-
-    } else {
-
-Object.assign(this.editingRow, this.rowOriginal);
+    } else if (this.rowOriginal) {
+      Object.assign(this.editingRow, this.rowOriginal);
     }
 
     this.editingRow = null;
+    this.rowOriginal = null;
   }
 
-  isEditing(row: any): boolean {
+  isEditing(row: T): boolean {
     return this.editingRow === row;
   }
 
-  adicionarLinha() {
+  adicionarLinha(): void {
     this.editandoLinha = true;
 
-    const novaLinha: any = {};
+    const novaLinha = this.criarNovaLinha();
 
     this.dados = [
       ...this.dados,
@@ -139,6 +124,6 @@ Object.assign(this.editingRow, this.rowOriginal);
     ];
 
     this.onEditar(novaLinha);
-    this.adicionar.emit()
+    this.adicionar.emit();
   }
 }

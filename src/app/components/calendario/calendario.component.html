@@ -1,56 +1,59 @@
 <div class="calendario">
-    <div class="anos-container">
-        <div *ngFor="let item of anos()">
+  <div class="anos-container">
+    @for (item of anos(); track item) {
+      <div>
         <mat-card class="card-container card-ano" [class.card-ano-ativo]="item.id === anoSelecionado" [ngStyle]="{'color': item.statusCompetenciaAno === StatusCompetencia.aberto ? 'white' : 'gray'}" (click)="aoClicarNoCardAnoDeveBuscarMeses(item.id)">
-            <span class="texto-card">{{ item.anoDescricao }}</span>
+          <span class="texto-card">{{ item.anoDescricao }}</span>
         </mat-card>
-        </div>
-    </div>
-    <app-loading *ngIf="loading"></app-loading>
-    <div class="meses-container" *ngIf="!loading">
-        <mat-card class="card-container meses" *ngFor="let mes of meses" (click)="aoClicarNoCardMesDeveIrParaDetalhes(mes)">
-            <div class="mes-card">
-                <div class="mes-header">
-                    <span
-                        class="texto-card"
+      </div>
+    }
+  </div>
+  @if (loading) {
+    <app-loading></app-loading>
+  }
+  @if (!loading) {
+    <div class="meses-container">
+      @for (mes of meses; track mes) {
+        <mat-card class="card-container meses" (click)="aoClicarNoCardMesDeveIrParaDetalhes(mes)">
+          <div class="mes-card">
+            <div class="mes-header">
+              <span
+                class="texto-card"
                         [ngStyle]="{
                             'color': mes.statusCompetenciaMes === StatusCompetencia.fechado ? 'gray' : 'white'
                         }">
-                        {{ mes.nome }}
-                    </span>
-
-                    <span
-                        class="status-container"
+                {{ mes.nome }}
+              </span>
+              <span
+                class="status-container"
                         [ngStyle]="{
                             'background-color':
                                 mes.statusCompetenciaMes === StatusCompetencia.fechado ? 'red' : 'green'
                         }">
-                        {{ mes.statusCompetenciaMes === StatusCompetencia.aberto ? 'Aberto' : 'Fechado' }}
-                    </span>
-                </div>
-
-                <div class="mes-valores">
-                    <div class="valor-item">
-                        <mat-icon
-                            class="icone-saida"
-                            [matTooltip]="'Saídas'">
-                            trending_down
-                        </mat-icon>
-
-                        <span>R$ 1.000,00</span>
-                    </div>
-
-                    <div class="valor-item">
-                        <mat-icon
-                            class="icone-entrada"
-                            [matTooltip]="'Receitas'">
-                            trending_up
-                        </mat-icon>
-
-                        <span>R$ 500,00</span>
-                    </div>
-                </div>
+                {{ mes.statusCompetenciaMes === StatusCompetencia.aberto ? 'Aberto' : 'Fechado' }}
+              </span>
             </div>
+            <div class="mes-valores">
+              <div class="valor-item">
+                <mat-icon
+                  class="icone-saida"
+                  [matTooltip]="'Saídas'">
+                  trending_down
+                </mat-icon>
+                <span>{{ mes.valorDespesaTotal | currency: "BRL" }}</span>
+              </div>
+              <div class="valor-item">
+                <mat-icon
+                  class="icone-entrada"
+                  [matTooltip]="'Receitas'">
+                  trending_up
+                </mat-icon>
+                <span>{{ mes.valorReceitaTotal | currency: "BRL" }}</span>
+              </div>
+            </div>
+          </div>
         </mat-card>
+      }
     </div>
+  }
 </div>
