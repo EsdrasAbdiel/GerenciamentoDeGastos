@@ -4,16 +4,14 @@ import { AppComponent } from './app/app.component';
 
 import { provideHttpClient, withInterceptors } from '@angular/common/http';
 import { credentialsInterceptor } from './app/interceptors/credentials.interceptor';
-import { provideRouter } from '@angular/router';
-import { routes } from './app/app.routes';
 
 bootstrapApplication(AppComponent, {
-  providers: [
-    provideHttpClient(
-      withInterceptors([credentialsInterceptor])
-    ),
+	providers: [
+		provideHttpClient(
+			withInterceptors([credentialsInterceptor])
+		),
 
-    ...(appConfig.providers ?? [])
-  ]
+		...(appConfig.providers ?? [])
+	]
 })
-  .catch((err) => console.error(err));
+	.catch((err) => console.error(err));

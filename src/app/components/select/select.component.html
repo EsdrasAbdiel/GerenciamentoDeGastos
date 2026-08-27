@@ -1,32 +1,44 @@
 <div class="select-container">
-  <div class="placeholder-select-container" (click)="abrirModalComOpcoes = !abrirModalComOpcoes">
-    {{ opcaoSelecionada || placeholder }} <mat-icon>arrow_drop_down</mat-icon>
-  </div>
+<button
+  type="button"
+  class="placeholder-select-container"
+  (click)="abrirModalComOpcoes = !abrirModalComOpcoes">
+  {{ opcaoSelecionada || placeholder }}
+  <mat-icon>arrow_drop_down</mat-icon>
+</button>
   <ng-container *ngTemplateOutlet="multiselect ? multiselectContainer : selectContainer"></ng-container>
 </div>
 
 <ng-template #multiselectContainer>
-  <div class="modal-opcoes-container" *ngIf="abrirModalComOpcoes">
-    <div *ngFor="let opcao of opcoes" class="opcao-container"> <input type="checkbox" class="input-checkbox"
-        [checked]="opcao.marcado" (change)="acaoAoClicar($event, opcao)"> {{ opcao.nome }}
+  @if (abrirModalComOpcoes) {
+    <div class="modal-opcoes-container">
+      @for (opcao of opcoes; track opcao) {
+        <div class="opcao-container"> <input type="checkbox" class="input-checkbox"
+          [checked]="opcao.marcado" (change)="acaoAoClicar($event, opcao)"> {{ opcao.descricao }}
+        </div>
+      }
+      @if (aparecerAdicionarOpcao) {
+        <ng-container *ngTemplateOutlet="novaOpcaoContainer"></ng-container>
+      }
     </div>
-    <ng-container *ngIf="aparecerAdicionarOpcao">
-      <ng-container *ngTemplateOutlet="novaOpcaoContainer"></ng-container>
-    </ng-container>
-  </div>
+  }
 </ng-template>
 <ng-template #selectContainer>
-  <div class="modal-opcoes-container" *ngIf="abrirModalComOpcoes">
-    <div *ngFor="let opcao of opcoes" class="opcao-container"
-      (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao)">{{ opcao.nome }}
+  @if (abrirModalComOpcoes) {
+    <div class="modal-opcoes-container">
+      @for (opcao of opcoes; track opcao) {
+        <button class="opcao-container"
+          (click)="aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao)">{{ opcao.descricao }}
+        </button>
+      }
+      @if (aparecerAdicionarOpcao) {
+        <ng-container *ngTemplateOutlet="novaOpcaoContainer"></ng-container>
+      }
     </div>
-    <ng-container *ngIf="aparecerAdicionarOpcao">
-      <ng-container *ngTemplateOutlet="novaOpcaoContainer"></ng-container>
-    </ng-container>
-  </div>
+  }
 </ng-template>
 <ng-template #novaOpcaoContainer>
-  <div class="opcao-container" (click)="onSelectChange('adicionar')"><mat-icon class="mat-18">add</mat-icon>
-    <span>Adiconar Nova
-      Opção</span></div>
+  <button class="opcao-container" (click)="onSelectChange('adicionar')"><mat-icon class="mat-18">add</mat-icon>
+  <span>Adiconar Nova
+  Opção</span></button>
 </ng-template>

@@ -11,237 +11,110 @@
 </style>
 
 <app-menu [tituloSnackbar]="tituloSnackbar">
-  <app-loading *ngIf="loading"></app-loading>
-  <div *ngIf="!loading">
-    <ng-container *ngTemplateOutlet="despesas__detalhes"></ng-container>
-  </div>
-</app-menu>
-
-<ng-template #despesas__detalhes>
   <div class="detalhes-container">
-    <form [formGroup]="form">
 
-      <div class="header-container">
-        <app-card-valores [valorDespesaTotal]="valoresSomados" [valorEntradaTotal]="valoresEntradasSomados"
-          valorSa></app-card-valores>
-        <div style="    display: flex;
+    <div class="header-container">
+      <app-card-valores [valorDespesaTotal]="valoresSomados"
+        [valorEntradaTotal]="valoresEntradasSomados"></app-card-valores>
+      <div style="    display: flex;
     flex-direction: row;
     gap: 1rem;
-    padding: 1rem 0;
     align-items: baseline;">
-          <button class="botao-acoes salvar" mat-raised-button (click)="salvarNoBackend()"
-            [disabled]="botaoDesabilitado()">
-            Salvar
-          </button>
-          <button class="botao-acoes excluir" mat-button (click)="excluir()">Excluir</button>
+        <app-button [label]="'Salvar'" classeBotao="salvar" (aoClicar)="salvarNoBackend()"></app-button>
 
-          <button class="botao-acoes voltar" mat-button (click)="voltar()">Voltar</button>
-        </div>
+        <app-button [label]="'Excluir'" classeBotao="excluir"></app-button>
+
+        <app-button [label]="'Voltar'" classeBotao="voltar" (aoClicar)="voltar()"></app-button>
+
       </div>
-      <div class="cards-container">
-        <div class="card-entrada">
-          <mat-card>
-            <div class="titulo-card-detalhe-container">
-              <mat-card-title class="titulo-card-detalhe">
-                <p>Entradas</p>
-              </mat-card-title>
-            </div>
+    </div>
+    <div class="cards-container">
+      <div class="card-entrada">
+        <mat-card>
+          <div class="titulo-card-detalhe-container">
+            <mat-card-title class="titulo-card-detalhe">
+              <p>Entradas</p>
+            </mat-card-title>
+          </div>
 
-            <mat-grid-list cols="8" rowHeight="50px" gutterSize="12px" style="margin: 0 5px;">
+          <ng-template #viewDataPagamento let-row>
+            {{ row.dataPagamento ? (row.dataPagamento | date:'dd/MM/yyyy') : '-' }}
+          </ng-template>
 
-              <!-- Linhas existentes (visualização ou edição) -->
-              <ng-container *ngFor="let item of dadosEntradasEmEdicao; let i = index; trackBy: trackByIndexEntrada">
+          <ng-template #viewValorEntrada let-row>
+            {{ row.entradaValor | currency:'BRL'}}
+          </ng-template>
+          <ng-template #rowEditTemplate let-row let-form="formEntrada" let-coluna="coluna">
 
-                <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
-                <div *ngIf="indiceEntradaEmEdicao === i">
-                  <mat-grid-tile [colspan]="3">
-                    <input matInput formControlName="descricaoEntrada" placeholder="Descrição" class="full-width">
-                  </mat-grid-tile>
+            <ng-container [formGroup]="formEntrada">
+              <app-input [type]="coluna.type" [formControlName]="coluna.key"></app-input>
+            </ng-container>
 
-                  <mat-grid-tile [colspan]="3">
-                    <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width" type="number">
-                  </mat-grid-tile>
+          </ng-template>
 
-                  <mat-grid-tile [colspan]="2" class="acoes-center">
-                    <button class="button-icon" matTooltip="Confirmar">
-                      <mat-icon class="icone-acoes confirmar" (click)="confirmarEntrada()">done</mat-icon>
-                    </button>
-                    <button class="button-icon" matTooltip="Cancelar">
-                      <mat-icon class="icone-acoes cancelar" (click)="cancelarEdicaoEntrada()">close</mat-icon>
-                    </button>
-                  </mat-grid-tile>
-                </div>
-
-                <!-- Modo VISUALIZAÇÃO (padrão) -->
-                <div *ngIf="indiceEntradaEmEdicao !== i">
-                  <mat-grid-tile [colspan]="3">
-                    {{ item.entradaDescricao }}
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="3">
-                    {{ item.entradaValor | currency: 'BRL' }}
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="2" class="acoes-center">
-                    <button mat-icon-button class="button-icon" [disabled]="indiceEntradaEmEdicao !== -1"
-                      matTooltip="Editar" (click)="iniciarEdicaoEntrada(i)">
-                      <mat-icon class="icone-acoes editar">edit</mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" class="button-icon" (click)="removerLinhaEntrada(i)"
-                      [disabled]="indiceEntradaEmEdicao !== -1" matTooltip="Remover">
-                      <mat-icon class="icone-acoes deletar">delete</mat-icon>
-                    </button>
-                  </mat-grid-tile>
-                </div>
-
-              </ng-container>
-
-              <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
-              <div *ngIf="indiceEntradaEmEdicao === dadosEntradasEmEdicao.length">
-                <mat-grid-tile [colspan]="3">
-                  <input matInput formControlName="descricaoEntrada" placeholder="Descrição" class="full-width">
-                </mat-grid-tile>
-
-                <mat-grid-tile [colspan]="3">
-                  <input matInput formControlName="entradaValor" placeholder="Valor" class="full-width" type="number">
-                </mat-grid-tile>
-
-                <mat-grid-tile [colspan]="2" class="acoes-center">
-                  <button mat-icon-button class="button-icon" color="primary" (click)="confirmarEntrada()"
-                    matTooltip="Confirmar">
-                    <mat-icon class="icone-acoes confirmar">done</mat-icon>
-                  </button>
-                  <button mat-icon-button class="button-icon" color="warn" (click)="cancelarEdicaoEntrada()"
-                    matTooltip="Cancelar">
-                    <mat-icon class="icone-acoes cancelar">close</mat-icon>
-                  </button>
-                </mat-grid-tile>
-              </div>
-
-              <!-- Nenhum registro -->
-              <div *ngIf="dadosEntradasEmEdicao.length === 0 && indiceEntradaEmEdicao === -1">
-                <mat-grid-tile [colspan]="8" class="nenhum-registro-encontrado">
-                  Nenhum registro encontrado
-                </mat-grid-tile>
-              </div>
-
-            </mat-grid-list>
-
-            <!-- Botão adicionar nova linha -->
-            <div class="adicionar-icon">
-              <button mat-icon-button class="button-icon" (click)="adicionarNovaLinhaEntrada()"
-                [disabled]="botaoDesabilitadoEntrada()">
-                <mat-icon class="icone-acoes adicionar">add</mat-icon>
-              </button>
-            </div>
-          </mat-card>
-        </div>
-        <div class="card-despesa">
-          <mat-card>
-            <div class="titulo-card-detalhe-container">
-              <mat-card-title class="titulo-card-detalhe">
-                <p>Despesas</p>
-              </mat-card-title>
-            </div>
-
-            <mat-grid-list cols="13" rowHeight="50px" gutterSize="12px" style="margin: 0 5px;">
-
-              <!-- Linhas existentes (visualização ou edição) -->
-              <ng-container *ngFor="let item of dadosDespesasEmEdicao; let i = index; trackBy: trackByIndex">
-
-                <!-- Modo EDIÇÃO (quando estiver editando uma linha existente) -->
-                <div *ngIf="indiceDespesaEmEdicao === i">
-                  <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
-                    <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao"
-                      [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
-                      class="full-width"></app-select>
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="4">
-                    <input matInput type="number" formControlName="valor" placeholder="Valor" class="full-width">
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="3">
-                    <mat-checkbox formControlName="pago">Pago</mat-checkbox>
-                  </mat-grid-tile>
-
-                  <mat-grid-tile [colspan]="2" class="acoes-center">
-                    <button class="button-icon" (click)="confirmar()" matTooltip="Confirmar">
-                      <mat-icon class="icone-acoes confirmar">done</mat-icon>
-                    </button>
-                    <button class="button-icon" (click)="cancelarEdicao()" matTooltip="Cancelar">
-                      <mat-icon class="icone-acoes cancelar">close</mat-icon>
-                    </button>
-                  </mat-grid-tile>
-                </div>
-
-                <!-- Modo VISUALIZAÇÃO (padrão) -->
-                <div *ngIf="indiceDespesaEmEdicao !== i">
-                  <mat-grid-tile [colspan]="4" *ngIf="!item.pago">
-                    {{ item.descricao }}
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="4" *ngIf="item.pago">
-                    <del>{{ item.descricao }}</del>
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="4">
-                    {{ item.valor | currency:'BRL' }}
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="3">
-                    <mat-checkbox type="checkbox" [checked]="item.pago" disabled="true">Pago</mat-checkbox>
-                  </mat-grid-tile>
-                  <mat-grid-tile [colspan]="2" class="acoes-center">
-                    <button mat-icon-button (click)="iniciarEdicao(i)" class="button-icon"
-                      [disabled]="indiceDespesaEmEdicao !== -1" matTooltip="Editar">
-                      <mat-icon class="icone-acoes editar">edit</mat-icon>
-                    </button>
-                    <button mat-icon-button color="warn" (click)="removerLinha(i)" class="button-icon"
-                      [disabled]="indiceDespesaEmEdicao !== -1" matTooltip="Remover">
-                      <mat-icon class="icone-acoes deletar">delete</mat-icon>
-                    </button>
-                  </mat-grid-tile>
-                </div>
-
-              </ng-container>
-
-              <!-- Linha de NOVA DESPESA (só aparece quando estiver adicionando) -->
-              <div *ngIf="indiceDespesaEmEdicao === dadosDespesasEmEdicao.length">
-                <mat-grid-tile [colspan]="4" class="mat-grid-tile-container">
-                  <app-select [placeholder]="'Selecione'" [opcoes]="opcoesDespesas" formControlName="descricao"
-                    [aparecerAdicionarOpcao]="true" (adicionarNovaOpcao)="deveCadastrarNovaDespesa()"
-                    class="full-width"></app-select>
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="4">
-                  <input matInput formControlName="valor" placeholder="Valor" [type]="'number'" class="full-width">
-                </mat-grid-tile>
-                <mat-grid-tile [colspan]="3">
-                  <mat-checkbox formControlName="pago">Pago</mat-checkbox>
-                </mat-grid-tile>
-
-                <mat-grid-tile [colspan]="2" class="acoes-center">
-                  <button mat-icon-button class="button-icon" color="primary" (click)="confirmar()">
-                    <mat-icon class="icone-acoes confirmar">done</mat-icon>
-                  </button>
-                  <button mat-icon-button class="button-icon" color="warn" (click)="cancelarEdicao()">
-                    <mat-icon class="icone-acoes cancelar">close</mat-icon>
-                  </button>
-                </mat-grid-tile>
-              </div>
-
-              <!-- Nenhum registro -->
-              <div *ngIf="dadosDespesasEmEdicao.length === 0 && indiceDespesaEmEdicao === -1">
-                <mat-grid-tile [colspan]="13" class="nenhum-registro-encontrado">
-                  Nenhum registro encontrado
-                </mat-grid-tile>
-              </div>
-
-            </mat-grid-list>
-
-            <!-- Botão adicionar nova linha -->
-            <div class="adicionar-icon">
-              <button mat-icon-button class="button-icon" (click)="adicionarNovaLinha()"
-                [disabled]="botaoDesabilitado()">
-                <mat-icon class="icone-acoes adicionar">add</mat-icon>
-              </button>
-            </div>
-          </mat-card>
-        </div>
+          <app-grid-editar-excluir [colunas]="colunasEntradas" [dados]="dadosEntradas" [form]="formEntrada"
+            [rowEditTemplate]="rowEditTemplate" (confirmar)="salvarLinhaEntrada($event)"
+            (deletar)="excluirLinhaEntrada($event)" (editar)="editarLinhaEntrada()"
+            (adicionar)="adicionarLinhaEntrada()" [criarNovaLinha]="criarNovaLinha"></app-grid-editar-excluir>
+        </mat-card>
       </div>
-    </form>
+      <div class="card-despesa">
+
+        <mat-card>
+          <div class="titulo-card-detalhe-container">
+            <mat-card-title class="titulo-card-detalhe">
+              <p>Despesas</p>
+            </mat-card-title>
+          </div>
+
+          <ng-template #viewPago let-row>
+            <mat-checkbox [checked]="row.pago" [disabled]="true"></mat-checkbox>
+          </ng-template>
+
+          <ng-template #viewValorDespesa let-row>
+            @if (row.pago) {
+            <del>{{ row.valor | currency:"BRL" }}</del>
+            } @else {
+            {{ row.valor | currency:"BRL" }}
+            }
+          </ng-template>
+
+          <ng-template #viewDescricaoDespesa let-row>
+            @if (row.pago) {
+            <del>{{ row.descricao }}</del>
+            } @else {
+            {{ row.descricao }}
+            }
+          </ng-template>
+
+          <ng-template #viewDataInclusao let-row>
+            {{ row.dataInclusao ? (row.dataInclusao | date:'dd/MM/yyyy') : '-' }}
+          </ng-template>
+
+          <ng-template #rowEditDespesaTemplate let-row let-form="formDespesa" let-coluna="coluna">
+            <ng-container [formGroup]="formDespesa">
+              @switch (coluna.type) {
+
+              @case ('checkbox') {
+              <mat-checkbox [formControlName]="coluna.key"></mat-checkbox>
+              }
+
+              @default {
+              <app-input [type]="coluna.type || 'text'" [formControlName]="coluna.key">
+              </app-input>
+              }
+
+              }
+            </ng-container>
+          </ng-template>
+
+          <app-grid-editar-excluir [colunas]="colunasDespesas" [dados]="dadosDespesas" [form]="formDespesa"
+            [rowEditTemplate]="rowEditDespesaTemplate" (editar)="editarLinhaDespesa()"
+            (confirmar)="salvarLinhaDespesa($event)" (adicionar)="adicionarLinhaDespesa()"
+            (deletar)="excluirLinhaDespesa($event)" [criarNovaLinha]="criarNovaLinhaDespesa"></app-grid-editar-excluir>
+        </mat-card>
+
+      </div>
+    </div>
   </div>
-</ng-template>
+</app-menu>

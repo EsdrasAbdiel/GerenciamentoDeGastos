@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { Registro } from '../models/registro.model';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class RegistroService {
-  private informacoesCadastroUsuario = new BehaviorSubject<Registro | null>(null);
+	private informacoesCadastroUsuario = new BehaviorSubject<Registro | null>(null);
 
-  setInformacoesCadastroUsuario(informacoes: Registro) {
-    this.informacoesCadastroUsuario.next(informacoes);
-  }
+	setInformacoesCadastroUsuario(informacoes: Registro) {
+		this.informacoesCadastroUsuario.next(informacoes);
+	}
 
-  getInformacoesCadastroUsuario() {
-    return this.informacoesCadastroUsuario.asObservable()
-  }
+	getInformacoesCadastroUsuario() {
+		return this.informacoesCadastroUsuario.asObservable();
+	}
 }

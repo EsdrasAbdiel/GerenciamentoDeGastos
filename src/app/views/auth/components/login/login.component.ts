@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+
+import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -16,22 +16,24 @@ import { ButtonComponent } from '../../../../components/button/button.component'
 
 @Component({
   selector: 'app-login',
-  imports: [ ButtonComponent, ReactiveFormsModule, FormsModule, CommonModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent, LoadingComponent],
+  imports: [ButtonComponent, ReactiveFormsModule, FormsModule, MatIconModule, MatCardModule, PasswordInputComponent, InputComponent, LoadingComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
 
   form!: FormGroup;
-  registrarUsuario: boolean = false;
+  registrarUsuario = false;
   loading!: boolean;
 
+  private router = inject(Router);
+  private fb = inject(FormBuilder);
+  private authService = inject(AuthService);
+  private registroService = inject(RegistroService);
+  private snackbarService = inject(SnackbarService);
+
   constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private registroService: RegistroService,
-    private authService: AuthService,
-    private snackbarService: SnackbarService
+
   ) {
     this.inicializarFormGroup();
   }
@@ -44,7 +46,7 @@ export class LoginComponent implements OnInit {
     this.form = this.fb.group({
       email: [null, [Validators.required, emailValidator()]],
       senha: [null, [Validators.required, Validators.minLength(6)]]
-    })
+    });
   }
 
   carregarInformacoesDaTelaDeRegistro() {
@@ -53,10 +55,10 @@ export class LoginComponent implements OnInit {
         if (informacoesRegistro) {
           this.form.patchValue({
             email: informacoesRegistro.email
-          })
+          });
         }
       }
-    )
+    );
   }
 
   deveBuscarUsuario() {
@@ -66,31 +68,33 @@ export class LoginComponent implements OnInit {
     const params = {
       email: String(email),
       senha: Number(senha)
-    }
+    };
 
     if (this.form.invalid) {
-      this.form.markAllAsTouched()
+      this.form.markAllAsTouched();
     } else {
       this.authService.postUsuario(params).pipe((finalize(() => this.loading = false))).subscribe(
         retorno => {
           if (retorno.sucesso)
-            this.authService.authenticated$.next(retorno.sucesso)
-            localStorage.setItem('usuario_id', String(retorno.resultado))
-            this.router.navigate(['/home'])
+            this.authService.authenticated$.next(retorno.sucesso);
+          localStorage.setItem('usuario_id', String(retorno.resultado));
+          this.router.navigate(['/home']);
         },
         error => {
-          error?.error.mensagem ? this.snackbarService.error(error?.error.mensagem) : this.snackbarService.error('Error ao efetuar login')
+          const mensagem = error.error?.mensagem ?? 'Erro ao efetuar login';
+
+          this.snackbarService.error(mensagem);
         }
-      )
+      );
     }
   }
 
   deveFazerRegistro() {
-    this.router.navigate(['/auth/registro'])
+    this.router.navigate(['/auth/registro']);
   }
 
   deveRedefinirSenha() {
-    this.router.navigate(['/auth/esqueci-senha'])
+    this.router.navigate(['/auth/esqueci-senha']);
   }
 
   get formulario() {

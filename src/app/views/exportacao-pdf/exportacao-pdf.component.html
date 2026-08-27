@@ -1,0 +1,32 @@
+<app-menu [tituloSnackbar]="'Importar Extrato'">
+  <h1 style="color: white">Histórico de Importação de Extrato</h1>
+  <button type="button" class="btn btn-primary" (click)="fileInput.click()">
+    Selecionar Arquivo
+  </button>
+
+  <button (click)="buscarExtratos()">Pesquisar</button>
+  <input type="file" (change)="onFileSelected($event)" style="width: 30%; display: none" #fileInput />
+
+  <!-- <table>
+    <thead>
+      <tr>
+        <th>Data/Hora</th>
+        <th>Status</th>
+        <th>Mes</th>
+      </tr>
+
+    </thead>
+
+    <tbody>
+      @for (item of dados; track item) {
+        <tr>
+          <td>{{item.dataImportacao | date:'dd/MM/yyyy hh:mm' }}</td>
+          <td>{{item.status}}</td>
+          <td>{{item.referenciaMes}}</td>
+        </tr>
+      }
+    </tbody>
+  </table> -->
+
+  <app-grid-editar-excluir [colunas]="colunas" [dados]="dadosConsulta"></app-grid-editar-excluir>
+</app-menu>
