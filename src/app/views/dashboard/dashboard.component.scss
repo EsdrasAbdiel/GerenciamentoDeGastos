@@ -11,26 +11,19 @@
 
 .grafico-comparativo-container {
   width: 50%;
-  flex: 1;
-  min-width: 0;
   height: 500px;
 }
 
 .container-cards {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
   width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
   margin-bottom: 1rem;
   gap: 1rem;
 
   .card-container {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
     gap: 8px;
-    font-size: 1.5rem;
+    font-size: 1rem;
 
     .titulo-container {
       display: flex;
@@ -46,6 +39,26 @@
   }
 }
 
+.card {
+  width: 30%;
+  min-height: 100px;
+  background-color: aliceblue;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.valores {
+  font-size: 14px;
+}
+
+.container {
+  display: flex;
+  flex-direction: row;
+  background-color: aliceblue;
+}
+
 .container-dashboard {
   width: 100%;
   margin: 0;
@@ -56,12 +69,22 @@
   overflow: hidden;
 }
 
+.card-dashboard{
+  display: flex;
+  gap: 1rem;
+  width: 75% !important;
+}
+
 .dashboard {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   gap: 1rem;
   width: 100% !important;
+}
+
+.dashboard-graficos {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  width: 100%;
 }
 
 .botoes-dashboard {

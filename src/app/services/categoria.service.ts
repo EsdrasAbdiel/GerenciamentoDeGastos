@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
+import { RetornoApi } from '../models/retorno-api.model';
+import { Categoria } from '../models/categoria.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +11,7 @@ import { environment } from '../../environments/environment';
 export class CategoriaService {
   private http = inject(HttpClient);
 
-  buscarCategorias(): Observable<any> {
-   return  this.http.get<any>(`${environment.BASE_URL.categorias}`)
+  buscarCategorias(): Observable<RetornoApi<Categoria[]>> {
+    return this.http.get<RetornoApi<Categoria[]>>(`${environment.BASE_URL.categorias}`);
   }
 }

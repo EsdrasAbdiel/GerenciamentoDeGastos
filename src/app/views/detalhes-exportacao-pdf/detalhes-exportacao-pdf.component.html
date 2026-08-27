@@ -1,0 +1,90 @@
+<style>
+  .cards-container {
+    width: 100%;
+    height: 80%;
+  }
+
+  .full-width {
+    width: 100%;
+    display: flex;
+  }
+</style>
+
+<app-menu [tituloSnackbar]="'Detalhes Importação'">
+  <div class="detalhes-container">
+
+    <div class="header-container">
+      <app-card-valores [valorDespesaTotal]="valoresSomados"
+        [valorEntradaTotal]="valoresEntradasSomados"></app-card-valores>
+      <div style="display: flex; flex-direction: row; gap: 1rem; align-items: baseline;">
+        <app-button [label]="'Confirmar importação'" classeBotao="salvar"
+          (aoClicar)="cadastrarExtratoAutomaticamente()"></app-button>
+        <app-button [label]="'Voltar'" classeBotao="voltar" (aoClicar)="voltar()"></app-button>
+      </div>
+    </div>
+
+    <div class="cards-container">
+      <div class="card-entrada">
+        <mat-card>
+          <div class="titulo-card-detalhe-container">
+            <mat-card-title class="titulo-card-detalhe">
+              <p>Entradas</p>
+            </mat-card-title>
+          </div>
+
+          <ng-template #viewDataPagamento let-row>
+            {{ row.data ? (row.data | date:'dd/MM/yyyy') : '-' }}
+          </ng-template>
+
+          <ng-template #viewValorEntrada let-row>
+            {{ row.valor | currency:'BRL' }}
+          </ng-template>
+
+          <ng-template #rowEditTemplate let-row let-form="formEntrada" let-coluna="coluna">
+            <ng-container [formGroup]="formEntrada">
+              <app-input [type]="coluna.type" [formControlName]="coluna.key"></app-input>
+            </ng-container>
+          </ng-template>
+
+          <app-grid-editar-excluir [colunas]="colunasEntradas" [dados]="entrada" [form]="formEntrada"
+            [rowEditTemplate]="rowEditTemplate" (confirmar)="salvarLinhaEntrada($event)"
+            (deletar)="excluirLinhaEntrada($event)" (editar)="editarLinhaEntrada()"
+            (adicionar)="adicionarLinhaEntrada()"></app-grid-editar-excluir>
+        </mat-card>
+      </div>
+
+      <div class="card-despesa">
+        <mat-card>
+          <div class="titulo-card-detalhe-container">
+            <mat-card-title class="titulo-card-detalhe">
+              <p>Despesas</p>
+            </mat-card-title>
+          </div>
+
+          <ng-template #viewValorDespesa let-row>
+            {{ row.valor | currency:'BRL' }}
+          </ng-template>
+
+          <ng-template #viewDescricaoDespesa let-row>
+            {{ row.descricao }}
+          </ng-template>
+
+          <ng-template #viewDataDespesa let-row>
+            {{ row.data ? (row.data | date:'dd/MM/yyyy') : '-' }}
+          </ng-template>
+
+          <ng-template #rowEditDespesaTemplate let-row let-form="formDespesa" let-coluna="coluna">
+            <ng-container [formGroup]="formDespesa">
+              <app-input [type]="coluna.type || 'text'" [formControlName]="coluna.key"></app-input>
+            </ng-container>
+          </ng-template>
+
+          <app-grid-editar-excluir [colunas]="colunasDespesas" [dados]="despesa" [form]="formDespesa"
+            [rowEditTemplate]="rowEditDespesaTemplate" (editar)="editarLinhaDespesa()"
+            (confirmar)="salvarLinhaDespesa($event)" (adicionar)="adicionarLinhaDespesa()"
+            (deletar)="excluirLinhaDespesa($event)"></app-grid-editar-excluir>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</app-menu>

@@ -4,14 +4,18 @@
     (aoClicar)="toggle()">
   </app-button>
 
-  <div *ngIf="isOpen" class="date-picker-container">
-    <div class="modal-container">
-      <div
-        *ngFor="let item of items"
-        class="item"
-        (click)="selecionar(item)">
-        {{ getLabel(item) }}
+  @if (isOpen) {
+    <div class="date-picker-container">
+      <div class="modal-container">
+        @for (item of items; track item) {
+          <button
+            type="button"
+            class="item"
+            (click)="selecionar(item)">
+            {{ getLabel(item) }}
+          </button>
+        }
       </div>
     </div>
-  </div>
+  }
 </div>

@@ -1,7 +1,7 @@
 <div style="padding: 1rem">
     <form [formGroup]="form" class="form-container">
         <app-input [label]="'Nome da Despesa'" formControlName="descricao"></app-input>
-        <app-select [placeholder]="'Categoria da Despesa'" formControlName="categoria" [opcoes]="opcoesCategorias()"></app-select>
+        <app-select [placeholder]="'Categoria da Despesa'" formControlName="categoria" [opcoes]="opcoesCategorias"></app-select>
     </form>
     <div class="buttons-container-space-between">
         <button (click)="close()">Cancelar</button>

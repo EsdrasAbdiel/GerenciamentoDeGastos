@@ -1,0 +1,142 @@
+.calendario {
+    overflow: auto;
+    padding: 1rem;
+}
+
+.texto-card {
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.anos-container {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.meses-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    flex: 1;
+}
+
+.meses {
+    height: 100%;
+}
+
+.meses:hover {
+    transform: translateY(-2px);
+    transition: .2s;
+    border-color: #5c6bc0;
+}
+
+.mes-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.mes-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 20px;
+}
+
+.mes-valores {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 20px;
+}
+
+.valor-item {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.status-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4px 8px;
+    border-radius: 8px;
+    font-size: 20px;
+}
+
+.card-ano {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    padding: 0;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.card-ano:hover {
+    transform: translateY(-2px);
+    transition: .2s;
+    border-color: #5c6bc0;
+}
+
+.card-ano-ativo {
+    background-color: #5c6bc0 !important;
+    border: 2px solid #7986cb !important;
+    color: white !important;
+    transform: translateY(-2px) !important;}
+
+.icone-entrada {
+    color: #5fbf62;
+}
+
+.icone-saida {
+    color: #c62828;
+}
+
+@media (max-width: 800px) {
+    .meses-container {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .texto-card {
+        font-size: 18px;
+    }
+
+    .status-container {
+        font-size: 18px
+    }
+
+    .mes-valores {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 420px) {
+    .anos-container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .meses-container {
+        grid-template-columns: repeat(1, 1fr);
+        gap: 8px;
+    }
+
+    .texto-card {
+        font-size: 16px;
+        font-weight: 400;
+    }
+
+    .status-container {
+        font-size: 16px
+    }
+}

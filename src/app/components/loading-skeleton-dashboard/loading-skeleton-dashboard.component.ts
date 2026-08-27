@@ -1,19 +1,14 @@
-import { NgIf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+
+import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'app-loading-skeleton-dashboard',
-  standalone: true,
-  imports: [],
-  templateUrl: './loading-skeleton-dashboard.component.html',
-  styleUrl: './loading-skeleton-dashboard.component.scss'
+	selector: 'app-loading-skeleton-dashboard',
+	standalone: true,
+	imports: [],
+	templateUrl: './loading-skeleton-dashboard.component.html',
+	styleUrl: './loading-skeleton-dashboard.component.scss'
 })
-export class LoadingSkeletonDashboardComponent implements OnInit {
-  @Input() loading: boolean = false;
-
-  ngOnInit(): void {
-    console.log(this.loading);
-
-  }
+export class LoadingSkeletonDashboardComponent {
+  @Input() loading = false;
 
 }

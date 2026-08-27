@@ -5,18 +5,18 @@ import { AuthService } from '../services/auth.service';
 
 export const authGuard: CanActivateFn = () => {
 
-  const authService = inject(AuthService);
-  const router = inject(Router);
+	const authService = inject(AuthService);
+	const router = inject(Router);
 
-  return authService.checkAuth().pipe(
-    map(authenticated => {
+	return authService.checkAuth().pipe(
+		map(authenticated => {
 
-      if (authenticated) {
-        return true;
-      }
+			if (authenticated) {
+				return true;
+			}
 
-      router.navigate(['/auth/login']);
-      return false;
-    })
-  );
+			router.navigate(['/auth/login']);
+			return false;
+		})
+	);
 };

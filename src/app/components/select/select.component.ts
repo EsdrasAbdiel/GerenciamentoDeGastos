@@ -1,18 +1,29 @@
-import { CommonModule, NgFor, NgIf, NgTemplateOutlet } from '@angular/common';
+import { CommonModule, NgTemplateOutlet } from '@angular/common';
 import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import {
+  ControlValueAccessor,
+  FormsModule,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule
+} from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
 export interface SelectModel {
   id: number;
-  nome: string;
-  marcado?: boolean
+  descricao: string;
+  marcado?: boolean;
 }
 
 @Component({
   selector: 'app-select',
   standalone: true,
-  imports: [NgFor, NgIf, ReactiveFormsModule, FormsModule, MatIconModule, NgTemplateOutlet, CommonModule],
+  imports: [
+    ReactiveFormsModule,
+    FormsModule,
+    MatIconModule,
+    NgTemplateOutlet,
+    CommonModule
+  ],
   templateUrl: './select.component.html',
   styleUrl: './select.component.scss',
   providers: [
@@ -24,33 +35,52 @@ export interface SelectModel {
   ]
 })
 export class SelectComponent implements ControlValueAccessor {
-  @Input() placeholder!: string;
+  @Input() placeholder = '';
   @Input() opcoes: SelectModel[] = [];
-  @Input() multiselect: boolean = false
-  @Input() aparecerAdicionarOpcao: boolean = false;
+  @Input() multiselect = false;
+  @Input() aparecerAdicionarOpcao = false;
+
   @Output() adicionarNovaOpcao = new EventEmitter<void>();
 
-  opcaoSelecionada!: string | any[];
-  opcaoSelecionadaMultiselect: SelectModel[] = []
-  array: string[] = []
+  opcaoSelecionada = '';
+  opcaoSelecionadaMultiselect: SelectModel[] = [];
+  array: string[] = [];
+
   abrirModalComOpcoes = false;
-  value: any;
+  value: SelectModel | SelectModel[] | null = null;
   disabled = false;
 
-  onChangeFn = (_: any) => { };
-  onTouchedFn = () => { };
+  private onChangeFn: (value: SelectModel | SelectModel[] | null) => void = () => undefined;
+  private onTouchedFn: () => void = () => undefined;
 
-  writeValue(value: SelectModel): void {
-    if (!value) return;
+  writeValue(value: SelectModel | SelectModel[] | null): void {
+    if (!value) {
+      this.value = null;
+      this.opcaoSelecionada = '';
+      this.opcaoSelecionadaMultiselect = [];
+      this.array = [];
+      return;
+    }
 
-    this.opcaoSelecionada = value.nome
+    this.value = value;
+
+    if (Array.isArray(value)) {
+      this.opcaoSelecionadaMultiselect = value;
+      this.array = value.map(opcao => opcao.descricao);
+      this.opcaoSelecionada = this.array.join(', ');
+      return;
+    }
+
+    this.opcaoSelecionada = value.descricao;
   }
 
-  registerOnChange(fn: any): void {
+  registerOnChange(
+    fn: (value: SelectModel | SelectModel[] | null) => void
+  ): void {
     this.onChangeFn = fn;
   }
 
-  registerOnTouched(fn: any): void {
+  registerOnTouched(fn: () => void): void {
     this.onTouchedFn = fn;
   }
 
@@ -58,25 +88,25 @@ export class SelectComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
-  onSelectChange(value: SelectModel | string) {
-    console.log(value)
-
+  onSelectChange(value: SelectModel | 'adicionar'): void {
     if (value === 'adicionar') {
       this.adicionarNovaOpcao.emit();
-      value = this.value ?? '';
       return;
     }
 
-
     this.value = value;
-    this.onChangeFn(this.value);
+    this.opcaoSelecionada = value.descricao;
+
+    this.onChangeFn(value);
     this.onTouchedFn();
   }
 
-  aoSelecionarOpcaoDeveAparecerNoPlaceholder(opcao: SelectModel) {
-    this.opcaoSelecionada = opcao.nome;
-    this.abrirModalComOpcoes = !this.abrirModalComOpcoes;
+  aoSelecionarOpcaoDeveAparecerNoPlaceholder(
+    opcao: SelectModel
+  ): string {
+    this.opcaoSelecionada = opcao.descricao;
     this.abrirModalComOpcoes = false;
+    this.value = opcao;
 
     this.onChangeFn(opcao);
     this.onTouchedFn();
@@ -84,21 +114,33 @@ export class SelectComponent implements ControlValueAccessor {
     return this.opcaoSelecionada;
   }
 
-  acaoAoClicar(event: any, opcao: SelectModel) {
-    const checked = event.target.checked;
+  acaoAoClicar(
+    event: Event,
+    opcao: SelectModel
+  ): void {
+    const input = event.target as HTMLInputElement;
+    const checked = input.checked;
 
     if (checked) {
-      this.opcaoSelecionadaMultiselect.push({ ...opcao, marcado: checked })
-      this.array.push(' ' + opcao.nome)
-    } else {
-      this.opcaoSelecionadaMultiselect = this.opcaoSelecionadaMultiselect.filter(o => o.id != opcao.id);
-      this.array = this.opcaoSelecionadaMultiselect.map(opcao => {
-        return opcao.nome
+      this.opcaoSelecionadaMultiselect.push({
+        ...opcao,
+        marcado: true
       });
+    } else {
+      this.opcaoSelecionadaMultiselect =
+        this.opcaoSelecionadaMultiselect.filter(
+          item => item.id !== opcao.id
+        );
     }
 
-    this.opcaoSelecionada = String(this.array)
+    this.array = this.opcaoSelecionadaMultiselect.map(
+      item => item.descricao
+    );
 
-    this.onChangeFn(this.opcaoSelecionadaMultiselect)
+    this.opcaoSelecionada = this.array.join(', ');
+    this.value = this.opcaoSelecionadaMultiselect;
+
+    this.onChangeFn(this.value);
+    this.onTouchedFn();
   }
 }

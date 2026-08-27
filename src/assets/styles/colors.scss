@@ -16,6 +16,7 @@ $ph-gray-color-hover: #a3a3a3;
 $ph-entrada-color: #5fbf62;
 $ph-saldo-color: #da7707d5;
 $ph-despesa-color: #C62828;
+$ph-background-color: #252525;
 
 // ===================================
 // 2. Exporta como variáveis CSS no :root
@@ -34,6 +35,7 @@ $ph-despesa-color: #C62828;
   --ph-entrada: #{$ph-entrada-color};
   --ph-saldo: #{$ph-saldo-color};
   --ph-despesa: #{$ph-despesa-color};
+  --ph-background-color: #{$ph-background-color};
 }
 
 // ===================================
@@ -103,10 +105,34 @@ $ph-despesa-color: #C62828;
   }
 
   .voltar {
-    background-color: var(--ph-gray) !important;
+    background-color: #3c3b3b !important;
     color: var(--ph-white) !important;
   }
 
   .voltar:hover {
-    background-color: var(--ph-gray-hover) !important;
+    background-color: #313030 !important;
+  }
+
+  .warning {
+    color: var(--ph-warning) !important;
+  }
+
+  .danger {
+    color: var(--ph-error) !important;
+  }
+
+  .success {
+    color: var(--ph-success) !important;
+  }
+
+  .primary {
+    color: var(--ph-primary) !important;
+  }
+
+  .gray {
+    color: var(--ph-gray);
+  }
+
+  .white {
+    color: var(--ph-white) !important;
   }
