@@ -40,10 +40,10 @@
 
           </ng-template>
 
-          <app-grid-editar-excluir [colunas]="colunasEntradas" [dados]="dadosEntradas" [form]="formEntrada"
+          <app-grid-acoes [colunas]="colunasEntradas" [dados]="dadosEntradas" [form]="formEntrada"
             [rowEditTemplate]="rowEditTemplate" (confirmar)="salvarLinhaEntrada($event)"
             (deletar)="excluirLinhaEntrada($event)" (editar)="editarLinhaEntrada()"
-            (adicionar)="adicionarLinhaEntrada()" [criarNovaLinha]="criarNovaLinha"></app-grid-editar-excluir>
+            (adicionar)="adicionarLinhaEntrada()" [criarNovaLinha]="criarNovaLinha" [tipoGrid]="GridAcoesTipoEnum.edicao"></app-grid-acoes>
         </mat-card>
       </div>
       <div class="card-despesa">
@@ -96,10 +96,10 @@
             </ng-container>
           </ng-template>
 
-          <app-grid-editar-excluir [colunas]="colunasDespesas" [dados]="dadosDespesas" [form]="formDespesa"
+          <app-grid-acoes [colunas]="colunasDespesas" [dados]="dadosDespesas" [form]="formDespesa"
             [rowEditTemplate]="rowEditDespesaTemplate" (editar)="editarLinhaDespesa()"
             (confirmar)="salvarLinhaDespesa($event)" (adicionar)="adicionarLinhaDespesa()"
-            (deletar)="excluirLinhaDespesa($event)" [criarNovaLinha]="criarNovaLinhaDespesa"></app-grid-editar-excluir>
+            (deletar)="excluirLinhaDespesa($event)" [criarNovaLinha]="criarNovaLinhaDespesa" [tipoGrid]="GridAcoesTipoEnum.edicao"></app-grid-acoes>
         </mat-card>
 
       </div>

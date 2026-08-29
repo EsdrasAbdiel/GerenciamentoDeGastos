@@ -1,0 +1,7 @@
+echo "🔍 Executando lint..."
+npm run lint || exit 1
+
+echo "🧪 Executando testes..."
+npm test -- --watch=false || exit 1
+
+echo "✅ Validações concluídas!"

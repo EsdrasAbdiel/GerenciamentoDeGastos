@@ -5,10 +5,10 @@ import { Router } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { Grid } from '../../enums/grid.enum';
-import { ButtonComponent, CardValoresComponent, GridEditarExcluirComponent, InputComponent, MenuComponent } from '../../components';
+import { ButtonComponent, CardValoresComponent, GridAcoesComponent, InputComponent, MenuComponent } from '../../components';
 import { AuthService, DespesasService, ResumoFinanceiroMensalService, SnackbarService } from '../../services';
 import { ExtratoItem } from '../../models';
-import { GridEditarExcluirColunas } from '../../components/grid-editar-excluir/grid-editar-excluir-colunas.model';
+import { GridAcoesModel } from '../../components/grid-acoes/grid-acoes.model';
 
 @Component({
 	selector: 'app-detalhes-exportacao-pdf',
@@ -19,7 +19,7 @@ import { GridEditarExcluirColunas } from '../../components/grid-editar-excluir/g
 		MatCardModule,
 		MatCheckboxModule,
 		MenuComponent,
-		GridEditarExcluirComponent,
+		GridAcoesComponent,
 		CardValoresComponent,
 		ButtonComponent,
 		InputComponent
@@ -48,8 +48,8 @@ export class DetalhesExportacaoPdfComponent implements OnInit, AfterViewInit {
   entradaEdicao: ExtratoItem[] = [];
   despesaEdicao: ExtratoItem[] = [];
 
-  colunasEntradas: GridEditarExcluirColunas[] = [];
-  colunasDespesas: GridEditarExcluirColunas[] = [];
+  colunasEntradas: GridAcoesModel[] = [];
+  colunasDespesas: GridAcoesModel[] = [];
   formEntrada!: FormGroup;
   formDespesa!: FormGroup;
 

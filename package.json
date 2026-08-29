@@ -9,7 +9,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "lint": "ng lint",
-    "production": "ng serve --configuration production"
+    "production": "ng serve --configuration production",
+    "prepare": "husky"
   },
   "private": true,
   "dependencies": {
@@ -42,6 +43,7 @@
     "angular-cli-ghpages": "^3.0.2",
     "angular-eslint": "21.0.1",
     "eslint-plugin-unused-imports": "^4.4.1",
+    "husky": "^9.1.7",
     "jasmine-core": "~5.5.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",

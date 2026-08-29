@@ -4,48 +4,52 @@ import { FormGroup } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTableModule } from '@angular/material/table';
 import { IconButtonComponent } from '../icon-button/icon-button.component';
-import { GridEditarExcluirColunas } from './grid-editar-excluir-colunas.model';
+import { GridAcoesModel } from './grid-acoes.model';
+import { GridAcoesTipoEnum } from './grid-acoes.enum';
 
 @Component({
-  selector: 'app-grid-editar-excluir',
+  selector: 'app-grid-acoes',
   standalone: true,
   imports: [
     MatTableModule,
     MatIconModule,
     NgTemplateOutlet,
     IconButtonComponent
-  ],
-  templateUrl: './grid-editar-excluir.component.html',
-  styleUrl: './grid-editar-excluir.component.scss'
+],
+  templateUrl: './grid-acoes.component.html',
+  styleUrl: './grid-acoes.component.scss'
 })
-export class GridEditarExcluirComponent<T extends object> {
+export class GridAcoesComponent<T extends object> {
   @Input() rowEditTemplate!: TemplateRef<unknown>;
   @Output() confirmar = new EventEmitter<T>();
   @Output() deletar = new EventEmitter<T>();
   @Output() editar = new EventEmitter<T>();
   @Output() adicionar = new EventEmitter<T>();
   @Input() criarNovaLinha!: () => T;
-  @Input() tipoGrid: 'consulta' | 'edicao' = 'consulta'
+  @Input() tipoGrid: GridAcoesTipoEnum = GridAcoesTipoEnum.consulta;
+  @Input() linhaClicavel = false;
+  @Output() aoClicarNaLinha = new EventEmitter<T>();
 
   @Input() form!: FormGroup;
   @Input() dados: T[] = [];
-  _colunas: GridEditarExcluirColunas[] = [];
+  _colunas: GridAcoesModel[] = [];
   displayedColumns: string[] = [];
 
   editingRow: T | null = null;
-
   editandoLinha = false;
+  GridAcoesTipoEnum = GridAcoesTipoEnum
 
   isExpansionDetailRow = (_: number, row: T) => {
     return this.isEditing(row);
   };
 
-
-  @Input() set colunas(value: GridEditarExcluirColunas[]) {
+  @Input() set colunas(value: GridAcoesModel[]) {
     if (!value) return;
 
     this.displayedColumns = value.map(column => column.key);
-    this.displayedColumns.push('acoes');
+
+    if(this.tipoGrid === GridAcoesTipoEnum.edicao)
+      this.displayedColumns.push('acoes');
 
     this._colunas = value;
   }
@@ -72,10 +76,10 @@ export class GridEditarExcluirComponent<T extends object> {
     this.editingRow = null;
   }
 
-
   private rowOriginal: T | null = null;
 
   onEditar(row: T): void {
+    console.log(row);
 
     if (this.editingRow === row) {
       return;
@@ -125,5 +129,13 @@ export class GridEditarExcluirComponent<T extends object> {
 
     this.onEditar(novaLinha);
     this.adicionar.emit();
+  }
+
+  deveClicar() {
+    alert('Linha clicada')
+  }
+
+  onClickRow(row: T) {
+    this.aoClicarNaLinha.emit(row);
   }
 }

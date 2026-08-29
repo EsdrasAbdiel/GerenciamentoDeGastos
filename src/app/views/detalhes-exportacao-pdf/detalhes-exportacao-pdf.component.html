@@ -46,10 +46,10 @@
             </ng-container>
           </ng-template>
 
-          <app-grid-editar-excluir [colunas]="colunasEntradas" [dados]="entrada" [form]="formEntrada"
+          <app-grid-acoes [colunas]="colunasEntradas" [dados]="entrada" [form]="formEntrada"
             [rowEditTemplate]="rowEditTemplate" (confirmar)="salvarLinhaEntrada($event)"
             (deletar)="excluirLinhaEntrada($event)" (editar)="editarLinhaEntrada()"
-            (adicionar)="adicionarLinhaEntrada()"></app-grid-editar-excluir>
+            (adicionar)="adicionarLinhaEntrada()"></app-grid-acoes>
         </mat-card>
       </div>
 
@@ -79,10 +79,10 @@
             </ng-container>
           </ng-template>
 
-          <app-grid-editar-excluir [colunas]="colunasDespesas" [dados]="despesa" [form]="formDespesa"
+          <app-grid-acoes [colunas]="colunasDespesas" [dados]="despesa" [form]="formDespesa"
             [rowEditTemplate]="rowEditDespesaTemplate" (editar)="editarLinhaDespesa()"
             (confirmar)="salvarLinhaDespesa($event)" (adicionar)="adicionarLinhaDespesa()"
-            (deletar)="excluirLinhaDespesa($event)"></app-grid-editar-excluir>
+            (deletar)="excluirLinhaDespesa($event)"></app-grid-acoes>
         </mat-card>
       </div>
     </div>
