@@ -14,13 +14,14 @@ import { finalize } from 'rxjs';
 import { MatDialog } from '@angular/material/dialog';
 import { AuthService } from '../../services/auth.service';
 import { MatButtonModule } from '@angular/material/button';
-import { GridEditarExcluirColunas } from '../../components/grid-editar-excluir/grid-editar-excluir-colunas.model';
+import { GridAcoesModel } from '../../components/grid-acoes/grid-acoes.model';
 import { Grid } from './../../enums/grid.enum';
 import { DespesaItem } from '../../models/despesaItem.model';
 import { EntradaItem } from '../../models/entradaItem.model';
 import { FormatarData } from '../../utils/formatar-data.util';
-import { ButtonComponent, CardValoresComponent, GridEditarExcluirComponent, InputComponent, MenuComponent, ModalComponent, SelectModel, StatusCompetencia } from '../../components';
+import { ButtonComponent, CardValoresComponent, GridAcoesComponent, InputComponent, MenuComponent, ModalComponent, SelectModel, StatusCompetencia } from '../../components';
 import { DespesasService, GastosService, ResumoFinanceiroMensalService } from '../../services';
+import { GridAcoesTipoEnum } from '../../components/grid-acoes/grid-acoes.enum';
 
 
 export interface Despesa {
@@ -44,7 +45,7 @@ export interface Entrada {
   selector: 'app-detalhes',
   standalone: true,
   imports: [
-    CommonModule,
+  CommonModule,
     ReactiveFormsModule,
     MatCardModule,
     MatGridListModule,
@@ -56,7 +57,7 @@ export interface Entrada {
     MatTooltipModule,
     CardValoresComponent,
     MatButtonModule,
-    GridEditarExcluirComponent,
+    GridAcoesComponent,
     InputComponent,
     ButtonComponent
   ],
@@ -70,8 +71,6 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   @ViewChild('viewValorDespesa', { static: true }) viewValorDespesa!: TemplateRef<unknown>;
   @ViewChild('viewDescricaoDespesa', { static: true }) viewDescricaoDespesa!: TemplateRef<unknown>;
   @ViewChild('viewDataInclusao', { static: true }) viewDataInclusao!: TemplateRef<unknown>;
-
-
 
   formDespesa!: FormGroup;
   formEntrada!: FormGroup;
@@ -90,13 +89,14 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   private dialog = inject(MatDialog);
   private authService = inject(AuthService);
   gridEnum!: Grid;
+  GridAcoesTipoEnum = GridAcoesTipoEnum
   estadoDaLinha!: number;
   StatusCompetencia = StatusCompetencia;
   statusCompetenciaMes!: number;
   opcoesDespesas: SelectModel[] = [];
   tituloSnackbar = '';
-  colunasEntradas: GridEditarExcluirColunas[] = [];
-  colunasDespesas: GridEditarExcluirColunas[] = [];
+  colunasEntradas: GridAcoesModel[] = [];
+  colunasDespesas: GridAcoesModel[] = [];
   estadoDaLinhaDespesa!: number;
   estadoDaLinhaEntrada!: number;
 

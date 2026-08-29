@@ -78,7 +78,7 @@ export class LoginComponent implements OnInit {
           if (retorno.sucesso)
             this.authService.authenticated$.next(retorno.sucesso);
           localStorage.setItem('usuario_id', String(retorno.resultado));
-          this.router.navigate(['/home']);
+          this.router.navigate(['/dashboard']);
         },
         error => {
           const mensagem = error.error?.mensagem ?? 'Erro ao efetuar login';

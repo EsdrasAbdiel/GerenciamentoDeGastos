@@ -2,7 +2,7 @@ export * from './button/button.component';
 export * from './calendario/calendario.component';
 export * from './card-valores/card-valores.component';
 export * from './date-picker/date-picker.component';
-export * from './grid-editar-excluir/grid-editar-excluir.component';
+export * from './grid-acoes/grid-acoes.component';
 export * from './icon-button/icon-button.component';
 export * from './input/input.component';
 export * from './loading/loading.component';
