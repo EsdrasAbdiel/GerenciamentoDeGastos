@@ -6,21 +6,21 @@ import { ResumoFinanceiroMensalService } from '../../services/resumo-financeiro-
 import { SnackbarService } from '../../services/snackbar.service';
 import { DespesasService, ImportacaoExtrato } from '../../services/despesas.service';
 import { AuthService } from '../../services/auth.service';
-import { GridEditarExcluirComponent } from '../../components/grid-editar-excluir/grid-editar-excluir.component';
-import { GridEditarExcluirColunas } from '../../components/grid-editar-excluir/grid-editar-excluir-colunas.model';
+import { GridAcoesComponent } from '../../components/grid-acoes/grid-acoes.component';
+import { GridAcoesModel } from '../../components/grid-acoes/grid-acoes.model';
 import { Router } from '@angular/router';
 import { ExtratoItem } from '../../models/extratoItem.model';
 
 @Component({
   selector: 'app-exportacao-pdf',
   standalone: true,
-  imports: [MenuComponent, CommonModule, GridEditarExcluirComponent],
+  imports: [MenuComponent, CommonModule, GridAcoesComponent],
   templateUrl: './exportacao-pdf.component.html',
   styleUrl: './exportacao-pdf.component.scss'
 })
 export class ExportacaoPdfComponent implements OnInit {
   dados: ImportacaoExtrato[] = [];
-  colunas: GridEditarExcluirColunas[] = [];
+  colunas: GridAcoesModel[] = [];
   dadosConsulta: ImportacaoExtrato[] = [];
 
   private readonly http = inject(HttpClient);

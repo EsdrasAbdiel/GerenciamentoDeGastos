@@ -1,6 +1,6 @@
 import { TemplateRef } from '@angular/core';
 
-export interface GridEditarExcluirColunas {
+export interface GridAcoesModel {
   key: string;
   label: string;
   template?: TemplateRef<unknown>;
