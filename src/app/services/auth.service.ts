@@ -1,11 +1,11 @@
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, catchError, map, Observable, of, tap } from 'rxjs';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 import { Registro } from '../models/registro.model';
-import { Injectable } from '@angular/core';
-import { RetornoApi } from '../models/retorno-api.model';
+import { inject, Injectable } from '@angular/core';
+import { RetornoApi, RetornoBase } from '../models/retorno-api.model';
 
-type RegistroRequest = {
+interface RegistroRequest {
   nome: string;
   email: string;
   dataNascimento: Date;
@@ -13,60 +13,61 @@ type RegistroRequest = {
   confirmarSenha: number;
 }
 
-type LoginRequest = {
+interface LoginRequest {
   email: string;
   senha: number;
 }
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) { }
-  public authenticated$ = new BehaviorSubject<boolean | null>(null);
+  private readonly http = inject(HttpClient);
+
+	public authenticated$ = new BehaviorSubject<boolean | null>(null);
 
 
-  postRegistrarUsuario(registro: RegistroRequest): Observable<RetornoApi<Registro>> {
-    return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro)
-  }
+	postRegistrarUsuario(registro: RegistroRequest): Observable<RetornoApi<Registro>> {
+		return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro);
+	}
 
-  postUsuario(login: LoginRequest): Observable<any> {
-    return this.http.post<any>(`${environment.BASE_URL.buscarUsuario}`, login)
-  }
+	postUsuario(login: LoginRequest): Observable<RetornoApi<RetornoBase>> {
+		return this.http.post<RetornoApi<RetornoBase>>(`${environment.BASE_URL.buscarUsuario}`, login);
+	}
 
-  logout() {
-    return this.http.post<RetornoApi<any>>(`${environment.BASE_URL.logout}`, {}).pipe(tap(() => this.authenticated$.next(false)))
-  }
+	logout() {
+		return this.http.post<RetornoApi<RetornoApi<RetornoBase>>>(`${environment.BASE_URL.logout}`, {}).pipe(tap(() => this.authenticated$.next(false)));
+	}
 
-  checkAuth(): Observable<Boolean> {
-    if (this.authenticated$.value !== null) {
-      return of(this.authenticated$.value)
-    }
+	checkAuth(): Observable<boolean> {
+		if (this.authenticated$.value !== null) {
+			return of(this.authenticated$.value);
+		}
 
-    return this.http.get(
-      `${environment.BASE_URL.me}`
-    ).pipe(
-      map(() => true),
-      tap(() => this.authenticated$.next(true)),
-      catchError(() => {
-        this.authenticated$.next(false);
-        return of(false);
-      })
-    )
-  }
+		return this.http.get(
+			`${environment.BASE_URL.me}`
+		).pipe(
+			map(() => true),
+			tap(() => this.authenticated$.next(true)),
+			catchError(() => {
+				this.authenticated$.next(false);
+				return of(false);
+			})
+		);
+	}
 
-  isAuthenticated(): boolean | null {
-    return this.authenticated$.value;
-  }
+	isAuthenticated(): boolean | null {
+		return this.authenticated$.value;
+	}
 
-  buscarUsuarioId(): string {
-    const usuarioId = localStorage.getItem('usuario_id')
+	buscarUsuarioId(): string {
+		const usuarioId = localStorage.getItem('usuario_id');
 
-    if (!usuarioId) {
-      this.authenticated$.next(false);
-      return 'null';
-    }
+		if (!usuarioId) {
+			this.authenticated$.next(false);
+			return 'null';
+		}
 
-    return usuarioId;
-  }
+		return usuarioId;
+	}
 }

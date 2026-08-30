@@ -1,0 +1,111 @@
+@use '../../../assets/styles/colors.scss';
+
+.tabela-card {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.table-wrapper {
+  max-height: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+
+  border-radius: 6px;
+}
+
+/* Scroll */
+.table-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.4);
+}
+
+/* Tabela */
+.tabela-container {
+  width: 100%;
+  table-layout: fixed;
+  background: transparent;
+}
+
+/* Header */
+.mat-mdc-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: #2b2b2b;
+}
+
+.mat-mdc-header-cell {
+  background: #2b2b2b !important;
+  color: white !important;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Células */
+.mat-mdc-cell {
+  color: white;
+}
+
+th,
+td {
+  color: white;
+  vertical-align: middle;
+}
+
+/* Larguras */
+.mat-column-acoes {
+  width: 120px;
+  text-align: center;
+}
+
+// .mat-column-descricao {
+//   width: 50%;
+// }
+
+// .mat-column-valorDespesa {
+//   width: 30%;
+// }
+
+/* Centralizar ações */
+.mat-column-acoes .mdc-data-table__cell,
+.mat-column-acoes {
+  text-align: center;
+}
+
+/* Linha */
+.mat-mdc-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* Sem dados */
+.no-data {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  color: white;
+}
+
+/* Botão adicionar */
+.adicionar-icon {
+  display: flex;
+  justify-content: center;
+  margin-top: 12px;
+}
+
+.cursor-pointer {
+  cursor: pointer
+}

@@ -1,3 +1,5 @@
+@import '../../../assets/styles/colors.scss';
+
 :host{
   .button-icon{
     background: none;
@@ -12,4 +14,6 @@
     background:#0000001a;
     border-radius: 50%;
   }
+
+  button { color: transparent; }
 }

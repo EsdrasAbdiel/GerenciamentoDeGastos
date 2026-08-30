@@ -1,0 +1,11 @@
+<app-menu [tituloSnackbar]="'Importar Extrato'">
+  <h1 style="color: white">Histórico de Importação de Extrato</h1>
+  <button type="button" class="btn btn-primary" (click)="fileInput.click()">
+    Selecionar Arquivo
+  </button>
+
+  <button (click)="buscarExtratos()">Pesquisar</button>
+  <input type="file" (change)="onFileSelected($event)" style="width: 30%; display: none" #fileInput />
+
+  <app-grid-acoes [colunas]="colunas" [dados]="dadosConsulta"></app-grid-acoes>
+</app-menu>

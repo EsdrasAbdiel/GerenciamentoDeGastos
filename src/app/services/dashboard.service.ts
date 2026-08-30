@@ -1,15 +1,16 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
+import { Dashboard } from '../models/dashboard.model';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class DashboardService {
-  private http = inject(HttpClient);
+	private http = inject(HttpClient);
 
-  dashboard(id: string): Observable<any> {
-    return this.http.get<any>(`${environment.BASE_URL.dashboard}`, { params: { id } });
-  }
+	dashboard(id: string): Observable<Dashboard> {
+		return this.http.get<Dashboard>(`${environment.BASE_URL.dashboard}`, { params: { id } });
+	}
 }

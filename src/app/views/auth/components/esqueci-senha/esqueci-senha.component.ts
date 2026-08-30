@@ -6,16 +6,16 @@ import { PasswordInputComponent } from '../../../../components/password-input/pa
 import { ButtonComponent } from '../../../../components/button/button.component';
 
 @Component({
-  selector: 'app-esqueci-senha',
-  imports: [MatCardModule, PasswordInputComponent, InputComponent, ButtonComponent],
-  templateUrl: './esqueci-senha.component.html',
-  styleUrl: './esqueci-senha.component.scss'
+	selector: 'app-esqueci-senha',
+	imports: [MatCardModule, PasswordInputComponent, InputComponent, ButtonComponent],
+	templateUrl: './esqueci-senha.component.html',
+	styleUrl: './esqueci-senha.component.scss'
 })
 export class EsqueciSenhaComponent {
-  private router = inject(Router);
+	private router = inject(Router);
 
-  deveRedirecionarParaTelaLogin() {
-    this.router.navigate(['/auth/login']);
-  }
+	deveRedirecionarParaTelaLogin() {
+		this.router.navigate(['/auth/login']);
+	}
 
 }

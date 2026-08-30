@@ -1,0 +1,21 @@
+<div class="picker-wrapper">
+  <app-button
+    [label]="label"
+    (aoClicar)="toggle()">
+  </app-button>
+
+  @if (isOpen) {
+    <div class="date-picker-container">
+      <div class="modal-container">
+        @for (item of items; track item) {
+          <button
+            type="button"
+            class="item"
+            (click)="selecionar(item)">
+            {{ getLabel(item) }}
+          </button>
+        }
+      </div>
+    </div>
+  }
+</div>
