@@ -10,6 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "production": "ng serve --configuration production",
+    "stagging": "ng serve --configuration stagging",
     "prepare": "husky"
   },
   "private": true,
