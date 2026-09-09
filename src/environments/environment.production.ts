@@ -9,7 +9,7 @@ export const environment = {
 		buscarDespesa: 'https://backend-gerenciamento-gastos.onrender.com/api/resumoFinanceiroMensal/buscarDespesa',
 		atualizarDespesa: 'https://backend-gerenciamento-gastos.onrender.com/api/resumoFinanceiroMensal/atualizarDespesa',
 		deletarDespesa: 'https://backend-gerenciamento-gastos.onrender.com/api/resumoFinanceiroMensal/deletarDespesa',
-    cadastrarResumoFinanceiroImportacaoExtrato: 'https://backend-gerenciamento-gastos.onrender.com/api/importacaoExtrato/cadastrarResumoFinanceiro/importacaoExtrato',
+    	cadastrarResumoFinanceiroImportacaoExtrato: 'https://backend-gerenciamento-gastos.onrender.com/api/importacaoExtrato/cadastrarResumoFinanceiro/importacaoExtrato',
 		buscarExtratoPeloTenantId: 'https://backend-gerenciamento-gastos.onrender.com/api/importacaoExtrato',
 		registarUsuario: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/registro',
 		buscarUsuario: 'https://backend-gerenciamento-gastos.onrender.com/api/auth/buscarUsuario/',
