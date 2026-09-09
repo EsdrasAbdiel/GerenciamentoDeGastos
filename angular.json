@@ -63,6 +63,17 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "stagging": {
+              "optimization": true,
+                  "sourceMap": true,
+              "extractLicenses": false,
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.stagging.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -75,6 +86,9 @@
             },
             "development": {
               "buildTarget": "GerenciamentoGastos:build:development"
+            },
+            "stagging": {
+              "buildTarget": "GerenciamentoGastos:build:stagging"
             }
           },
           "defaultConfiguration": "development"
