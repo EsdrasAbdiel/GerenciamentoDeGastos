@@ -62,6 +62,12 @@ export class LoginComponent implements OnInit {
   }
 
   deveBuscarUsuario() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.snackbarService.error('Preencha todos os campos obrigatorios.')
+      return;
+    }
+
     this.loading = true;
     const { email, senha } = this.form.value;
 
@@ -70,9 +76,6 @@ export class LoginComponent implements OnInit {
       senha: Number(senha)
     };
 
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-    } else {
       this.authService.postUsuario(params).pipe((finalize(() => this.loading = false))).subscribe(
         retorno => {
           if (retorno.sucesso)
@@ -86,7 +89,6 @@ export class LoginComponent implements OnInit {
           this.snackbarService.error(mensagem);
         }
       );
-    }
   }
 
   deveFazerRegistro() {
