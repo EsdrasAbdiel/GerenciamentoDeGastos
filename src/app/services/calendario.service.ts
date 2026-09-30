@@ -4,7 +4,6 @@ import { Ano } from '../models/ano.model';
 import { Mes } from '../models/mes.model';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
-import { MesDashboard } from '../models/mes-dashboard.model';
 
 @Injectable({
 	providedIn: 'root'
