@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { FormGroup, FormsModule, ReactiveFormsModule, ɵInternalFormsSharedModule } from '@angular/forms';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ECharts } from 'echarts/core';
-import { DespesaItem, MesDashboard, ResumoFinanceiroMensal } from '../../models';
+import { DespesaItem, Mes, MesDashboard, ResumoFinanceiroMensal } from '../../models';
 import { AuthService, CalendarioService, DashboardService } from '../../services';
 import { LoadingSkeletonDashboardComponent, LoadingSkeletonComponent, DatePickerComponent, MenuComponent } from '../../components';
 import { graficoBarraHorizontalDashboard, graficoBarraVerticalDashboard } from '../../utils';
@@ -38,7 +38,7 @@ export class DashboardComponent implements OnInit {
   registros: ResumoFinanceiroMensal[] = [];
   anoAtual: number = new Date().getFullYear();
   mesAtual!: number;
-  mesesDashboard: MesDashboard[] = [];
+  mesesDashboard: Mes[] = [];
   despesasPorCategoria: string[] = [];
   semDados = false;
 
@@ -56,7 +56,7 @@ export class DashboardComponent implements OnInit {
   graficoBarraHorizontalDashboard = graficoBarraHorizontalDashboard;
 
   readonly anos = toSignal(this.calendarioService.getAnos(), { initialValue: [] });
-  readonly meses = toSignal(this.calendarioService.getMesesDashboard(), { initialValue: [] });
+  readonly meses = toSignal(this.calendarioService.getMeses(), { initialValue: [] });
 
   pickerAberto: 'mes' | 'ano' | null = null;
 
@@ -77,7 +77,7 @@ export class DashboardComponent implements OnInit {
   }
 
   carregarDadosCalendario() {
-    this.calendarioService.getMesesDashboard().subscribe(retorno => {
+    this.calendarioService.getMeses().subscribe(retorno => {
       this.mesesDashboard = retorno;
     });
   }

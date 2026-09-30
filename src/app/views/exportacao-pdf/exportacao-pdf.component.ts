@@ -10,6 +10,7 @@ import { GridAcoesComponent } from '../../components/grid-acoes/grid-acoes.compo
 import { GridAcoesModel } from '../../components/grid-acoes/grid-acoes.model';
 import { Router } from '@angular/router';
 import { ExtratoItem } from '../../models/extratoItem.model';
+import { RetornoApi } from '../../models';
 
 @Component({
   selector: 'app-exportacao-pdf',
@@ -53,11 +54,11 @@ export class ExportacaoPdfComponent implements OnInit {
     const formData = new FormData();
     formData.append('file', file);
 
-    this.http.post<ExtratoItem[]>('http://localhost:8080/api/importacaoExtrato/importar', formData)
+    this.http.post<RetornoApi<ExtratoItem[]>>('http://localhost:8080/api/importacaoExtrato/importar', formData)
       .subscribe({
         next: res => {
           if (res) {
-            this.resumoService.setDadosExportacaoPdf(res);
+            this.resumoService.setDadosExportacaoPdf(res.resultado);
             this.router.navigate(['/detalhes-exportacao-pdf']);
           }
           input.value = '';
@@ -90,7 +91,7 @@ export class ExportacaoPdfComponent implements OnInit {
   }
 
   buscarExtratos() {
-    this.despesasService.buscarExtratoPeloTenantId(this.authservice.buscarUsuarioId()).subscribe(retorno => {
+    this.despesasService.getImportacaoExtratoPeloId(this.authservice.buscarUsuarioId()).subscribe(retorno => {
       this.dadosConsulta = retorno;
     });
   }

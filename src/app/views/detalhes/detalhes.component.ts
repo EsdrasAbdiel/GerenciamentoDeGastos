@@ -20,7 +20,7 @@ import { DespesaItem } from '../../models/despesaItem.model';
 import { EntradaItem } from '../../models/entradaItem.model';
 import { FormatarData } from '../../utils/formatar-data.util';
 import { ButtonComponent, CardValoresComponent, GridAcoesComponent, InputComponent, MenuComponent, ModalComponent, SelectModel, StatusCompetencia } from '../../components';
-import { DespesasService, GastosService, ResumoFinanceiroMensalService } from '../../services';
+import { DespesasService, GastosService, ResumoFinanceiroMensalService, SnackbarService } from '../../services';
 import { GridAcoesTipoEnum } from '../../components/grid-acoes/grid-acoes.enum';
 
 
@@ -100,6 +100,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   estadoDaLinhaDespesa!: number;
   estadoDaLinhaEntrada!: number;
 
+  private snackbar = inject(SnackbarService);
   private router = inject(Router);
   private fb = inject(FormBuilder);
   private gastosService = inject(GastosService);
@@ -121,9 +122,6 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
       dataPagamento: [null]
     });
 
-    this.carregarDespesas();
-
-    this.atualizarDespesasOpcoes();
     if (this.paramsRoute['id']) {
       this.carregarDespesasExistentes();
       this.tituloSnackbar = 'Editar Despesa';
@@ -190,15 +188,6 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     ];
   }
 
-  atualizarDespesasOpcoes() {
-    this.resumoFinanceiroMensalService.getAtualizarOpcoesDespesas().subscribe(
-      retorno => {
-        if (retorno)
-          this.carregarDespesas();
-      }
-    );
-  }
-
   verificacaoValorPositivoOuNegativo(valor: number) {
     if (valor > 0) {
       return '#28A745';
@@ -207,15 +196,6 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
     } else {
       return '#808080';
     }
-  }
-
-  carregarDespesas() {
-    this.despesasService.buscarDespesas().subscribe(retorno => {
-      this.opcoesDespesas = retorno.map(d => ({
-        id: d.id,
-        descricao: d.descricao
-      }));
-    });
   }
 
   deveCadastrarNovaDespesa() {
@@ -227,7 +207,7 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
 
   carregarDespesasExistentes() {
     this.loading = true;
-    this.gastosService.getDespesaPeloId(this.paramsRoute['id']).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
+    this.gastosService.getResumoFinanceiroMensalPeloId(this.paramsRoute['id']).pipe(finalize(() => (this.loading = false))).subscribe(retorno => {
       this.dadosDespesas = retorno.itensDespesa.map(item => {
         return {
           ...item,
@@ -283,10 +263,13 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
         dataInclusao: FormatarData(new Date()),
         mes: Number(this.paramsRoute['mes']),
         ano: Number(this.paramsRoute['ano']),
-        usuarioId: this.authService.buscarUsuarioId()
+        usuarioId: this.authService.buscarUsuarioId(),
+        statusCompetenciaMes: 1
       };
 
-      this.gastosService.postCadastroDespesas(paramsCadastro).subscribe(retorno => {
+
+
+      this.gastosService.postResumoFinanceiroMensal(paramsCadastro).subscribe(retorno => {
         if (retorno.sucesso) {
           alert(retorno.mensagem);
         } else {
@@ -306,7 +289,10 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
         usuarioId: this.authService.buscarUsuarioId()
       };
 
-      this.gastosService.putDespesaPeloId(this.paramsRoute['id'], paramsAlteracao).subscribe(retorno => {
+            console.log(paramsAlteracao);
+
+
+      this.gastosService.putResumoFinanceiroMensalPeloId(this.paramsRoute['id'], paramsAlteracao).subscribe(retorno => {
         alert(retorno.sucesso ? retorno.mensagem : retorno.mensagem);
       });
     }
@@ -340,7 +326,9 @@ export class DetalhesComponent implements OnInit, AfterViewInit {
   }
 
   salvarLinhaDespesa(event: Despesa) {
-    if (this.estadoDaLinha === Grid.editar) {
+    console.log(event);
+
+    if (this.estadoDaLinhaDespesa === Grid.editar) {
 
       this.dadosDespesasEdicao.map((linha, index) => {
         if (index === event.index) {
@@ -424,6 +412,15 @@ criarNovaLinhaDespesa(): DespesaItem {
 
   voltar() {
     this.router.navigate(['/card-anos']);
+  }
+
+  excluirResgistro() {
+    if (!this.paramsRoute['id'])
+      return;
+
+    this.gastosService.deleteResumoFinanceiroMensal(this.paramsRoute['id']).subscribe(retorno => {
+      return retorno.sucesso ? this.snackbar.success('Resumo financeiro excluido com sucesso.') : this.snackbar.error('Erro ao exluir resumo financeiro');
+    })
   }
 
   get formularioDespesa() {

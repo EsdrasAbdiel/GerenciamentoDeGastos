@@ -28,15 +28,15 @@ export class AuthService {
 
 
 	postRegistrarUsuario(registro: RegistroRequest): Observable<RetornoApi<Registro>> {
-		return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.registarUsuario}`, registro);
+		return this.http.post<RetornoApi<Registro>>(`${environment.BASE_URL.auth}`, registro);
 	}
 
-	postUsuario(login: LoginRequest): Observable<RetornoApi<RetornoBase>> {
-		return this.http.post<RetornoApi<RetornoBase>>(`${environment.BASE_URL.buscarUsuario}`, login);
+	postBuscarUsuarioPeloEmail(login: LoginRequest): Observable<RetornoApi<RetornoBase>> {
+		return this.http.post<RetornoApi<RetornoBase>>(`${environment.BASE_URL.auth}registro/buscarUsuarioPeloEmail`, login);
 	}
 
 	logout() {
-		return this.http.post<RetornoApi<RetornoApi<RetornoBase>>>(`${environment.BASE_URL.logout}`, {}).pipe(tap(() => this.authenticated$.next(false)));
+		return this.http.post<RetornoApi<RetornoApi<RetornoBase>>>(`${environment.BASE_URL.auth}`, {}).pipe(tap(() => this.authenticated$.next(false)));
 	}
 
 	checkAuth(): Observable<boolean> {
@@ -45,7 +45,7 @@ export class AuthService {
 		}
 
 		return this.http.get(
-			`${environment.BASE_URL.me}`
+			`${environment.BASE_URL.auth}me`
 		).pipe(
 			map(() => true),
 			tap(() => this.authenticated$.next(true)),

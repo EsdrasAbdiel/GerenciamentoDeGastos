@@ -54,7 +54,7 @@ export class CalendarioComponent implements OnInit {
 		this.loading = true;
 		this.anoSelecionado = ano;
 		this.anoAtual = ano;
-		this.calendarioService.getMeses(ano, this.authService.buscarUsuarioId()).pipe((finalize(() => this.loading = false))).subscribe(
+		this.calendarioService.getMesesComResumoFinanceiro(ano, this.authService.buscarUsuarioId()).pipe((finalize(() => this.loading = false))).subscribe(
 			retorno => {
 
 				this.meses = retorno.map((mes: Mes) => {
