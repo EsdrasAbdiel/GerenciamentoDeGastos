@@ -62,6 +62,12 @@ export class LoginComponent implements OnInit {
   }
 
   deveBuscarUsuario() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      this.snackbarService.error('Preencha todos os campos obrigatorios.')
+      return;
+    }
+
     this.loading = true;
     const { email, senha } = this.form.value;
 
@@ -88,7 +94,6 @@ export class LoginComponent implements OnInit {
           this.snackbarService.error(mensagem);
         }
       );
-    }
   }
 
   deveFazerRegistro() {
