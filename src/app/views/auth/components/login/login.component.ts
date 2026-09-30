@@ -76,10 +76,15 @@ export class LoginComponent implements OnInit {
       senha: Number(senha)
     };
 
-      this.authService.postUsuario(params).pipe((finalize(() => this.loading = false))).subscribe(
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+    } else {
+      this.authService.postBuscarUsuarioPeloEmail(params).pipe((finalize(() => this.loading = false))).subscribe(
         retorno => {
           if (retorno.sucesso)
             this.authService.authenticated$.next(retorno.sucesso);
+          console.log(this.authService.authenticated$);
+
           localStorage.setItem('usuario_id', String(retorno.resultado));
           this.router.navigate(['/dashboard']);
         },

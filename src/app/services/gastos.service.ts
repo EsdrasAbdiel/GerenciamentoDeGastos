@@ -1,9 +1,7 @@
-import { Ano } from './../models/ano.model';
 import { environment } from '../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Mes } from '../models/mes.model';
 import { ResumoFinanceiroMensal } from '../models/resumo-financeiro-mensal.model';
 import { RetornoApi, RetornoBase } from '../models/retorno-api.model';
 import { DespesaItem } from '../models/despesaItem.model';
@@ -33,26 +31,22 @@ export class GastosService {
 
   private readonly http = inject(HttpClient);
 
-	getGastos(ano: number): Observable<ResumoFinanceiroMensal>{
-		return this.http.get<ResumoFinanceiroMensal>(`${environment.BASE_URL.listarGastos}/${ano}`);
+	getResumoFinanceiroMensal(ano: number): Observable<ResumoFinanceiroMensal>{
+		return this.http.get<ResumoFinanceiroMensal>(`${environment.BASE_URL.resumoFinanceiroMensal}${ano}`);
 	}
 
-	getAnos(): Observable<Ano[]>{
-		return this.http.get<Ano[]>(environment.BASE_URL.listarAnos);
+	getResumoFinanceiroMensalPeloId(id: string): Observable<ResumoFinanceiroMensal>{
+		return this.http.get<ResumoFinanceiroMensal>(`${environment.BASE_URL.resumoFinanceiroMensal}${id}`);
+	}
+	putResumoFinanceiroMensalPeloId(id: string, despesa: ResumoFinanceiroMensalRequest): Observable<RetornoApi<RetornoBase>>{
+		return this.http.put<RetornoApi<RetornoBase>>(`${environment.BASE_URL.resumoFinanceiroMensal}`, despesa);
 	}
 
-	getMeses(ano: number): Observable<Mes[]>{
-		return this.http.get<Mes[]>(`${environment.BASE_URL.listarMeses}`, { params: { ano } });
+	postResumoFinanceiroMensal(params: ResumoFinanceiroMensalRequest): Observable<RetornoBase>{
+		return this.http.post<RetornoBase>(environment.BASE_URL.resumoFinanceiroMensal, params);
 	}
 
-	getDespesaPeloId(id: string): Observable<ResumoFinanceiroMensal>{
-		return this.http.get<ResumoFinanceiroMensal>(`${environment.BASE_URL.buscarDespesa}/${id}`);
-	}
-	putDespesaPeloId(id: string, despesa: ResumoFinanceiroMensalRequest): Observable<RetornoApi<RetornoBase>>{
-		return this.http.put<RetornoApi<RetornoBase>>(`${environment.BASE_URL.atualizarDespesa}/${id}`, despesa);
-	}
-
-	postCadastroDespesas(params: ResumoFinanceiroMensalRequest): Observable<RetornoBase>{
-		return this.http.post<RetornoBase>(environment.BASE_URL.cadastro, params);
-	}
+  deleteResumoFinanceiroMensal(id: string): Observable<RetornoBase> {
+    return this.http.delete<RetornoBase>(`${environment.BASE_URL.resumoFinanceiroMensal}${id}`, )
+  }
 }
