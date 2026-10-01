@@ -255,7 +255,7 @@ export class DetalhesExportacaoPdfComponent implements OnInit, AfterViewInit {
   		}))
   	};
 
-  	this.despesaService.cadastrarResumoFinanceiroImportacaoExtrato(params).subscribe({
+  	this.despesaService.postImportacaoExtrato(params).subscribe({
   		next: retorno => {
   			if (retorno.sucesso) {
   				this.snackbar.success(retorno.mensagem);
