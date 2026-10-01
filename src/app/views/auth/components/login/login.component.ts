@@ -94,6 +94,7 @@ export class LoginComponent implements OnInit {
           this.snackbarService.error(mensagem);
         }
       );
+    }
   }
 
   deveFazerRegistro() {
