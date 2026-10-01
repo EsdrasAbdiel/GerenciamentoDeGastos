@@ -1,15 +1,18 @@
-
-
 :host {
-  .registro-card-login {
+  .botoes-card-login-container{
     display: flex;
     flex-direction: column;
-    color: white;
-    font-size: 16px;
-    font-weight: 300;
-    justify-content: center;
+    gap: 1rem;
     margin-top: 1rem;
     align-items: center;
+    justify-content: center;
+    .botao-card-login {
+      font-size: 16px;
+      color: white;
+      background-color: transparent;
+      border: none;
+      text-decoration: underline;
+    }
   }
 
   .inputs-form {
@@ -21,7 +24,5 @@
 
   .login {
     width: 300px;
-    height: 260px;
   }
 }
-
