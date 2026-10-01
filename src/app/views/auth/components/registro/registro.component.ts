@@ -24,11 +24,11 @@ export class RegistroComponent {
 	showPassword = false;
 	showConfirmPassword = false;
 
-  private router = inject(Router);
-private fb = inject(FormBuilder);
-private authService = inject(AuthService);
-private registroService = inject(RegistroService);
-private snackbarService = inject(SnackbarService);
+	private router = inject(Router);
+	private fb = inject(FormBuilder);
+	private authService = inject(AuthService);
+	private registroService = inject(RegistroService);
+	private snackbarService = inject(SnackbarService);
 
 	constructor(
 	) {
@@ -56,6 +56,13 @@ private snackbarService = inject(SnackbarService);
 	}
 
 	deveCadastrarUsuario() {
+
+		if (this.form.invalid) {
+			this.form.markAllAsTouched();
+			this.snackbarService.error('Preencha todos os campos obrigatórios');
+			return;
+		}
+
 		const { nome, email, dataNascimento, senha, confirmarSenha } = this.form.value;
 
 		const params = {
@@ -66,22 +73,18 @@ private snackbarService = inject(SnackbarService);
 			confirmarSenha: Number(confirmarSenha),
 		};
 
-		if (this.form.invalid) {
-			this.form.markAllAsTouched();
-		} else {
-			this.authService.postRegistrarUsuario(params).pipe().subscribe(
-				retorno => {
-					if (retorno.sucesso) {
-						this.snackbarService.success(retorno.mensagem);
-						this.registroService.setInformacoesCadastroUsuario(retorno.resultado);
-						this.router.navigate(['/auth/login']);
-					}
-				},
-				error => {
-					this.snackbarService.error(error?.error.mensagem ? error?.error.mensagem : 'Erro ao efetuar registro' );
+		this.authService.postRegistrarUsuario(params).pipe().subscribe(
+			retorno => {
+				if (retorno.sucesso) {
+					this.snackbarService.success(retorno.mensagem);
+					this.registroService.setInformacoesCadastroUsuario(retorno.resultado);
+					this.router.navigate(['/auth/login']);
 				}
-			);
-		}
+			},
+			error => {
+				this.snackbarService.error(error?.error.mensagem ? error?.error.mensagem : 'Erro ao efetuar registro');
+			}
+		);
 	}
 
 	get formulario() {

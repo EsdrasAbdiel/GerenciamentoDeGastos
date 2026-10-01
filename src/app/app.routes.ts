@@ -4,8 +4,6 @@ import { LoginComponent } from './views/auth/components/login/login.component';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { AuthComponent } from './views/auth/auth.component';
 import { RegistroComponent } from './views/auth/components/registro/registro.component';
-import { EsqueciSenhaComponent } from './views/auth/components/esqueci-senha/esqueci-senha.component';
-// import { authGuard } from './guards/auth.guard';
 import { ExportacaoPdfComponent } from './views/exportacao-pdf/exportacao-pdf.component';
 import { CalendarioComponent } from './components/calendario/calendario.component';
 import { MenuCardsComponent } from './views/menu-cards/menu-cards.component';
@@ -18,7 +16,6 @@ export const routes: Routes = [
 		children: [
 			{ path: 'login', component: LoginComponent },
 			{ path: 'registro', component: RegistroComponent },
-			{ path: 'esqueci-senha', component: EsqueciSenhaComponent }
 		]
 	},
 	{

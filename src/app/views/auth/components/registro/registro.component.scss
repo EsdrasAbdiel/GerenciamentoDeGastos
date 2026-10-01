@@ -1,5 +1,5 @@
 .registro {
-  min-width: 370px;
+  width: 370px;
 }
 
 .campos-form-container {
@@ -13,11 +13,17 @@
   display: flex;
   flex-direction: column;
   color: white;
-  font-size: 12px;
-  font-weight: 300;
   justify-content: center;
   margin-top: 1rem;
   align-items: center;
+
+  .botao-card-registro {
+    font-size: 16px;
+    color: white;
+    background-color: transparent;
+    border: none;
+    text-decoration: underline;
+  }
 }
 
 .textarea-container {
