@@ -5,7 +5,7 @@
     </div>
     <form class="formulario-container" [formGroup]="form">
       <div class="inputs-form">
-        <app-input [label]="'Email'" formControlName="email" [error]="erroEmail" class="input-form" />
+        <app-input [label]="'Email'" formControlName="email" [error]="erroEmail" />
         <app-password-input>
           <app-input [label]="'Senha'" formControlName="senha" [error]="erroSenha" [mask]="'000000'" />
         </app-password-input>
@@ -13,13 +13,13 @@
       <div class="button-width-100">
         <app-button [label]="'Login'" (aoClicar)="deveBuscarUsuario()" [classeBotao]="'btn-primary'"></app-button>
       </div>
-      <div style="font-size: 16px; color: #b2b2c9;">
-        <button (click)="deveRedefinirSenha()">Esqueci a senha.</button>
-      </div>
-      <div class="registro-card-login">
-        <button (click)="deveFazerRegistro()">Não tem cadastro? Cadastre-se</button>
+
+      <div class="botoes-card-login-container">
+        <button (click)="deveRedefinirSenha()" class="botao-card-login">Esqueci a senha.</button>
+        <button (click)="deveFazerRegistro()" class="botao-card-login">Não tem cadastro? Cadastre-se</button>
       </div>
 
+      
     </form>
 
   </mat-card>
