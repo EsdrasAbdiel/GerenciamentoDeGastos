@@ -100,11 +100,7 @@ export class LoginComponent implements OnInit {
   deveFazerRegistro() {
     this.router.navigate(['/auth/registro']);
   }
-
-  deveRedefinirSenha() {
-    this.router.navigate(['/auth/esqueci-senha']);
-  }
-
+  
   get formulario() {
     return this.form.controls;
   }
